@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+.venv/
+
+# Secrets
+.env
+
+# Storage and temporary media directories
+uploads/
+output/
+temp/
+
+# Logs
+logs/
+*.log
+
+# Python cache files
+__pycache__/
+*.pyc
+**/*.pyc
+
+# OS/IDE settings
+.DS_Store
+.vscode/
+pyrightconfig.json

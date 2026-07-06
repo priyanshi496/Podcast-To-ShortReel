@@ -1,0 +1,100 @@
+from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+from typing import Optional, List
+
+# Video Schemas
+class VideoBase(BaseModel):
+    original_filename: str
+    storage_path: str
+    duration_sec: Optional[float] = None
+    status: str = "uploaded"
+
+class VideoCreate(VideoBase):
+    pass
+
+class VideoResponse(VideoBase):
+    id: int
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+# Job Schemas
+class JobBase(BaseModel):
+    video_id: int
+    clip_candidate_id: Optional[int] = None
+    job_type: str
+    status: str = "queued"
+    progress: float = 0.0
+    error_message: Optional[str] = None
+
+
+class JobCreate(JobBase):
+    pass
+
+class JobResponse(JobBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+# Transcript Segment Schemas
+class TranscriptSegmentBase(BaseModel):
+    video_id: int
+    speaker: Optional[str] = None
+    start_time: float
+    end_time: float
+    text: str
+    confidence: Optional[float] = None
+
+class TranscriptSegmentCreate(TranscriptSegmentBase):
+    pass
+
+class TranscriptSegmentResponse(TranscriptSegmentBase):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
+# Clip Candidate Schemas
+class ClipCandidateBase(BaseModel):
+    video_id: int
+    rank: Optional[int] = None
+    start_time: float
+    end_time: float
+    duration_sec: float
+    category: Optional[str] = None
+    virality_score: float = 0.0
+    hook_score: float = 0.0
+    emotion_score: float = 0.0
+    curiosity_score: float = 0.0
+    surprise_score: float = 0.0
+    reaction_score: float = 0.0
+    context_completeness: float = 0.0
+    reason: Optional[str] = None
+    hook_line: Optional[str] = None
+    transcript_excerpt: Optional[str] = None
+    why_viewers_keep_watching: Optional[str] = None
+    needs_manual_review: bool = False
+    suggested_title: Optional[str] = None
+    suggested_caption: Optional[str] = None
+    best_aspect_ratio: str = "9:16"
+    status: str = "suggested"
+
+
+class ClipCandidateCreate(ClipCandidateBase):
+    pass
+
+class ClipCandidateTrim(BaseModel):
+    start_time: float
+    end_time: float
+
+class ClipExportResponse(BaseModel):
+    id: int
+    clip_candidate_id: int
+    file_path: str
+    subtitle_path: Optional[str] = None
+    format: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+class ClipCandidateResponse(ClipCandidateBase):
+    id: int
+    exports: List[ClipExportResponse] = []
+    model_config = ConfigDict(from_attributes=True)
