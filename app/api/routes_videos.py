@@ -3,7 +3,7 @@ import shutil
 import uuid
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from app import crud, schemas, models
 from app.db import get_db
 from app.config import settings
@@ -130,5 +130,157 @@ def reset_pipeline_data(db: Session = Depends(get_db)):
         return {"status": "success", "message": "UI reset successfully. Database and media preserved."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to reset UI cache: {e}")
+
+
+@router.post("/upload-transcript", response_model=schemas.VideoResponse)
+def upload_video_with_transcript(
+    transcript_file: UploadFile = File(...),
+    video_file: Optional[UploadFile] = File(None),
+    db: Session = Depends(get_db)
+):
+    # 1. Parse the transcript content
+    try:
+        content = transcript_file.file.read().decode("utf-8")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not read transcript file: {e}")
+
+    import json
+    import re
+
+    parsed_segments = []
+    
+    # Try parsing as JSON first
+    try:
+        data = json.loads(content)
+        if isinstance(data, list):
+            for idx, item in enumerate(data):
+                if isinstance(item, dict) and "text" in item:
+                    start_t = float(item.get("start_time", idx * 2.0))
+                    end_t = float(item.get("end_time", start_t + 2.0))
+                    speaker = str(item.get("speaker") or "Speaker")
+                    confidence = float(item.get("confidence") or 1.0)
+                    parsed_segments.append({
+                        "start_time": start_t,
+                        "end_time": end_t,
+                        "speaker": speaker,
+                        "text": str(item["text"]),
+                        "confidence": confidence
+                    })
+    except Exception:
+        pass
+
+    # Fallback to text parsing if JSON didn't yield segments
+    if not parsed_segments:
+        # Regex format: [0.00s - 1.84s] Speaker 1: text or similar
+        pattern = re.compile(
+            r"\[\s*(\d+(?:\.\d+)?)\s*s?\s*-\s*(\d+(?:\.\d+)?)\s*s?\s*\]\s*(?:([^:]+):)?\s*(.*)"
+        )
+        lines = content.splitlines()
+        has_timestamps = any(pattern.match(line.strip()) for line in lines)
+        
+        if has_timestamps:
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                match = pattern.match(line)
+                if match:
+                    start_t = float(match.group(1))
+                    end_t = float(match.group(2))
+                    speaker = match.group(3).strip() if match.group(3) else "Speaker 1"
+                    text = match.group(4).strip()
+                    parsed_segments.append({
+                        "start_time": start_t,
+                        "end_time": end_t,
+                        "speaker": speaker,
+                        "text": text,
+                        "confidence": 1.0
+                    })
+        else:
+            # Plan text Speaker: text or line-by-line format
+            speaker_text_pattern = re.compile(r"^([^:]+):\s*(.*)$")
+            curr_time = 0.0
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                match = speaker_text_pattern.match(line)
+                if match:
+                    speaker = match.group(1).strip()
+                    text = match.group(2).strip()
+                else:
+                    speaker = "Speaker 1"
+                    text = line
+                
+                words = text.split()
+                duration = max(2.0, len(words) * 0.4)
+                end_t = curr_time + duration
+                
+                parsed_segments.append({
+                    "start_time": round(curr_time, 2),
+                    "end_time": round(end_t, 2),
+                    "speaker": speaker,
+                    "text": text,
+                    "confidence": 1.0
+                })
+                curr_time = end_t
+
+    if not parsed_segments:
+        raise HTTPException(
+            status_code=400,
+            detail="Could not extract any transcript segments. Please check file format."
+        )
+
+    # 2. Save video file if uploaded, otherwise create a placeholder record
+    video_path = ""
+    original_filename = "Transcript-only Podcast"
+    if video_file:
+        ext = os.path.splitext(video_file.filename)[1]
+        unique_filename = f"{uuid.uuid4()}{ext}"
+        video_path = os.path.join(settings.UPLOAD_DIR, unique_filename)
+        try:
+            with open(video_path, "wb") as buffer:
+                shutil.copyfileobj(video_file.file, buffer)
+            original_filename = video_file.filename
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Could not save video file: {e}")
+    else:
+        original_filename = f"Transcript: {transcript_file.filename}"
+
+    # Determine duration based on transcript end time
+    duration_sec = parsed_segments[-1]["end_time"] if parsed_segments else 0.0
+
+    # 3. Create Video DB record
+    video_in = schemas.VideoCreate(
+        original_filename=original_filename,
+        storage_path=video_path,
+        duration_sec=duration_sec,
+        status="transcribed"  # Directly set as transcribed so we bypass Whispering
+    )
+    db_video = crud.create_video(db, video_in)
+
+    # 4. Save segments to DB
+    db_segments = [
+        schemas.TranscriptSegmentCreate(
+            video_id=db_video.id,
+            speaker=item["speaker"],
+            start_time=item["start_time"],
+            end_time=item["end_time"],
+            text=item["text"],
+            confidence=item["confidence"]
+        )
+        for item in parsed_segments
+    ]
+    crud.create_transcript_segments(db, db_segments)
+
+    # 5. Create ranking job directly in queue (bypassing transcribe stage)
+    job_in = schemas.JobCreate(
+        video_id=db_video.id,
+        job_type="rank",
+        status="queued"
+    )
+    crud.create_job(db, job_in)
+
+    return db_video
 
 

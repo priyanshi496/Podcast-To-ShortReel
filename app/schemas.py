@@ -67,6 +67,14 @@ class ClipCandidateBase(BaseModel):
     surprise_score: float = 0.0
     reaction_score: float = 0.0
     context_completeness: float = 0.0
+    
+    # New short-form psychology scores
+    scroll_stop_score: float = 0.0
+    part2_score: float = 0.0
+    rewatch_score: float = 0.0
+    standalone_score: float = 0.0
+    cliffhanger_score: float = 0.0
+
     reason: Optional[str] = None
     hook_line: Optional[str] = None
     transcript_excerpt: Optional[str] = None
@@ -75,6 +83,12 @@ class ClipCandidateBase(BaseModel):
     suggested_title: Optional[str] = None
     suggested_caption: Optional[str] = None
     best_aspect_ratio: str = "9:16"
+
+    # New narrative attributes
+    section_type: Optional[str] = None
+    narrative_summary: Optional[str] = None
+    cut_rationale: Optional[str] = None
+
     status: str = "suggested"
 
 

@@ -105,6 +105,11 @@ def create_clip_candidate(db: Session, clip: schemas.ClipCandidateCreate) -> mod
         surprise_score=clip.surprise_score,
         reaction_score=clip.reaction_score,
         context_completeness=clip.context_completeness,
+        scroll_stop_score=clip.scroll_stop_score,
+        part2_score=clip.part2_score,
+        rewatch_score=clip.rewatch_score,
+        standalone_score=clip.standalone_score,
+        cliffhanger_score=clip.cliffhanger_score,
         reason=clip.reason,
         hook_line=clip.hook_line,
         transcript_excerpt=clip.transcript_excerpt,
@@ -113,6 +118,9 @@ def create_clip_candidate(db: Session, clip: schemas.ClipCandidateCreate) -> mod
         suggested_title=clip.suggested_title,
         suggested_caption=clip.suggested_caption,
         best_aspect_ratio=clip.best_aspect_ratio,
+        section_type=clip.section_type,
+        narrative_summary=clip.narrative_summary,
+        cut_rationale=clip.cut_rationale,
         status=clip.status
     )
     db.add(db_clip)

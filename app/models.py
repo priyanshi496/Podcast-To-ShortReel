@@ -66,6 +66,13 @@ class ClipCandidate(Base):
     surprise_score = Column(Float, default=0.0)
     reaction_score = Column(Float, default=0.0)
     context_completeness = Column(Float, default=0.0)
+    
+    # New short-form psychology scores
+    scroll_stop_score = Column(Float, default=0.0)
+    part2_score = Column(Float, default=0.0)
+    rewatch_score = Column(Float, default=0.0)
+    standalone_score = Column(Float, default=0.0)
+    cliffhanger_score = Column(Float, default=0.0)
 
     reason = Column(Text, nullable=True)
     hook_line = Column(Text, nullable=True)
@@ -75,6 +82,11 @@ class ClipCandidate(Base):
     suggested_title = Column(String, nullable=True)
     suggested_caption = Column(Text, nullable=True)
     best_aspect_ratio = Column(String, default="9:16")
+
+    # New narrative attributes
+    section_type = Column(String, nullable=True)
+    narrative_summary = Column(Text, nullable=True)
+    cut_rationale = Column(Text, nullable=True)
 
     status = Column(String, default="suggested")  # suggested, approved, rejected, trimmed, rendered
 

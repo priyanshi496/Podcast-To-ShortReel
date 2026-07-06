@@ -108,9 +108,17 @@ def process_job(db: Session, job: models.Job):
         wav_path = os.path.join(settings.TEMP_DIR, audio_filename)
         audio_re_extracted = False
         if not os.path.exists(wav_path):
-            logger.info("Temporary audio file not found. Re-extracting audio for ranking features...")
-            wav_path = audio.extract_and_normalize_audio(video.storage_path, audio_filename)
-            audio_re_extracted = True
+            if video.storage_path and os.path.isfile(video.storage_path):
+                logger.info("Temporary audio file not found. Re-extracting audio for ranking features...")
+                try:
+                    wav_path = audio.extract_and_normalize_audio(video.storage_path, audio_filename)
+                    audio_re_extracted = True
+                except Exception as ae:
+                    logger.warning(f"Failed to extract audio for ranking features: {ae}")
+                    wav_path = None
+            else:
+                logger.info("No source video file found (uploaded transcript only). Skipping audio signal features.")
+                wav_path = None
             
         try:
             ranked_candidates = rank.rank_candidates(
@@ -148,6 +156,11 @@ def process_job(db: Session, job: models.Job):
                 surprise_score=clip_data["surprise_score"],
                 reaction_score=clip_data["reaction_score"],
                 context_completeness=clip_data["context_completeness"],
+                scroll_stop_score=clip_data["scroll_stop_score"],
+                part2_score=clip_data["part2_score"],
+                rewatch_score=clip_data["rewatch_score"],
+                standalone_score=clip_data["standalone_score"],
+                cliffhanger_score=clip_data["cliffhanger_score"],
                 reason=clip_data["reason"],
                 hook_line=clip_data["hook_line"],
                 transcript_excerpt=clip_data["transcript_excerpt"],
@@ -156,6 +169,9 @@ def process_job(db: Session, job: models.Job):
                 suggested_title=clip_data["suggested_title"],
                 suggested_caption=clip_data["suggested_caption"],
                 best_aspect_ratio=clip_data["best_aspect_ratio"],
+                section_type=clip_data["section_type"],
+                narrative_summary=clip_data["narrative_summary"],
+                cut_rationale=clip_data["cut_rationale"],
                 status="suggested"
             )
             crud.create_clip_candidate(db, clip_create)

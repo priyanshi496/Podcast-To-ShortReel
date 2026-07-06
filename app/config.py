@@ -6,8 +6,13 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/podcast"
     WHISPER_MODEL: str = "small"
     WHISPER_DEVICE: str = "cpu"
+    # NVIDIA NIM (primary LLM provider)
     NVIDIA_API_KEY: str = "your_nvidia_api_key_here"
-    NVIDIA_MODEL: str = "nvidia/llama-3.1-nemotron-ultra-253b-v1"
+    NVIDIA_MODEL: str = "openai/gpt-oss-120b"
+    # OpenRouter (fallback LLM provider)
+    OPENROUTER_API_KEY: str = "your_openrouter_api_key_here"
+    OPENROUTER_MODEL: str = "google/gemma-4-31b-it:free"
+    # Groq (fallback LLM provider)
     GROQ_API_KEY: str = ""
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
     UPLOAD_DIR: str = "uploads"
