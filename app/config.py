@@ -3,8 +3,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/podcast"
+    # Legacy local transcription (kept for fallback/rollback — no longer used
+    # by transcribe.py now that Deepgram is the primary ASR + diarization provider)
     WHISPER_MODEL: str = "small"
     WHISPER_DEVICE: str = "cpu"
+    # Deepgram (primary ASR provider — transcription + real speaker diarization)
+    DEEPGRAM_API_KEY: str = "your_deepgram_api_key_here"
+    DEEPGRAM_MODEL: str = "nova-2"
     # NVIDIA NIM (primary LLM provider)
     NVIDIA_API_KEY: str = "your_nvidia_api_key_here"
     NVIDIA_MODEL: str = "openai/gpt-oss-120b"
