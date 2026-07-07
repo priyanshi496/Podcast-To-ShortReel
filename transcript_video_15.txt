@@ -1,0 +1,225 @@
+[00:01.68 - 00:07.28] Speaker 1: You were in Amazon, in Borackel, in LinkedIn, so you have seen people from the other side.
+[00:07.28 - 00:12.93] Speaker 1: You have been in rooms where you might have seen children in higher positions.
+[00:12.93 - 00:14.93] Speaker 1: Right, you were in higher positions.
+[00:14.93 - 00:20.14] Speaker 1: So tell me when a world class hiring manager, someone is HR,
+[00:20.14 - 00:25.14] Speaker 1: he is sitting on Amazon and he has to hire for a position and on his table,
+[00:25.14 - 00:29.89] Speaker 1: One comes from IIT and one comes from MIT or Stanford.
+[00:29.89 - 00:31.89] Speaker 1: So what do you see in both?
+[00:31.89 - 00:33.89] Speaker 1: What is the difference?
+[00:33.89 - 00:38.14] Speaker 1: Why does the MIT and Stanford people get preference or not?
+[00:38.14 - 00:40.14] Speaker 1: Let me give you a simple example.
+[00:40.14 - 00:43.14] Speaker 1: I was in US and my colleague was in college.
+[00:43.14 - 00:45.14] Speaker 1: He was watching the hiring in Netflix.
+[00:45.14 - 00:50.14] Speaker 1: Netflix is one of the, I say one of the, the MANG has an N, it's Netflix.
+[00:50.14 - 00:53.14] Speaker 1: People here know Netflix more than Netflix.
+[00:53.14 - 00:57.92] Speaker 1: and source but I think one of the best tech companies to work for in the world
+[00:58.92 - 01:01.93] Speaker 1: their employees get $700,000
+[01:02.64 - 01:05.31] Speaker 1: they convert it to India and it's Rs. 7 crore
+[01:05.92 - 01:07.42] Speaker 1: Rs. 7 crore all the way
+[01:07.42 - 01:09.42] Speaker 1: I asked him how do you hire a boss in Netflix
+[01:10.04 - 01:14.04] Speaker 1: he said because I was working in Lingden, he said let's start your platform
+[01:14.70 - 01:18.25] Speaker 1: so I asked him if you post a job in Lingden
+[01:18.51 - 01:20.84] Speaker 1: how many hits do you have today
+[01:20.84 - 01:25.98] Speaker 1: So he asked me a cross question that how many people would come?
+[01:25.98 - 01:28.87] Speaker 1: I said that it would be 10,000, 12,000 in a week
+[01:28.87 - 01:35.26] Speaker 1: and he told me that sometime it even breaches 3 to 4 lakhs just for one job position itself
+[01:35.26 - 01:39.26] Speaker 1: So a pecky position is 3 to 4 lakhs globally
+[01:39.26 - 01:49.15] Speaker 1: So I asked him a cross question that how many people would act up rightly
+[01:49.15 - 01:52.35] Speaker 1: He countered me and said that I am fine
+[01:52.35 - 01:55.48] Speaker 1: 60% maybe, 70%
+[01:55.48 - 01:57.95] Speaker 1: It will be 97%
+[01:57.95 - 02:01.84] Speaker 1: Then I said that you are doing it
+[02:01.84 - 02:06.25] Speaker 1: Is it a sadistic pleasure that you are taking so many words and taking them out
+[02:06.25 - 02:08.96] Speaker 1: But after 97% how many will be left?
+[02:08.96 - 02:12.34] Speaker 1: I asked how I am taking out 97%
+[02:12.34 - 02:16.74] Speaker 1: They are saying that they are taking it out because the people who are applying
+[02:16.74 - 02:19.69] Speaker 1: They are the donkey
+[02:19.69 - 02:21.69] Speaker 1: What do people do in today's date
+[02:21.69 - 02:23.37] Speaker 1: And I used to make mistakes
+[02:23.37 - 02:25.13] Speaker 1: I am in college and I need a job
+[02:25.13 - 02:43.53] Speaker 1: I want to make it in Rizum, to make it in Rizum, when I had to make it in Rizum, I did a lot of research, I watched videos on YouTube, I watched this lecture and I experimented and made it in Rizum, I printed its PDF and now all the companies are going in the same chip, in the same Rizum, right?
+[02:43.53 - 02:46.37] Speaker 1: company doesn't matter, it's going in the same direction.
+[02:46.74 - 02:49.28] Speaker 1: They are saying that when I put it in the data science position,
+[02:50.40 - 02:52.69] Speaker 1: most of the people are putting it in the random direction,
+[02:52.69 - 02:56.09] Speaker 1: they are doing Java work, but they are saying that I am applying for the data science position itself.
+[02:56.74 - 02:58.97] Speaker 1: They are working in Python, that's why I am applying for the data science position.
+[02:58.97 - 03:02.19] Speaker 1: So 97-98% of people are irrelevant.
+[03:02.59 - 03:06.97] Speaker 1: The company's requirement is not matching with that.
+[03:07.78 - 03:09.97] Speaker 1: So coming back to the Wal-Mart company,
+[03:09.97 - 03:11.87] Speaker 1: whose domain is very specific,
+[03:11.87 - 03:15.87] Speaker 1: who want to hire the same specific people who come from day one to work,
+[03:15.87 - 03:19.15] Speaker 1: then the first filter criteria is whether they are matching or not.
+[03:19.15 - 03:19.65] Speaker 1: Okay.
+[03:19.65 - 03:21.41] Speaker 1: Normally, 97% of this is removed.
+[03:21.41 - 03:21.91] Speaker 1: Okay.
+[03:21.91 - 03:23.25] Speaker 1: Now, this is 3%.
+[03:23.25 - 03:25.36] Speaker 1: Now, this 3% is also a huge number.
+[03:25.36 - 03:26.36] Speaker 1: It's 9000.
+[03:26.36 - 03:27.56] Speaker 1: It's not humanly possible.
+[03:27.56 - 03:30.75] Speaker 1: Hiring is easier than going far.
+[03:30.75 - 03:31.96] Speaker 1: For a company, it's a big cost.
+[03:31.96 - 03:32.75] Speaker 1: I was in LinkedIn.
+[03:32.75 - 03:35.25] Speaker 1: We were planning to hire a manager for our position.
+[03:36.25 - 03:40.25] Speaker 1: It's been 1.5 years and we have not been able to fill a position itself.
+[03:40.25 - 03:42.25] Speaker 1: You are doing it while you are doing it.
+[03:42.25 - 03:46.21] Speaker 1: You are doing it while you are doing it.
+[03:46.21 - 03:48.21] Speaker 1: You are not getting a good candidate.
+[03:48.21 - 03:51.21] Speaker 1: If you are getting a good candidate, then his notice period is 2 months.
+[03:51.21 - 03:58.21] Speaker 1: Until he came for 2 months, he negotiated with some other company and went on a higher package there itself.
+[03:58.21 - 03:59.21] Speaker 1: So it's very tough.
+[03:59.21 - 04:00.50] Speaker 1: Right?
+[04:00.50 - 04:02.50] Speaker 1: So it's a huge cost there.
+[04:02.50 - 04:04.50] Speaker 1: You have so many resumes.
+[04:04.50 - 04:10.50] Speaker 1: You see, it's not that companies are biased that I want to buy from IED or from Stanford.
+[04:10.50 - 04:12.50] Speaker 1: It's more about the practicality.
+[04:12.50 - 04:15.00] Speaker 1: As a company, if I am running a founder,
+[04:15.00 - 04:18.00] Speaker 1: I know that I have a trade-off.
+[04:18.00 - 04:20.50] Speaker 1: First, I don't have much time to hire.
+[04:20.50 - 04:21.50] Speaker 1: Right?
+[04:21.50 - 04:24.00] Speaker 1: And I don't have much in today's stiff competition.
+[04:24.00 - 04:27.00] Speaker 1: I want it today. I want it for many years.
+[04:27.00 - 04:29.00] Speaker 1: I wanted it yesterday.
+[04:29.00 - 04:31.50] Speaker 1: Right? That's number one.
+[04:31.50 - 04:34.00] Speaker 1: And secondly, I don't have so many people.
+[04:34.00 - 04:35.00] Speaker 1: I don't have a resource.
+[04:35.00 - 04:39.16] Speaker 1: I don't have so much time and money that I give everyone a fair chance.
+[04:39.16 - 04:42.13] Speaker 1: So our society has already been built with filter layers
+[04:42.13 - 04:44.63] Speaker 1: Criteria which has cracked the kids and reached there
+[04:44.63 - 04:47.16] Speaker 1: That allows me to ease out that thing
+[04:47.16 - 04:51.33] Speaker 1: Look, no company has any problem to go to XYZ college to hire
+[04:51.33 - 04:55.60] Speaker 1: But when a person goes to Mumbai to hire a selected kid
+[04:55.60 - 04:58.30] Speaker 1: He takes 10 interviews and 2 kids are selected
+[04:58.30 - 05:02.30] Speaker 1: But the same goes to XYZ college where he takes 10,000 interviews
+[05:02.30 - 05:05.30] Speaker 1: But then he is not able to find one person, so he won't go there next time
+[05:05.30 - 05:13.30] Speaker 1: That's the whole philosophy and that's why knowingly or unknowingly, no company will tell you in today's date that we only take from the IITs.
+[05:13.30 - 05:22.30] Speaker 1: But when it comes to the hiring manager and they have to take a tough call to take it from me, they will go and prefer it because they feel that the child has already cracked and the filter is already there.
+[05:22.30 - 05:29.30] Speaker 1: And they end up doing it. So that's how it happens. So nobody, Kano company admits it as a company when I was in Lingnan.
+[05:29.30 - 05:31.98] Speaker 1: to say that we don't care which college you come from.
+[05:32.77 - 05:35.74] Speaker 1: But ultimately when I have a pile of resumes
+[05:35.93 - 05:37.69] Speaker 1: and have to identify that I have less time
+[05:37.69 - 05:39.22] Speaker 1: and I have to interview two kids
+[05:39.57 - 05:40.98] Speaker 1: then I fall down to the practicality day.
+[05:40.98 - 05:43.74] Speaker 1: You know, we look at what he has cracked before
+[05:44.10 - 05:45.25] Speaker 1: and based on that I decide.
+[05:45.25 - 05:46.81] Speaker 1: That's where the practicality comes.
+[05:46.81 - 05:48.33] Speaker 1: So you are saying that
+[05:48.69 - 05:50.86] Speaker 1: whether the child has come from IIT or MIT
+[05:51.22 - 05:54.69] Speaker 1: it doesn't matter what happens in that.
+[05:55.06 - 05:57.74] Speaker 1: It only matters that society has already made
+[05:57.74 - 06:02.54] Speaker 1: if it is at the top level of MIT or Stanford, then take it in the first place.
+[06:02.54 - 06:06.93] Speaker 1: And then give it the first chance, if it fulfills our criteria and demand,
+[06:06.93 - 06:09.43] Speaker 1: then the rest of the 10,000 children will come from anywhere.
+[06:09.43 - 06:11.93] Speaker 1: And if there is a change in that, right?
+[06:11.93 - 06:18.43] Speaker 1: We started to relax that this is the institute and if I go here and one of the kids is really talented,
+[06:18.43 - 06:21.83] Speaker 1: he is ready to do work. I think people will be interested to go there.
+[06:21.83 - 06:26.54] Speaker 1: If you don't have anyone to support you, if I talk about a hiring company,
+[06:26.54 - 06:30.33] Speaker 1: If I go to a private college, I feel like a Nawabo.
+[06:30.33 - 06:35.43] Speaker 1: I feel like I am being fed a lot of food and all the facilities that I need to hire.
+[06:35.43 - 06:42.23] Speaker 1: If you go to an IT, you are given a single room in a guest room and no one is there to get it to you.
+[06:42.23 - 06:46.82] Speaker 1: You don't get much benefit. You are just going because of getting the right talent itself.
+[06:46.82 - 06:48.52] Speaker 1: There are no incentives.
+[06:48.52 - 06:54.62] Speaker 1: So that's the mindset that is changing because of the technology.
+[06:54.62 - 06:57.18] Speaker 1: because of, first of all, all these things had to be done manually.
+[06:57.18 - 07:01.23] Speaker 1: Now in today's rate, many arounds are online, through AI.
+[07:01.23 - 07:04.62] Speaker 1: So now fair chances are that the rest of the students of the institute have also started getting it.
+[07:04.62 - 07:08.87] Speaker 1: Because now machines can do much faster, much better stale than the human itself.
+[07:08.87 - 07:16.62] Speaker 1: Plus the change must also be coming, that the students who are not from IT, IM or MIT,
+[07:16.62 - 07:19.23] Speaker 1: they are doing something online or doing something else.
+[07:19.23 - 07:20.82] Speaker 1: There are good results.
+[07:20.82 - 07:24.02] Speaker 1: And if they have broken it in two or three companies,
+[07:24.02 - 07:26.14] Speaker 1: So then the chances will be for the next 200.
+[07:26.14 - 07:27.94] Speaker 1: Because they are looking at probably
+[07:27.94 - 07:31.14] Speaker 1: that not only the one who is cracking, but the other one who is cracking.
+[07:31.14 - 07:32.75] Speaker 1: Yes, yes, yes.
+[07:32.75 - 07:36.43] Speaker 1: Tell me one, when you go to work with these big companies,
+[07:37.31 - 07:39.56] Speaker 1: Amazon, Oracle, PayPal, Sub-Meh,
+[07:39.56 - 07:42.56] Speaker 1: which is the top three skills
+[07:42.56 - 07:45.24] Speaker 1: that the company expects from day one,
+[07:45.24 - 07:46.24] Speaker 1: you will come.
+[07:47.31 - 07:49.92] Speaker 1: And this gap, it doesn't teach any institution.
+[07:50.24 - 07:52.56] Speaker 1: I make three companies of different types.
+[07:52.56 - 07:54.95] Speaker 1: And I will tell you the expectations of the three of them.
+[07:54.95 - 07:57.36] Speaker 1: The ones who don't teach in colleges on day one.
+[07:57.36 - 07:57.86] Speaker 1: Correct.
+[07:57.86 - 07:59.36] Speaker 1: There are different expectations of the three of them.
+[07:59.36 - 08:01.75] Speaker 1: You don't teach in college and you have to do it in an industry.
+[08:01.75 - 08:03.75] Speaker 1: The first is a service-based company.
+[08:03.75 - 08:05.95] Speaker 1: Mass recruiters, TCS, VEPRO, Cognizant.
+[08:05.95 - 08:07.95] Speaker 1: And then when I am saying that I have full respect for them.
+[08:07.95 - 08:10.75] Speaker 1: Because they are giving employment to the countries and no one else is.
+[08:10.75 - 08:12.16] Speaker 1: So I have a few respects for them.
+[08:12.16 - 08:15.45] Speaker 1: But their nature and business is that you have come to day one.
+[08:15.45 - 08:18.42] Speaker 1: They will assume that you haven't learnt anything in college.
+[08:18.42 - 08:22.22] Speaker 1: After going to the infosys, you are treated for 6 months.
+[08:22.22 - 08:26.89] Speaker 1: They believe that our college is not taught by computer science
+[08:26.89 - 08:30.06] Speaker 1: They will have to train me for 6 months and then they will do the work for me
+[08:30.06 - 08:33.10] Speaker 1: I will deploy it for one client, for another client, for the third client
+[08:33.10 - 08:37.01] Speaker 1: So the service-based company will train you first, day 1 will be in your training
+[08:37.01 - 08:41.82] Speaker 1: And when the training is done, then you will be put on a client
+[08:41.82 - 08:43.62] Speaker 1: What is the client's system?
+[08:43.62 - 08:45.05] Speaker 1: What is their expectation?
+[08:45.05 - 08:46.22] Speaker 1: Their basic minimum
+[08:46.22 - 08:49.22] Speaker 1: The client said that you can make a website and your work is over
+[08:49.22 - 08:50.98] Speaker 1: No, it is on hiring time
+[08:50.98 - 08:56.37] Speaker 1: They have high expectations that they are not very inspirational, not very self-expecting,
+[08:56.37 - 08:57.98] Speaker 1: and they are working for a long duration.
+[08:57.98 - 09:01.58] Speaker 1: I'll tell you, when I was getting a pass out in 2011 in IT,
+[09:02.17 - 09:05.08] Speaker 1: we used to joke that friends,
+[09:06.08 - 09:08.27] Speaker 1: these mass recruiters come with all due respect,
+[09:08.27 - 09:12.67] Speaker 1: they bring a truck with them and then they take you in factories.
+[09:13.08 - 09:16.37] Speaker 1: And when they came, they didn't interview 9-pointers.
+[09:16.37 - 09:19.27] Speaker 1: They didn't interview 8-pointers, they didn't interview 7-pointers.
+[09:19.27 - 09:22.87] Speaker 1: Because they knew that if this kid comes, even if he joins, he will leave it for a month.
+[09:22.87 - 09:24.87] Speaker 1: They are only interving 6 pointers.
+[09:24.87 - 09:26.87] Speaker 1: They know that if they are not doing anything,
+[09:26.87 - 09:28.87] Speaker 1: they are not doing anything, they are bounded,
+[09:28.87 - 09:30.87] Speaker 1: if they are not entertaining the other companies,
+[09:30.87 - 09:32.87] Speaker 1: then they have chances that they will get at least 2 years of ticket.
+[09:32.87 - 09:34.87] Speaker 1: That is the expectation from this kind.
+[09:34.87 - 09:37.87] Speaker 1: So, they have a fixed, if you go to a service based company,
+[09:37.87 - 09:39.87] Speaker 1: then that is also scripted, they have made a proper script.
+[09:39.87 - 09:41.87] Speaker 1: On day 1, they will come and give you this training.
+[09:41.87 - 09:44.87] Speaker 1: When the training is over, you will be called by a client.
+[09:44.87 - 09:46.87] Speaker 1: After the client, you will be deployed.
+[09:46.87 - 09:51.37] Speaker 1: client will give you a project, you will do it, you will have a dream that they will send you to the US,
+[09:51.37 - 09:56.37] Speaker 1: they will send you to the UK. Now this also seems to be a big, people think that people are taking
+[09:56.37 - 10:00.37] Speaker 1: from India to the US by working in TCS Vipro, I'll tell you, life is very miserable, right?
+[10:00.37 - 10:05.26] Speaker 1: Why? An average Silicon Valley, which is the top city in the US,
+[10:05.26 - 10:08.76] Speaker 1: we will do average selling in that, 120, we will talk about San Francisco,
+[10:08.76 - 10:12.76] Speaker 1: there is an average selling of 100K, 120K, there is 1.5 crore.
+[10:12.76 - 10:16.88] Speaker 1: These are the people who actually crack and work in companies.
+[10:16.88 - 10:17.88] Speaker 1: On top level.
+[10:17.88 - 10:19.88] Speaker 1: And I am saying this on top level.
+[10:19.88 - 10:24.38] Speaker 1: Top level people 300K, 400K, 500K, Netflix, Google are paying much higher than that.
+[10:24.38 - 10:29.95] Speaker 1: Now when they go through this, TCS, Vipro, InfoZid, they are going from here.
+[10:29.95 - 10:33.95] Speaker 1: They are told from here that you are going to America.
+[10:33.95 - 10:38.04] Speaker 1: But they are deployed in small villages of America.
+[10:38.04 - 10:42.04] Speaker 1: Where they are found, 60K, 70K, 80K.
+[10:42.04 - 10:49.04] Speaker 1: If you translate it, then you can see around 76-70 lakhs of salary.
+[10:49.04 - 10:51.04] Speaker 1: But according to that, it's not enough.
+[10:51.04 - 10:55.04] Speaker 1: Now, from that small life, you can see that you are living the American dream.
+[10:55.04 - 10:57.04] Speaker 1: You are going there, living a lavish life.
+[10:57.04 - 11:00.04] Speaker 1: But there, you take a small room and save money.
+[11:00.04 - 11:03.04] Speaker 1: Your whole intention is that the more you stay there, the less you eat.
+[11:03.04 - 11:06.04] Speaker 1: You stop traveling, you clean up all the things yourself.
+[11:06.04 - 11:08.04] Speaker 1: I just save, save, save, save.
+[11:08.04 - 11:11.04] Speaker 1: Two to three years, come back and build a house, buy a car there itself.
+[11:11.04 - 11:16.04] Speaker 1: So, you get 50-60 lakhs of your salary there, do you live in San Francisco or in a small village?
+[11:16.04 - 11:19.04] Speaker 1: You live in a small village, so you don't have to get an American exposure.
+[11:19.04 - 11:23.04] Speaker 1: You feel like you are living in an American dream but you are living in a village.
+[11:23.04 - 11:26.04] Speaker 1: You are a cracky and living in a small village.
+[11:26.04 - 11:32.04] Speaker 1: If you will afford to roam the whole of America in this city, then you will have not a single penny left.
+[11:32.04 - 11:35.04] Speaker 1: And then you are living a life of a miser.
+[11:35.04 - 11:40.04] Speaker 1: I think you are leaving your friends, your relatives, your country.
+[11:40.04 - 11:48.45] Speaker 1: where you want a good life and you are going in a small town there, in a small village
+[11:48.45 - 11:51.69] Speaker 1: and then you are not enjoying life, you are living a life of a miser, what is the point of
+[11:51.69 - 11:52.69] Speaker 1: doing all of that stuff itself?
+[11:52.69 - 11:54.69] Speaker 1: What did you ask in LinkedIn?
+[11:54.69 - 11:59.99] Speaker 1: So, I had 7 rounds in LinkedIn interview, in which in the different rounds they wanted
+[11:59.99 - 12:00.99] Speaker 1: to check different things.
+[12:00.99 - 12:01.99] Speaker 1: Crazy.
+[12:01.99 - 12:07.19] Speaker 1: For example, first 2 rounds was all about I was going for senior position but they
+[12:07.19 - 12:10.26] Speaker 1: they wanted to do it, because I can do so much hand-sewn coding, right?
+[12:10.26 - 12:16.30] Speaker 1: So they asked me the different data structures, algorithm, questions, all the tough, no different varieties of the questions.
+[12:16.30 - 12:19.80] Speaker 1: And that too in the domain where they work, for example,
+[12:19.80 - 12:21.80] Speaker 1: on lingon

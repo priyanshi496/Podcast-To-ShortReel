@@ -1,83 +1,72 @@
 import logging
 import json
 import re
-import time
-import random
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, cast
 from app.config import settings
 from app.services.audio_signal import detect_audio_events
 
 logger = logging.getLogger(__name__)
 
 # ============================================================
-# RETRY WRAPPER — handles 503 / 429 / 502 / 500 from any provider
-# Uses exponential backoff with full jitter so bursts don't pile up.
-# ============================================================
-
-_RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
-_MAX_RETRY_ATTEMPTS   = 4          # total attempts (1 original + 3 retries)
-_RETRY_BASE_DELAY_SEC = 2.0        # starting backoff (doubles each retry)
-_RETRY_MAX_DELAY_SEC  = 30.0       # cap so we don't wait forever
-
-
-def _is_retryable_error(exc: Exception) -> bool:
-    """Returns True if the exception looks like a transient provider error."""
-    msg = str(exc).lower()
-    # httpx / openai surface these as status codes in the message
-    for code in _RETRYABLE_HTTP_CODES:
-        if str(code) in msg:
-            return True
-    # Common phrases from OpenRouter / Groq error bodies
-    retryable_phrases = [
-        "service unavailable", "overloaded", "rate limit",
-        "too many requests", "bad gateway", "gateway timeout",
-        "internal server error", "upstream", "timeout",
-    ]
-    return any(phrase in msg for phrase in retryable_phrases)
-
-
-def _call_with_retry(fn, *args, provider_name: str = "?", pass_label: str = "", **kwargs):
-    """
-    Calls fn(*args, **kwargs) with up to _MAX_RETRY_ATTEMPTS total attempts.
-    On a retryable error, waits with exponential backoff + full jitter before
-    the next attempt.  Non-retryable errors are re-raised immediately.
-    """
-    last_exc = None
-    for attempt in range(1, _MAX_RETRY_ATTEMPTS + 1):
-        try:
-            return fn(*args, **kwargs)
-        except Exception as exc:
-            last_exc = exc
-            if not _is_retryable_error(exc) or attempt == _MAX_RETRY_ATTEMPTS:
-                raise
-            # Exponential backoff with full jitter
-            base = min(_RETRY_BASE_DELAY_SEC * (2 ** (attempt - 1)), _RETRY_MAX_DELAY_SEC)
-            wait = random.uniform(0, base)
-            logger.warning(
-                f"[{provider_name}] {pass_label} attempt {attempt} failed "
-                f"({type(exc).__name__}: {exc}). "
-                f"Retrying in {wait:.1f}s (attempt {attempt+1}/{_MAX_RETRY_ATTEMPTS})..."
-            )
-            time.sleep(wait)
-    raise last_exc  # unreachable but keeps linters happy
-
-# ============================================================
 # CATEGORY CONFIG — each category has its own prompt strategy
 # AND its own virality scoring weights (must sum to 1.0)
 # ============================================================
 
-CATEGORY_CONFIG = {
+CATEGORY_CONFIG: Dict[str, Any] = {
 
     "story_narrative": {
         "description": "A personal life story, anecdote, or testimonial told with a beginning, middle, and end, describing events that happened to the narrator.",
         "clip_strategy": "cliffhanger",
         "prompt_rules": (
-            "This content is NARRATIVE/STORYTELLING. Act like an expert viral short-form storyteller and retention editor.\n"
-            "- Your job is NOT to find complete clips with payoffs. Your job is to find the BEST 'Part 1' moments that make viewers immediately want to watch Part 2.\n"
-            "- Think like a movie trailer editor. The clip should END exactly at the moment curiosity reaches its highest point (the retention breakpoint).\n"
-            "- Never include the answer. CUT immediately after the final question or shocking cliffhanger sentence.\n"
-            "- Find the exact sentence where a viewer would most likely comment 'Part 2?' or continue watching if this were split into two reels. Cut immediately after that sentence.\n"
-            "- If a story naturally takes 43 seconds before the curiosity peak, return 43 seconds. If the peak happens after only 5 seconds, return 5 seconds. Optimize ONLY for the highest curiosity peak."
+            "PERSONA: You are Alex Carter — a documentary filmmaker and narrative clip strategist who spent 8 years "
+            "cutting viral segments for true crime podcasts, Netflix docuseries, and serialized interview shows. "
+            "You have built careers by finding the exact 40-second window in a 3-hour conversation that makes "
+            "millions of people lose sleep wondering what happened next. You don't think in stories. You think in CLIFFHANGERS.\n\n"
+
+            "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
+            "Picture someone at 2am, phone face-up on their pillow, mid-scroll, sound on. This clip auto-plays. "
+            "They have zero investment in this speaker, zero context, and every reason to keep scrolling. "
+            "Would they put the phone DOWN — or would they sit up? That is the only question that matters. "
+            "If they'd put the phone down: it is NOT the clip.\n\n"
+
+            "YOUR MISSION — CLIFFHANGER ARCHITECTURE:\n"
+            "You are NOT finding a complete story with a satisfying ending. You are finding the exact window where "
+            "a cold stranger will DEMAND Part 2 in the comments. The clip ends at the precise moment curiosity "
+            "peaks — AFTER stakes are established, AFTER the viewer is emotionally invested, but BEFORE any "
+            "resolution lands. The answer must feel one sentence away — just out of reach. "
+            "If the viewer can guess what happened, you cut too late.\n\n"
+
+            "THE FIRST 3 SECONDS FORMULA — THE STAKES DROP:\n"
+            "The opening sentence must drop the viewer MID-STAKES, not mid-setup. Compare:\n"
+            "WEAK: 'So I've been thinking about this for a while — my father and I had a complicated relationship...'\n"
+            "STRONG: 'My father disappeared for 11 years and nobody in my family ever said his name again.'\n"
+            "The difference: the STRONG version creates an immediate gap the viewer MUST fill. "
+            "Start at the strongest sentence in the passage. Cut everything before it.\n\n"
+
+            "THE TENSION PEAK — FINDING THE EXACT CUT POINT:\n"
+            "Walk the transcript. Find the sentence where stakes are at their absolute highest and the outcome is "
+            "most uncertain. That is your end point — the sentence immediately BEFORE the answer or reveal. "
+            "Test: if you cut HERE, would a viewer type 'Part 2???' in the comments? YES = cut here. "
+            "If the resolution is already implied or guessable — you've gone too far. Pull back.\n\n"
+
+            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
+            "- Curiosity gap: viewer knows something happened but not what — they need resolution\n"
+            "- Narrative tension: the worst-case scenario is still on the table, outcome genuinely unknown\n"
+            "- Emotional investment: viewer bonds with the speaker's stakes before the cut\n"
+            "- Pattern interrupt: the story went somewhere the viewer did NOT expect\n\n"
+
+            "THE 'WHY THIS MOMENT AND NOT THE ADJACENT ONE' TEST:\n"
+            "There may be 5-10 story moments in this transcript. Before finalizing, ask: is there a HIGHER "
+            "tension peak in the 2 minutes before or after this window? If yes — that is your real clip. "
+            "You are looking for the single highest curiosity peak in the entire transcript, not the first acceptable one.\n\n"
+
+            "ANTI-PATTERNS (these look good but perform terribly):\n"
+            "✗ Opening with context or backstory — never start with 'So the reason this happened...'\n"
+            "✗ Letting the resolution land inside the clip — the answer must NEVER appear before the cut\n"
+            "✗ Choosing a touching story with emotion but no real uncertainty or unresolved stakes\n"
+            "✗ Picking a 'cliffhanger' where the viewer can guess the answer in 5 seconds — that is not tension\n"
+            "✗ Starting the clip mid-thought — viewer is confused, not hooked\n"
+            "Duration: match the clip exactly to where the peak falls. 22 seconds? Cut at 22. 54 seconds? Use 54. Never pad."
         ),
         "weights": {
             "curiosity": 0.30,
@@ -88,31 +77,61 @@ CATEGORY_CONFIG = {
             "reaction": 0.05,
             "audio_signal": 0.15,
         },
-        "min_duration_sec": 15.0,
-        "max_duration_sec": 60.0,
+        "min_duration_sec": 30.0,
+        "max_duration_sec": 90.0,
     },
 
     "comedy_punchline": {
         "description": "A joke, comedic bit, or funny observation with a clear setup and punchline meant to make people laugh.",
         "clip_strategy": "payoff",
         "prompt_rules": (
-            "This content is COMEDY/PUNCHLINE. Act like an expert stand-up comedy editor who has cut "
-            "thousands of viral comedy clips for TikTok and Reels.\n"
-            "- Your job is to find a clip that is FUNNY ON ITS OWN, with zero missing context, the moment it starts playing.\n"
-            "- A joke has three parts: the setup (establishes expectation), the twist (violates expectation), "
-            "and the tag/reaction (the laugh or the awkward pause after). ALL THREE must be inside the clip.\n"
-            "- Identify the exact word or sentence where the joke 'turns' — that's the punchline. The clip must "
-            "not cut before this point under any circumstance.\n"
-            "- Include 1-3 seconds of tag/reaction room after the punchline (laughter, pause, someone reacting) — "
-            "this is where the payoff actually lands emotionally for the viewer, don't cut it off.\n"
-            "- Prefer setups that are SHORT. If the setup takes longer than 20 seconds before the twist, it's "
-            "probably not a clean clip — look for a shorter, tighter joke elsewhere instead.\n\n"
-            "AVOID THESE COMMON MISTAKES:\n"
-            "- Do NOT select a clip that ends right as the joke starts, before the twist lands — this is the "
-            "single most common comedy-clipping error and it kills retention instantly.\n"
-            "- Do NOT select something merely lighthearted or pleasant in tone if it has no actual comedic turn — "
-            "'funny-adjacent' is not the same as 'funny.'\n"
-            "- Total duration MUST be between 15 and 60 seconds."
+            "PERSONA: You are Danny Kim — a stand-up comedy editor who has cut viral clips for Netflix specials, "
+            "Comedy Central, and the biggest comedy podcasts on the internet. You have watched 10,000 hours of "
+            "stand-up and you can hear the exact millisecond when a joke turns. You know that cutting 2 seconds "
+            "too early on a punchline is the single most common way a good joke dies on short-form. "
+            "Your job is to make sure that NEVER happens.\n\n"
+
+            "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
+            "Someone sees this clip cold, no context, no idea who the speaker is. Do they LAUGH — or do they "
+            "just mildly nod? A 'that's kind of funny' clip will get 500 views. A 'I'm sending this to everyone "
+            "I know' clip goes viral. You are ONLY selecting the second kind.\n\n"
+
+            "THE THREE-PART JOKE ARCHITECTURE (all three must be inside the clip):\n"
+            "Part 1 — SETUP: Establishes an expectation in the viewer's mind. What do they think is coming?\n"
+            "Part 2 — TWIST/PUNCHLINE: Violates that expectation in a surprising direction. The exact sentence where the joke TURNS.\n"
+            "Part 3 — TAG/REACTION: The laugh, the pause, the callback, the awkward silence after — this is where "
+            "the payoff lands emotionally. Do NOT cut here. Include 1-3 seconds of this reaction space.\n\n"
+
+            "THE FIRST 3 SECONDS FORMULA — THE SETUP HOOK:\n"
+            "Comedy clips fail when the setup is too long. The setup must create expectation FAST. Compare:\n"
+            "WEAK: 'You know, I've been thinking about relationships a lot lately and I talked to my therapist "
+            "about it and she said something I thought was interesting which was...'\n"
+            "STRONG: 'My therapist told me I have commitment issues. I told her I'd think about it.'\n"
+            "The STRONG version: setup in one clause, punchline in the next. Look for this tightness.\n\n"
+
+            "FINDING THE PUNCHLINE — THE EXACT TURN POINT:\n"
+            "Every joke has a 'turn' — the exact word, sentence, or moment where the expectation inverts. "
+            "Find it. Mark it. The clip MUST contain everything from the setup through the turn through the reaction. "
+            "If you are even one sentence short of the turn — the clip has no payoff and will not perform. "
+            "A setup with no punchline is not a comedy clip — it is a waste of everyone's time.\n\n"
+
+            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
+            "- Cognitive surprise: the punchline went somewhere they genuinely did not predict\n"
+            "- Social currency: they NEED to send this to a specific person in their contacts right now\n"
+            "- Relatability: 'this is literally me' — they see themselves in the absurdity\n"
+            "- Release valve: the joke names something true that nobody says out loud\n\n"
+
+            "SETUP LENGTH RULE — SHORT SETUPS WIN:\n"
+            "If the setup runs longer than 20 seconds before the punchline turns, it is probably not the right clip. "
+            "Look for a TIGHTER joke elsewhere in the transcript. The best comedy clips are short, punchy, and complete. "
+            "15-35 seconds is the sweet spot. Every second of setup is borrowed time.\n\n"
+
+            "ANTI-PATTERNS (these kill comedy clips):\n"
+            "✗ THE #1 MISTAKE: Cutting right as the joke starts — before the twist lands. This is instant death.\n"
+            "✗ 'Funny-adjacent' content — a speaker laughing, a light moment, a pleasant tone — is NOT a joke\n"
+            "✗ Cutting AFTER the reaction has completely died — end while the energy is still up, not after it fades\n"
+            "✗ Selecting a moment that requires you to have heard the preceding 5 minutes to understand the punchline\n"
+            "✗ Choosing a joke that only works for the live studio audience, not for a cold viewer with no social context"
         ),
         "weights": {
             "surprise": 0.25,
@@ -123,33 +142,64 @@ CATEGORY_CONFIG = {
             "context": 0.05,
             "audio_signal": 0.25,
         },
-        "min_duration_sec": 10.0,
-        "max_duration_sec": 45.0,
+        "min_duration_sec": 20.0,
+        "max_duration_sec": 90.0,
     },
 
     "interview_discussion": {
         "description": "A back-and-forth conversation between two or more speakers, asking and answering questions, debating, or interviewing.",
         "clip_strategy": "mixed",
         "prompt_rules": (
-            "This content is INTERVIEW/DISCUSSION. Act like an expert podcast clip editor who specializes in "
-            "cutting Q&A exchanges that feel complete and satisfying in under 60 seconds.\n"
-            "- Identify the exact question, challenge, or claim being raised, and the exact answer or pushback "
-            "it receives. Both halves of the exchange must live inside your chosen boundaries.\n"
-            "- If the exchange resolves within the segment, use PAYOFF and include the resolution in full.\n"
-            "- If one speaker raises something genuinely intriguing that is NOT addressed yet within the "
-            "transcript window you were given, use CLIFFHANGER and cut right after the intriguing claim — "
-            "but only if it's a real unresolved claim, not a mundane question awaiting an obvious answer.\n"
-            "- Prefer moments where the answer surprises, contradicts, or complicates the question — a boring, "
-            "expected answer to a boring, expected question is not a viral clip even if the exchange is 'complete.'\n"
-            "- Total duration MUST be between 15 and 60 seconds.\n\n"
-            "AVOID THESE COMMON MISTAKES:\n"
-            "- Do NOT select a clip that is just one speaker asking a question with no answer inside the clip. "
-            "A clip that ends on '...so what happened next?' with silence or a cut is a BAD clip — it has no "
-            "payoff and will not retain viewers.\n"
-            "- Do NOT select a clip where the same speaker talks the entire time with no second voice responding "
-            "— that is a monologue, not an interview exchange, even if it happens during an interview.\n"
-            "- Do NOT select generic small talk or pleasantries ('how are you', 'thanks for having me') even if "
-            "it technically has two speakers — it must contain a real question/claim + real answer/reaction."
+            "PERSONA: You are Sarah Chen — a debate segment producer who has spent 6 years cutting confrontational "
+            "exchanges for political news shows, hot-topic podcasts, and viral interview compilations. "
+            "You have an obsessive ability to identify the EXACT moment in a conversation where one speaker "
+            "says something that genuinely surprises, challenges, or contradicts the other. You know that "
+            "a clean Q&A exchange in under 60 seconds is the most reliable format for viral interview content — "
+            "but only if the answer is genuinely surprising, not expected.\n\n"
+
+            "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
+            "Someone sees this clip cold. They don't know either speaker. Does the opening line make them think "
+            "'wait, what's the answer to THAT?' or 'oh, another interview question'? "
+            "If the opening doesn't feel urgent and the answer doesn't feel worth waiting for — it's not the clip.\n\n"
+
+            "THE EXCHANGE COMPLETENESS RULE — NON-NEGOTIABLE:\n"
+            "Every interview clip has TWO halves: the question/challenge AND the answer/response. "
+            "BOTH must live inside the clip boundaries. A clip that ends on an unanswered question has "
+            "zero payoff. A clip that starts mid-answer with no context has zero hook. "
+            "For PAYOFF clips: include everything from the question through the full answer, including any "
+            "reaction or follow-up that makes the answer land harder.\n\n"
+
+            "THE FIRST 3 SECONDS FORMULA — THE PROVOCATIVE OPENING:\n"
+            "The opening sentence must signal that something REAL is about to happen. Compare:\n"
+            "WEAK: 'So can you tell me a little bit about your background and how you got into this field?'\n"
+            "STRONG: 'I have to ask you something that everyone is thinking but nobody's actually said out loud.'\n"
+            "The STRONG version creates immediate tension: what is that thing? The viewer STAYS to find out.\n\n"
+
+            "WHEN TO USE CLIFFHANGER (exceptions only):\n"
+            "Use CLIFFHANGER ONLY if: (a) the first speaker drops a genuinely shocking claim or reveals "
+            "something explosive, AND (b) the response is NOT yet in the transcript window you have. "
+            "The unresolved tension must be REAL — not just a mundane question awaiting an obvious answer. "
+            "If a viewer could reasonably guess the response, it's NOT a cliffhanger — it's an incomplete clip.\n\n"
+
+            "WHAT MAKES AN ANSWER VIRAL-WORTHY:\n"
+            "The answer must do at least ONE of these: surprise (contradicts what you expected), "
+            "contradict (challenges a widespread belief), confess (admits something vulnerable or embarrassing), "
+            "flip the power dynamic (the guest gains the upper hand), or reveal (discloses something previously hidden). "
+            "A boring, expected answer to a boring, expected question is NOT a viral clip, "
+            "even if the exchange is technically complete.\n\n"
+
+            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
+            "- Intellectual curiosity: the question unlocks a topic the viewer didn't know they cared about\n"
+            "- Social currency: 'I have to show this to someone who believes the opposite'\n"
+            "- Moral tension: one speaker says something the viewer must decide if they agree with\n"
+            "- Revelation: something that changes how the viewer sees a person, topic, or belief\n\n"
+
+            "ANTI-PATTERNS (these kill interview clips):\n"
+            "✗ THE #1 MISTAKE: Clip ends on an unanswered question — zero payoff, viewers feel cheated\n"
+            "✗ One speaker monologue — same voice the entire time is NOT an interview exchange\n"
+            "✗ Generic pleasantries ('great to be here', 'thank you so much') even with two speakers\n"
+            "✗ A clip where the 'surprising' answer is completely predictable from the question\n"
+            "✗ Selecting an exchange that only makes sense if you know the episode's earlier context"
         ),
         "weights": {
             "curiosity": 0.20,
@@ -160,32 +210,72 @@ CATEGORY_CONFIG = {
             "reaction": 0.10,
             "audio_signal": 0.20,
         },
-        "min_duration_sec": 15.0,
-        "max_duration_sec": 60.0,
+        "min_duration_sec": 30.0,
+        "max_duration_sec": 90.0,
     },
 
     "motivational_emotional": {
         "description": "A vulnerable, emotional reflection about self-worth, healing, personal growth, or overcoming struggle.",
         "clip_strategy": "payoff",
         "prompt_rules": (
-            "This content is MOTIVATIONAL/EMOTIONAL. Act like an expert editor for emotional/self-help short-form "
-            "content who understands what makes people stop scrolling and feel something.\n"
-            "- The clip should carry ONE complete emotional beat: vulnerability or struggle first, then the "
-            "realization, acceptance, or turning point. Do not cut mid-realization — the emotional payoff must "
-            "land fully within the clip.\n"
-            "- The strongest ending line is usually short, quotable, and universal — something a viewer would "
-            "screenshot or repeat to themselves. Prioritize ending the clip on that exact line, even if it means "
-            "trimming earlier context.\n"
-            "- The opening should establish real stakes fast — what was actually hard, painful, or uncertain — "
-            "not a vague lead-in. Viewers need to feel the weight of the struggle within the first few seconds.\n"
-            "- Favor specific, concrete personal detail over generic self-help language. 'I felt like nobody "
-            "would ever like me' is stronger than 'I struggled with self-esteem.'\n"
-            "- Total duration MUST be between 15 and 60 seconds.\n\n"
-            "AVOID THESE COMMON MISTAKES:\n"
-            "- Do NOT select a clip that is only the struggle with no resolution, or only the resolution with no "
-            "stakes established — both halves must be present.\n"
-            "- Do NOT select purely generic inspirational statements with no personal story attached to them — "
-            "specificity is what makes emotional clips land, not abstraction."
+            "PERSONA: You are Dr. Maya Reid — a behavioral therapist turned emotional content specialist who "
+            "has studied why people stop scrolling when they see vulnerability. You've spent 5 years "
+            "consulting on emotional short-form content for mental health creators, self-help authors, and "
+            "trauma-informed podcasters. You understand the precise emotional architecture that makes a viewer "
+            "feel SEEN — not preached at. Your clips make people cry and save simultaneously.\n\n"
+
+            "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
+            "Someone sees this clip. They've never heard of this speaker. They feel nothing yet. "
+            "Does the first sentence make them feel something in their chest — or does it sound like "
+            "another inspirational quote they've already heard? The standard is: would a stranger "
+            "STOP scrolling because they recognize their own pain in this person's words? "
+            "If it sounds like a poster — it's not the clip.\n\n"
+
+            "THE EMOTIONAL ARC — BOTH HALVES MUST BE PRESENT:\n"
+            "Every great emotional clip has TWO halves that must both live inside the clip window:\n"
+            "HALF 1 — THE WEIGHT: The specific, concrete struggle, pain, fear, or failure. "
+            "Not 'I had a hard time' — but 'I remember sitting in my car in the parking lot not being "
+            "able to go inside because I didn't know how to face them.'\n"
+            "HALF 2 — THE TURN: The realization, acceptance, or shift that came from it. "
+            "Not 'and then I got better' — but 'I realized I was waiting for permission from someone "
+            "who was never going to give it to me.'\n"
+            "If HALF 1 is missing: the clip sounds preachy. If HALF 2 is missing: the clip is just sad.\n\n"
+
+            "THE FIRST 3 SECONDS FORMULA — NAME THE SPECIFIC PAIN:\n"
+            "The opening must name a real, specific pain — not a vague category of pain. Compare:\n"
+            "WEAK: 'I used to really struggle with self-confidence and feeling worthy of love...'\n"
+            "STRONG: 'I used to delete texts before I sent them because I was convinced nobody "
+            "actually wanted to hear from me.'\n"
+            "The STRONG version: the viewer immediately checks — 'wait, have I done that?' That check-in "
+            "is the hook. Specificity creates recognition. Recognition creates stops.\n\n"
+
+            "THE SCREENSHOT LINE — THE ENDING:\n"
+            "The strongest emotional clips end on a line that is SHORT, QUOTABLE, and UNIVERSAL — "
+            "something the viewer would screenshot and post. Examples of the pattern:\n"
+            "'You can't heal in the same environment that made you sick.'\n"
+            "'I stopped explaining myself to people who were committed to misunderstanding me.'\n"
+            "Find that line in the transcript. End the clip ON THAT LINE — not after it. "
+            "The silence after it IS the payoff.\n\n"
+
+            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
+            "- 'I feel seen': the viewer recognizes their own experience in the speaker's specific words\n"
+            "- Vicarious catharsis: the speaker says the thing the viewer has never been able to articulate\n"
+            "- Permission: the clip implicitly tells the viewer something they needed to hear about themselves\n"
+            "- Resonance + shareability: they want to send this to someone specific who needs to hear it\n\n"
+
+            "SPECIFICITY OVER ABSTRACTION — ALWAYS:\n"
+            "Generic: 'I struggled with self-esteem.' — forgettable\n"
+            "Specific: 'I would rehearse conversations in my head three days before having them "
+            "because I was terrified of saying the wrong thing.' — stops a scroll\n"
+            "Favor the specific, personal, and concrete. Generic self-help language makes people feel "
+            "talked at, not understood.\n\n"
+
+            "ANTI-PATTERNS (these feel deep but perform terribly):\n"
+            "✗ Only the struggle with no resolution — leaves the viewer feeling worse, not moved\n"
+            "✗ Only the lesson with no vulnerability — sounds like a TED talk, not a human\n"
+            "✗ Generic inspirational quotes with no story attached — 'believe in yourself' is not a clip\n"
+            "✗ Abstract language that could apply to anyone, about anything ('I went on a journey of healing')\n"
+            "✗ Ending AFTER the key insight — the clip should END on the best line, not past it"
         ),
         "weights": {
             "emotion": 0.30,
@@ -196,31 +286,72 @@ CATEGORY_CONFIG = {
             "surprise": 0.05,
             "audio_signal": 0.30,
         },
-        "min_duration_sec": 15.0,
-        "max_duration_sec": 60.0,
+        "min_duration_sec": 30.0,
+        "max_duration_sec": 90.0,
     },
 
     "controversial_hot_take": {
         "description": "A bold, provocative opinion or claim stated confidently, meant to spark disagreement or debate.",
         "clip_strategy": "cliffhanger",
         "prompt_rules": (
-            "This content is CONTROVERSIAL/HOT TAKE. Act like an expert editor for debate-bait short-form clips "
-            "designed to fill up the comment section.\n"
-            "- Identify the single boldest, most polarizing claim in the transcript — the sentence most likely "
-            "to make half the audience nod and the other half want to argue.\n"
-            "- End the clip immediately after that claim is stated, before any softening, qualification, "
-            "'but obviously...', or walk-back. The unresolved confidence is what drives comments — don't let the "
-            "speaker undercut their own claim inside the clip.\n"
-            "- start_time: include 15-30 seconds of buildup BEFORE the claim so viewers have enough context to "
-            "understand exactly what's being argued and why it matters.\n"
-            "- The goal is provoking a reaction (agree/disagree/argue in comments), not winning the argument for "
-            "the speaker — do not include rebuttal, evidence, or resolution.\n"
-            "- Total duration MUST be between 15 and 60 seconds.\n\n"
-            "AVOID THESE COMMON MISTAKES:\n"
-            "- Do NOT select a claim that is immediately qualified or softened within the same breath — that "
-            "defuses the controversy before the clip even ends.\n"
-            "- Do NOT select something merely opinionated but uncontroversial (e.g. a claim almost everyone "
-            "already agrees with) — the whole point is a claim that splits the audience."
+            "PERSONA: You are Jordan Blake — a political debate segment producer and controversy strategist "
+            "who has spent 7 years engineering clips designed to detonate comment sections. You've produced "
+            "segments for political talk shows, hot-take YouTube channels, and debate-format podcasts. "
+            "You understand that controversy is not about being extreme — it's about finding the claim where "
+            "exactly HALF the audience nods and the other half immediately types a response. "
+            "Your clips are engineered to make people REACT, not just watch.\n\n"
+
+            "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
+            "Someone sees this clip cold. The first sentence plays. Does it make them STOP because they "
+            "either violently agree or violently disagree? Or does it make them shrug? "
+            "A controversial clip should feel like a social hand grenade — the moment it plays, "
+            "people feel the need to say something. If the reaction is 'hm, interesting' — it's not the clip. "
+            "The reaction you're engineering is: 'Oh I have THOUGHTS about this.'\n\n"
+
+            "THE CLAIM IDENTIFICATION — THE POLARIZING SENTENCE:\n"
+            "Scan the entire transcript. Find the single sentence most likely to split a room in half. "
+            "It must meet these criteria:\n"
+            "✓ At least 40% of viewers would strongly agree\n"
+            "✓ At least 40% of viewers would strongly disagree or want to argue\n"
+            "✓ The claim is stated CONFIDENTLY, not tentatively\n"
+            "✓ It challenges something people actively believe, not something already agreed upon\n"
+            "That sentence IS the clip's core. Everything else is scaffolding around it.\n\n"
+
+            "THE BUILDUP — CONTEXT WINDOW BEFORE THE CLAIM:\n"
+            "Include 15-30 seconds of buildup BEFORE the claim. The buildup must:\n"
+            "1. Establish WHO is saying this (credibility signal — why does their opinion matter?)\n"
+            "2. Establish WHAT specific topic is being argued (so the claim has context)\n"
+            "3. Create anticipation — make the viewer sense that something bold is coming\n"
+            "Do NOT start the clip with the claim alone. Without context, controversial claims "
+            "sound random. WITH context, they feel like a verdict.\n\n"
+
+            "THE CUT POINT — MAXIMUM UNRESOLVED CONFIDENCE:\n"
+            "Cut IMMEDIATELY after the claim is stated — before ANY of the following:\n"
+            "- 'But obviously...' / 'Although...' / 'That said...'\n"
+            "- Evidence, reasoning, or justification\n"
+            "- The speaker walking back, softening, or qualifying their position\n"
+            "The unresolved confidence — the bold claim hanging in the air with no defense — "
+            "is what fills the comment section. The moment you include the justification, "
+            "the viewer relaxes. You want them TENSE and REACTIVE when the clip ends.\n\n"
+
+            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
+            "- Identity activation: the claim challenges or validates something the viewer considers core to themselves\n"
+            "- Moral outrage OR moral validation: they either feel vindicated or attacked\n"
+            "- Social urgency: 'I need to tag someone who needs to see this' or 'I need to argue with this'\n"
+            "- The 'finally someone said it' effect: names a truth people hold but rarely say aloud\n\n"
+
+            "THE '50/50 SPLIT' TEST:\n"
+            "Before selecting any clip, ask: would a room of 100 random people be SPLIT on this claim — "
+            "roughly half nodding, half wanting to push back? If 90+ people would agree — it's not controversial, "
+            "it's just correct. If only 10 people would agree — it's too extreme and gets dismissed rather than debated. "
+            "You want the 50/50 split. That is what generates comments, duets, and stitches.\n\n"
+
+            "ANTI-PATTERNS (these defuse controversy before it starts):\n"
+            "✗ The speaker immediately softens or qualifies the claim in the same breath — defused before landing\n"
+            "✗ A claim that almost everyone already agrees with — generates no debate, just nods\n"
+            "✗ A claim so extreme it gets dismissed as irrational — people disengage rather than argue\n"
+            "✗ Including the evidence or reasoning — this gives people a logical exit; keep them emotional\n"
+            "✗ A vague, abstract statement that sounds controversial but says nothing specific enough to disagree with"
         ),
         "weights": {
             "hook": 0.20,
@@ -231,8 +362,8 @@ CATEGORY_CONFIG = {
             "context": 0.05,
             "audio_signal": 0.25,
         },
-        "min_duration_sec": 15.0,
-        "max_duration_sec": 60.0,
+        "min_duration_sec": 30.0,
+        "max_duration_sec": 90.0,
     },
 }
 
@@ -249,8 +380,8 @@ STAGE1_CANDIDATE_POOL_SIZE = 18
 
 # How far (in seconds) we're willing to extend a clip's start backward or end forward
 # to reach a clean sentence boundary. Applies to every category equally.
-MAX_BOUNDARY_LOOKBACK_SEC = 12.0
-MAX_BOUNDARY_LOOKAHEAD_SEC = 12.0
+MAX_BOUNDARY_LOOKBACK_SEC = 20.0
+MAX_BOUNDARY_LOOKAHEAD_SEC = 90.0  # must be >= max category duration so repair can always reach min_duration floor
 
 # Phrases that are strong, category-agnostic signals a moment matters — the speaker
 # themself is telling you it's important. Small heuristic bonus, not a hard rule.
@@ -444,6 +575,40 @@ LEAN_SCHEMA_BLOCK = (
     "      \"hook_line\": \"string\",\n"
     "      \"reason\": \"string\",\n"
     "      \"curiosity_score\": 0,\n"
+    "      \"hook_score\": 0,\n"
+    "      \"sentence_analysis\": [\n"
+    "        {\n"
+    "          \"text\": \"verbatim sentence text\",\n"
+    "          \"role\": \"HOOK | SETUP | QUESTION | ANSWER | CLAIM | COUNTERCLAIM | CHALLENGE | TEASE | REVEAL | EVIDENCE | EXAMPLE | REACTION | CONCLUSION | CALLBACK | PAIN | STRUGGLE | SHIFT | LESSON | INCITING_INCIDENT | ESCALATION | HIGHEST_TENSION | RESOLUTION | CONTEXT | PAUSE | JUSTIFICATION\",\n"
+    "          \"importance\": 0.0,\n"
+    "          \"starts_arc\": false,\n"
+    "          \"ends_arc\": false,\n"
+    "          \"creates_curiosity\": false,\n"
+    "          \"resolves_curiosity\": false,\n"
+    "          \"creates_tension\": false,\n"
+    "          \"resolves_tension\": false\n"
+    "        }\n"
+    "      ]\n"
+    "    }\n"
+    "  ]\n"
+    "}\n"
+)
+
+# Lean schema variant for local/smaller models — identical but WITHOUT sentence_analysis.
+# sentence_analysis is expensive output (200–400 tokens per clip) and smaller models
+# hallucinate enum roles. The narrative grammar trimming Python fallback handles
+# boundary refinement when this field is absent.
+LEAN_SCHEMA_BLOCK_LOCAL = (
+    "{\n"
+    "  \"video_id\": \"string\",\n"
+    "  \"clips\": [\n"
+    "    {\n"
+    "      \"start_time\": 0.0,\n"
+    "      \"end_time\": 0.0,\n"
+    "      \"clip_strategy\": \"cliffhanger | payoff\",\n"
+    "      \"hook_line\": \"string\",\n"
+    "      \"reason\": \"string\",\n"
+    "      \"curiosity_score\": 0,\n"
     "      \"hook_score\": 0\n"
     "    }\n"
     "  ]\n"
@@ -459,42 +624,35 @@ try:
     from pydantic import BaseModel, Field
     from typing import Literal
 
-    class NarrativeUnitModel(BaseModel):
-        unit_id: int
-        section_type: Literal[
-            "story", "debate", "lesson", "personal_experience", "failure", "success",
-            "analogy", "mindset_shift", "prediction", "reveal", "quote", "argument",
-            "twist", "confession", "question_answer"
+    class SentenceAnalysisModel(BaseModel):
+        text: str
+        role: Literal[
+            "HOOK", "SETUP", "QUESTION", "ANSWER", "CLAIM", "COUNTERCLAIM", "CHALLENGE", "TEASE",
+            "REVEAL", "EVIDENCE", "EXAMPLE", "REACTION", "CONCLUSION", "CALLBACK", "PAIN",
+            "STRUGGLE", "SHIFT", "LESSON", "INCITING_INCIDENT", "ESCALATION", "HIGHEST_TENSION",
+            "RESOLUTION", "CONTEXT", "PAUSE", "JUSTIFICATION"
         ]
-        start_sentence: str
-        end_sentence: str
-        summary: str = Field(description="One-sentence summary of this segment.")
-        hook: str = Field(description="The starting hook or main question of this unit.")
-        buildup: str = Field(description="The build-up leading to the climax or key claim.")
-        climax: str = Field(description="The climax/clash/key statement of the unit.")
-        reveal: str = Field(description="The main payoff or answer/conclusion.")
-        resolution: str = Field(description="How the story or debate resolved.")
-        tension_point: str = Field(description="The highest tension sentence or peak curiosity point.")
+        importance: float = Field(ge=0.0, le=10.0)
+        starts_arc: bool
+        ends_arc: bool
+        creates_curiosity: bool
+        resolves_curiosity: bool
+        creates_tension: bool
+        resolves_tension: bool
 
-    class NarrativeMapResponse(BaseModel):
-        units: List[NarrativeUnitModel]
+    class ClipCandidateModel(BaseModel):
+        start_time: float
+        end_time: float
+        clip_strategy: Literal["cliffhanger", "payoff"]
+        hook_line: str
+        reason: str = Field(max_length=200)
+        curiosity_score: int = Field(ge=0, le=10)
+        hook_score: int = Field(ge=0, le=10)
+        sentence_analysis: List[SentenceAnalysisModel] = Field(default_factory=list)
 
-    class RetentionPeakModel(BaseModel):
-        unit_id: int
-        cut_after_sentence: str = Field(description="The exact sentence immediately after which we should stop the clip.")
-        cut_rationale: str = Field(description="Detailed psychological rationale for cutting at this sentence.")
-        estimated_duration_sec: float = Field(description="Estimated duration in seconds (usually 15-60s).")
-        curiosity_score: int = Field(ge=0, le=100)
-        scroll_stop_score: int = Field(ge=0, le=100)
-        part2_score: int = Field(ge=0, le=100)
-        rewatch_score: int = Field(ge=0, le=100)
-        standalone_score: int = Field(ge=0, le=100)
-        cliffhanger_score: int = Field(ge=0, le=100)
-        why_viewers_keep_watching: str = Field(description="A sentence explaining why viewers will keep watching this clip.")
-        suggested_title: str = Field(description="A hooky, clicky title for the reel.")
-
-    class RetentionPeaksResponse(BaseModel):
-        peaks: List[RetentionPeakModel]
+    class ClipResponseModel(BaseModel):
+        video_id: str
+        clips: List[ClipCandidateModel]
 
     _PYDANTIC_AVAILABLE = True
 except Exception:
@@ -510,6 +668,8 @@ try:
     from sentence_transformers import SentenceTransformer, util as st_util
     _SBERT_AVAILABLE = True
 except Exception:
+    SentenceTransformer = None
+    st_util = None
     _SBERT_AVAILABLE = False
 
 _embedding_model = None
@@ -522,6 +682,8 @@ def _load_embedding_classifier():
     global _embedding_model, _anchor_embeddings, _anchor_keys
     if _embedding_model is not None:
         return
+    if SentenceTransformer is None:
+        raise ImportError("SentenceTransformer is not available")
     _embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
     _anchor_keys = list(CATEGORY_CONFIG.keys())
     anchor_texts = [CATEGORY_CONFIG[k]["description"] for k in _anchor_keys]
@@ -538,6 +700,8 @@ def embedding_classify_category(full_transcript_text: str) -> Tuple[Optional[str
         return None, 0.0
     try:
         _load_embedding_classifier()
+        if _embedding_model is None or _anchor_embeddings is None or _anchor_keys is None or st_util is None:
+            return None, 0.0
         text_embedding = _embedding_model.encode(full_transcript_text[:3000], convert_to_tensor=True)
         scores = st_util.cos_sim(text_embedding, _anchor_embeddings)[0]
         best_idx = int(scores.argmax())
@@ -624,7 +788,7 @@ def heuristic_classify_category(full_transcript_text: str) -> str:
     for kw in controversial_kw:
         votes["controversial_hot_take"] += text.count(kw)
 
-    best_category = max(votes, key=votes.get)
+    best_category = max(votes, key=votes.__getitem__)
     if votes[best_category] == 0:
         return DEFAULT_CATEGORY
 
@@ -635,57 +799,65 @@ def heuristic_classify_category(full_transcript_text: str) -> str:
 # ============================================================
 # LLM PROVIDER FALLBACK CHAIN (category-agnostic)
 # ============================================================
-# OpenRouter, NVIDIA NIM, and Groq all expose an OpenAI-compatible chat.completions API,
+# NVIDIA NIM and Groq both expose an OpenAI-compatible chat.completions API,
 # so the exact same prompts, Instructor/Pydantic guaranteed-schema path, and
-# legacy manual-parse path work unchanged for all — only base_url, api_key,
+# legacy manual-parse path work unchanged for either — only base_url, api_key,
 # and model name differ. This means the fallback is purely an infra concern:
 # it applies identically no matter which CATEGORY_CONFIG entry is active.
-#
-# PROVIDER ORDER: NVIDIA NIM (primary) → OpenRouter (fallback) → Groq (tertiary)
-
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_OPENROUTER_MODEL = "google/gemma-4-31b-it:free"
 
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+# A solid general-purpose default if GROQ_MODEL isn't set in settings/.env.
 DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
 
 
-def _get_llm_providers() -> List[Dict[str, str]]:
+def _get_llm_providers() -> List[Dict[str, Any]]:
     """
     Returns an ordered list of usable LLM provider configs.
-    Provider order: NVIDIA NIM (primary) → OpenRouter (fallback) → Groq (tertiary).
-    A provider is only included if its API key is actually configured.
-    """
-    providers: List[Dict[str, str]] = []
 
-    # ── PRIMARY: NVIDIA NIM ──────────────────────────────────────────────────
+    Priority order (highest → lowest):
+      1. Ollama  — local, free, zero-latency, runs when OLLAMA_ENABLED=true
+      2. NVIDIA NIM — cloud primary (large model, high quality)
+      3. Groq   — cloud fallback (fast, rate-limited)
+
+    Any provider missing its key / flag is silently skipped, so the
+    chain degrades gracefully without any category-specific logic.
+    """
+    providers: List[Dict[str, Any]] = []
+
+    # ── 1. Ollama (local) ─────────────────────────────────────────────────────
+    # Inserted FIRST so local inference always runs before hitting cloud APIs.
+    # Set OLLAMA_ENABLED=true in .env to activate; default is false so existing
+    # deployments are unaffected until explicitly opted in.
+    ollama_enabled = getattr(settings, "OLLAMA_ENABLED", False)
+    if ollama_enabled:
+        ollama_url = getattr(settings, "OLLAMA_BASE_URL", "http://localhost:11434/v1")
+        ollama_model = getattr(settings, "OLLAMA_MODEL", "qwen3:8b")
+        providers.append({
+            "name": "ollama",
+            "base_url": ollama_url,
+            # Ollama ignores the API key but the OpenAI client requires a non-empty value.
+            "api_key": "ollama",
+            "model": ollama_model,
+            # num_ctx=16384 ensures the large scoring prompts (12k+ tokens) fit.
+            # Ollama passes unknown keys in extra_body as model options.
+            "extra_body": {"options": {"num_ctx": 16384}},
+        })
+        logger.info(f"Ollama provider enabled: model='{ollama_model}' at '{ollama_url}'")
+
+    # ── 2. NVIDIA NIM (cloud primary) ────────────────────────────────────────
     nvidia_key = getattr(settings, "NVIDIA_API_KEY", None)
     if nvidia_key and nvidia_key not in ["your_nvidia_api_key_here", ""]:
         providers.append({
             "name": "nvidia_nim",
             "base_url": "https://integrate.api.nvidia.com/v1",
             "api_key": nvidia_key,
-            "model": getattr(settings, "NVIDIA_MODEL", "openai/gpt-oss-120b"),
+            "model": getattr(settings, "NVIDIA_MODEL", "nvidia/nemotron-3-super-120b-a12b"),
+            # NVIDIA's NIM Nemotron endpoint accepts this reasoning-suppression flag;
+            # Groq's endpoint does not, so this is only applied per-provider below.
             "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
-            "extra_headers": {},
         })
 
-    # ── FALLBACK 1: OpenRouter ───────────────────────────────────────────────
-    openrouter_key = getattr(settings, "OPENROUTER_API_KEY", None)
-    if openrouter_key and openrouter_key not in ["your_openrouter_api_key_here", ""]:
-        providers.append({
-            "name": "openrouter",
-            "base_url": OPENROUTER_BASE_URL,
-            "api_key": openrouter_key,
-            "model": getattr(settings, "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL),
-            "extra_body": {},
-            "extra_headers": {
-                "HTTP-Referer": "https://github.com/podcast-to-shortreel",
-                "X-Title": "Podcast To ShortReel",
-            },
-        })
-
-    # ── FALLBACK 2: Groq ─────────────────────────────────────────────────────
+    # ── 3. Groq (cloud fallback) ──────────────────────────────────────────────
     groq_key = getattr(settings, "GROQ_API_KEY", None)
     if groq_key and groq_key not in ["your_groq_api_key_here", ""]:
         providers.append({
@@ -694,7 +866,6 @@ def _get_llm_providers() -> List[Dict[str, str]]:
             "api_key": groq_key,
             "model": getattr(settings, "GROQ_MODEL", DEFAULT_GROQ_MODEL),
             "extra_body": {},
-            "extra_headers": {},
         })
 
     return providers
@@ -721,7 +892,6 @@ def _classify_via_provider(
     client = OpenAI(
         base_url=provider["base_url"],
         api_key=provider["api_key"],
-        default_headers=provider.get("extra_headers") or {},
         http_client=httpx.Client(timeout=httpx.Timeout(60.0, connect=10.0)),
     )
 
@@ -738,7 +908,12 @@ def _classify_via_provider(
         stream=False,
     )
 
-    raw = completion.choices[0].message.content.strip()
+    content = completion.choices[0].message.content
+    if not content:
+        logger.warning(f"[{provider.get('name', 'Unknown')}] returned empty or None content.")
+        return None
+
+    raw = content.strip()
     if "```json" in raw:
         raw = raw.split("```json")[1].split("```")[0]
     elif "```" in raw:
@@ -816,57 +991,129 @@ def classify_content_category(full_transcript_text: str) -> str:
 # PROMPT BUILDING
 # ============================================================
 
-def build_system_prompt(category: str) -> str:
-    """Builds the rich, persona-driven system prompt for a specific content category."""
-    cfg = CATEGORY_CONFIG.get(category, CATEGORY_CONFIG[DEFAULT_CATEGORY])
+def build_system_prompt(category: str, lean: bool = False) -> str:
+    """
+    Builds the rich, persona-driven system prompt for a specific content category.
 
-    return (
-        "You are Jamie, a senior short-form content strategist with 8+ years cutting viral clips "
-        "for the world's biggest podcasts — JRE, Lex Fridman, Hot Ones, Diary of a CEO, and similar. "
-        "You have an obsessive understanding of what stops a cold audience mid-scroll on TikTok and Instagram Reels.\n\n"
+    lean=True  → Ollama / local model path. The Narrative Analysis stage becomes
+                 internal reasoning guidance only (model thinks through it but does
+                 NOT output sentence_analysis JSON). Rule #8 is removed. Output
+                 schema uses LEAN_SCHEMA_BLOCK_LOCAL (no sentence_analysis field).
+    lean=False → Cloud path (NVIDIA NIM / Groq). Full output including sentence_analysis.
+    """
+    cfg = (
+        CATEGORY_CONFIG.get(category)
+        or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    )
 
-        "PLATFORM CONTEXT (read this before judging anything):\n"
-        "- The clip will be shown to a COLD AUDIENCE — people who have never heard of this show, "
-        "this guest, or this topic. They are mid-scroll with their sound ON. You have exactly 3 seconds "
-        "to stop them before they swipe away. There is no host introduction, no context, no episode title — "
-        "just the clip, starting cold.\n"
-        "- Average TikTok viewer drops off after 7 seconds unless the hook lands. Your clip must earn "
-        "every additional second.\n"
-        "- The best clips feel like they were MADE for short-form — not ripped from a longer video.\n\n"
+    base_prompt = (
+        "You are Jamie Chen — Head of Viral Clip Strategy at a top-tier podcast network. "
+        "You have 9 years of experience overseeing clip selection for the world's biggest long-form shows: "
+        "JRE, Lex Fridman, Diary of a CEO, Huberman Lab, and Hot Ones. "
+        "You manage a team of specialist editors — each an expert in their genre — and you have final approval "
+        "on every clip that goes out. Your clips consistently hit 1M+ views. "
+        "You understand with surgical precision what stops a cold thumb mid-scroll versus what gets skipped.\n\n"
 
-        f"CONTENT CATEGORY: {category}\n"
-        f"What this means: {cfg['description']}\n\n"
+        "=== PLATFORM REALITY (internalize this before judging anything) ===\n"
+        "The clip will be shown to a COLD AUDIENCE on TikTok or Instagram Reels — people who have "
+        "NEVER heard of this show, this speaker, or this topic. They are mid-scroll with sound ON. "
+        "There is no episode title, no host intro, no context — just the clip, playing cold. "
+        "You have EXACTLY 3 seconds to stop them before they swipe. "
+        "Average dropout happens at 7 seconds if the hook hasn't landed. "
+        "The best clips don't feel 'clipped' — they feel MADE for short-form.\n\n"
 
-        "YOUR MISSION FOR THIS CATEGORY (follow exactly — this overrides your general instincts):\n"
+        "=== NARRATIVE ANALYSIS STAGE ===\n"
+        "To find the exact correct cut point (retention peak), you must first perform a sentence-by-sentence "
+        "narrative analysis of all sentences within each proposed clip window. "
+        "For each sentence, you must determine its specific role in the discourse structure. "
+        "Do NOT guess the cut points. Use the following category-specific narrative grammar to guide your choices:\n\n"
+        
+        "CATEGORY GRAMMAR STRUCTURES:\n"
+        "- story_narrative: [HOOK, INCITING_INCIDENT, ESCALATION, HIGHEST_TENSION, RESOLUTION]\n"
+        "- interview_discussion: [QUESTION, ANSWER, FOLLOWUP, REACTION]\n"
+        "- controversial_hot_take: [CONTEXT, CLAIM, PAUSE, JUSTIFICATION]\n"
+        "- motivational_emotional: [PAIN, STRUGGLE, SHIFT, LESSON]\n"
+        "- comedy_punchline: [SETUP, EXPECTATION, PUNCHLINE, REACTION]\n\n"
+
+        "DISCOURSE RULES FOR CLIPPING:\n"
+        "- If strategy is 'cliffhanger' (e.g., story_narrative, controversial_hot_take):\n"
+        "  Scan the sentences. Find the transition between the tease/setup/tension and the resolution/reveal. "
+        "  Your clip should end IMMEDIATELY at the moment curiosity/tension reaches its peak (the sentence before the reveal or resolution starts).\n"
+        "- If strategy is 'payoff' (e.g., comedy_punchline, interview_discussion, motivational_emotional):\n"
+        "  Ensure the clip contains the full EXPECTATION -> PUNCHLINE -> REACTION, or QUESTION -> ANSWER -> REACTION, or PAIN -> STRUGGLE -> SHIFT -> LESSON in full. "
+        "  Do not cut off early before the emotional release/payoff lands.\n\n"
+    )
+
+    lean_instr = (
+        "IMPORTANT: Perform this narrative analysis INTERNALLY to guide your clip selection "
+        "and cut-point decisions. Do NOT output a sentence_analysis field. "
+        "Your output JSON must only contain the fields listed in the schema below.\n\n"
+        "LANGUAGE NOTE: The transcript may be in any language (Hindi, Spanish, etc.). "
+        "Regardless of the transcript language:\n"
+        "  - hook_line: copy the exact verbatim text from the transcript as-is (keep original language)\n"
+        "  - reason: always write in English\n"
+        "  - clip_strategy: must be exactly 'cliffhanger' or 'payoff' (no other values)\n"
+        "  - curiosity_score and hook_score: integers 0-10 only (no decimals, no ranges)\n\n"
+    ) if lean else ""
+
+    specialist_section = (
+        "=== ACTIVE SPECIALIST FOR THIS CONTENT TYPE ===\n"
+        f"Category: {category}\n"
+        f"Description: {cfg['description']}\n\n"
+        "You have activated the specialist persona below for this content type. "
+        "Their instructions OVERRIDE your general instincts. Follow them exactly.\n\n"
         f"{cfg['prompt_rules']}\n\n"
+    )
 
-        "SCORING RUBRIC (use these definitions when assigning scores 0-10):\n"
-        "curiosity_score:\n"
-        "  10 = A cold stranger MUST know what happens next. They would screenshot, share, or comment 'Part 2?'\n"
-        "   7 = Intriguing enough to watch to the end, but not urgent.\n"
-        "   4 = Mildly interesting. Some viewers finish, most swipe.\n"
-        "   0 = No reason to keep watching after the first 5 seconds.\n"
-        "hook_score:\n"
-        "  10 = First sentence immediately grabs attention. No context needed.\n"
-        "   7 = Good opening, but takes 5-8 seconds to really pull the viewer in.\n"
-        "   4 = Adequate opening but forgettable. Requires prior knowledge of the show.\n"
-        "   0 = Opens with pleasantries, setup, or a question with no immediate payoff.\n\n"
+    rubric_section = (
+        "=== SCORING RUBRIC — CALIBRATED ANCHORS ===\n"
+        "Do NOT score on a curve. Score against these fixed anchors:\n\n"
+        "curiosity_score (0-10): How urgently does a cold viewer need to know what happens next?\n"
+        "  10 = The moment a viewer hears it, they MUST find out what happened. They pause, rewind, comment. "
+        "They would interrupt a conversation to show someone. Think: a speaker confessing they faked their "
+        "credentials for 10 years — and then the clip cuts.\n"
+        "   8 = Strong unresolved tension. Most viewers finish and look for Part 2.\n"
+        "   6 = Interesting enough to watch to the end. Some rewatch. Few seek more.\n"
+        "   4 = Mildly curious. About half the viewers finish. The other half swipe at the 15-second mark.\n"
+        "   2 = Could be skipped at any point with no loss. Viewer is not invested.\n"
+        "   0 = No tension whatsoever. Viewer checks their other apps before it ends.\n\n"
+        "hook_score (0-10): How hard does the FIRST SENTENCE hit a cold stranger with zero context?\n"
+        "  10 = First sentence is a social hand grenade. Physically impossible not to stop. "
+        "Think: 'I walked into work one morning and found out I had been fired three weeks earlier and "
+        "nobody told me.' Immediate, specific, impossible to ignore.\n"
+        "   8 = Very strong opening. 80%+ of cold viewers pause.\n"
+        "   6 = Good opening. Holds attention but not immediately gripping.\n"
+        "   4 = Generic opening. Requires knowing the show to appreciate. Most cold viewers swipe.\n"
+        "   2 = Weak opener — 'So' / 'Yeah' / 'Like I was saying' / 'Thanks for having me'.\n"
+        "   0 = Actively repels viewers. Opens with pleasantries, transitions, or missing context.\n\n"
+    )
 
-        "HARD RULES (breaking these makes the clip unshippable):\n"
-        "- Only select moments that are 100% self-contained — a stranger with zero context must understand it instantly.\n"
-        "- The clip MUST have a strong first line — if the first sentence is 'Yeah' / 'So' / 'Like I was saying' — "
-        "it is NOT a valid clip start, move forward until you hit a real hook.\n"
-        "- Output multiple ranked candidates, best first.\n"
-        "- curiosity_score and hook_score are 0-10 integers.\n"
-        "- reason must explain in 25-35 words WHY this specific moment is viral-worthy — "
-        "what psychological trigger does it activate? (curiosity, shock, laughter, relatability, controversy?)\n"
-        "- hook_line must be the EXACT verbatim sentence from the transcript that is either the clip's "
-        "opening hook or the cliffhanger/punchline end-point (per your strategy above).\n\n"
-
+    rules_section = (
+        "=== HARD RULES — BREAKING THESE MAKES THE CLIP UNSHIPPABLE ===\n"
+        "1. 100% self-contained: a stranger with zero context must understand it from the first second.\n"
+        "2. Strong first line: if the clip's first sentence is a filler or weak opener, "
+        "move forward through the transcript until you find a real hook.\n"
+        "3. No mid-thought starts: the clip must begin at a complete sentence boundary.\n"
+        "4. Output EXACTLY 3 ranked candidates, best candidate first. Do not return just 1 clip.\n"
+        "5. curiosity_score and hook_score are integers 0-10.\n"
+        "6. reason: 25-35 words explaining the SPECIFIC psychological trigger this moment activates "
+        "(curiosity gap, cognitive surprise, vicarious emotion, moral outrage, social currency, etc.).\n"
+        "7. hook_line: the EXACT verbatim sentence from the transcript — either the clip's opening hook "
+        "or the cliffhanger/punchline end-point sentence. Copy it character-for-character.\n"
+        "8. DURATION: Ensure clips are not too short. Aim for 30 to 60 seconds of duration to provide sufficient context.\n"
+        + (
+            "" if lean else
+            "9. sentence_analysis: Provide a sentence-by-sentence analysis of the sentences in the clip. Each item must have: "
+            "text, role, importance, starts_arc, ends_arc, creates_curiosity, resolves_curiosity, creates_tension, resolves_tension.\n\n"
+        )
+        +
+        "=== OUTPUT FORMAT ===\n"
         "Return ONLY this JSON. No markdown, no explanation, no extra fields:\n"
-        f"{LEAN_SCHEMA_BLOCK}\n"
+        f"{LEAN_SCHEMA_BLOCK_LOCAL if lean else LEAN_SCHEMA_BLOCK}\n"
         "Keep the JSON compact and minimal. Do not add any fields not listed above."
     )
+
+    return base_prompt + lean_instr + specialist_section + rubric_section + rules_section
 
 
 # ============================================================
@@ -980,12 +1227,13 @@ def repair_sentence_boundaries(
     beginning of a sentence and ends at the end of one, instead of trusting whatever
     raw timestamp the LLM guessed or the single nearest segment edge.
 
-    - Walks the start backward while the PREVIOUS segment doesn't end cleanly
-      (i.e. the chosen start is actually mid-sentence, continuing an earlier thought).
-    - Walks the end forward while the CURRENT segment doesn't end cleanly.
-    - Both walks are capped by MAX_BOUNDARY_LOOKBACK_SEC / MAX_BOUNDARY_LOOKAHEAD_SEC
-      so a single dangling clause can't drag a clip on for a full minute.
-    - Also re-checks the category's min/max duration bounds after repair.
+    - Walks the start backward while the current start segment begins mid-sentence
+      (i.e. doesn't start with a capital letter / isn't the first segment).
+    - Walks the end forward while the current end segment doesn't end cleanly.
+    - If the clip is too short after finding a clean end, continues walking forward
+      until min_duration_sec is met, always landing on a clean sentence boundary.
+    - Both walks are capped by MAX_BOUNDARY_LOOKBACK_SEC / MAX_BOUNDARY_LOOKAHEAD_SEC.
+    - Hard-caps at max_duration_sec so no clip ever overshoots.
 
     Returns (repaired_start, repaired_end, is_clean). is_clean=False means we could
     not fully repair it within the lookback/lookahead/duration budget — the caller
@@ -994,12 +1242,29 @@ def repair_sentence_boundaries(
     if not segs:
         return start, end, True  # nothing to validate against; trust caller's bounds
 
-    ordered = sorted(segs, key=lambda s: s.start_time)
+    ordered = sorted(segs, key=lambda s: float(s.start_time))
+
+    def _seg_starts_clean(idx: int) -> bool:
+        """True if the segment at idx begins at the start of a new sentence.
+        A segment starts cleanly if:
+          - it is the very first segment (idx == 0), OR
+          - the previous segment ended with terminal punctuation, OR
+          - its text begins with an uppercase letter (Whisper capitalises new sentences)
+        """
+        text = (ordered[idx].text or "").strip()
+        if idx == 0:
+            return True
+        if _ends_clean(ordered[idx - 1].text):
+            return True
+        # Whisper capitalises the first word of a new sentence
+        if text and text[0].isupper():
+            return True
+        return False
 
     def _closest_idx(t: float, key: str) -> int:
         best_i, best_diff = 0, float("inf")
         for i, s in enumerate(ordered):
-            diff = abs(getattr(s, key) - t)
+            diff = abs(float(getattr(s, key)) - t)
             if diff < best_diff:
                 best_diff = diff
                 best_i = i
@@ -1010,36 +1275,55 @@ def repair_sentence_boundaries(
     if end_idx < start_idx:
         end_idx = start_idx
 
-    # Walk start backward until the segment BEFORE it ends cleanly (or budget runs out)
+    # --- PASS 1: Walk start BACKWARD until we land on a clean sentence start ---
     lookback_used = 0.0
-    while start_idx > 0:
-        prev_seg = ordered[start_idx - 1]
-        if _ends_clean(prev_seg.text):
-            break
-        gap = ordered[start_idx].start_time - prev_seg.start_time
+    while start_idx > 0 and not _seg_starts_clean(start_idx):
+        gap = float(ordered[start_idx].start_time) - float(ordered[start_idx - 1].start_time)
         if lookback_used + gap > MAX_BOUNDARY_LOOKBACK_SEC:
             break
         start_idx -= 1
         lookback_used += gap
 
-    # Walk end forward until the current segment itself ends cleanly (or budget runs out)
+    repaired_start = float(ordered[start_idx].start_time)
+
+    # --- PASS 2: Walk end FORWARD until the segment ends cleanly ---
     lookahead_used = 0.0
     while end_idx < len(ordered) - 1:
         cur_seg = ordered[end_idx]
         if _ends_clean(cur_seg.text):
             break
-        next_seg = ordered[end_idx + 1]
-        gap = next_seg.end_time - cur_seg.end_time
-        if lookahead_used + gap > MAX_BOUNDARY_LOOKAHEAD_SEC:
+        seg_dur = float(cur_seg.end_time) - float(cur_seg.start_time)
+        if lookahead_used + seg_dur > MAX_BOUNDARY_LOOKAHEAD_SEC:
+            break
+        # Also don't let the end walk push us past the max allowed duration
+        if float(ordered[end_idx + 1].end_time) - repaired_start > max_duration_sec * 1.5:
             break
         end_idx += 1
-        lookahead_used += gap
+        lookahead_used += seg_dur
 
-    repaired_start = ordered[start_idx].start_time
-    repaired_end = ordered[end_idx].end_time
+    repaired_end = float(ordered[end_idx].end_time)
     duration = repaired_end - repaired_start
 
-    starts_clean = (start_idx == 0) or _ends_clean(ordered[start_idx - 1].text)
+    # --- PASS 3: If clip is too short, keep walking forward to meet min_duration ---
+    # Stops at the next clean sentence boundary AFTER min_duration is reached.
+    # Hard-caps at max_duration_sec to prevent overshooting.
+    while duration < min_duration_sec and end_idx < len(ordered) - 1:
+        end_idx += 1
+        candidate_end = float(ordered[end_idx].end_time)
+        candidate_dur = candidate_end - repaired_start
+        # Hard cap: never exceed the category's maximum duration
+        if candidate_dur > max_duration_sec:
+            break
+        repaired_end = candidate_end
+        duration = candidate_dur
+        # Once we've met the minimum, stop at the very next clean sentence boundary
+        if duration >= min_duration_sec and _ends_clean(ordered[end_idx].text):
+            break
+
+    repaired_end = float(ordered[end_idx].end_time)
+    duration = repaired_end - repaired_start
+
+    starts_clean = _seg_starts_clean(start_idx)
     ends_clean = _ends_clean(ordered[end_idx].text)
     # Give some slack either side of the category's configured bounds since repair
     # can legitimately need to extend a bit further than the original guess.
@@ -1047,6 +1331,115 @@ def repair_sentence_boundaries(
 
     is_clean = starts_clean and ends_clean and within_bounds
     return repaired_start, repaired_end, is_clean
+
+
+def find_segment_for_sentence(sentence_text: str, segs: List[Any]) -> Optional[Tuple[float, float]]:
+    """
+    Finds the start and end times of the transcript segments that best match
+    the given sentence text.
+    """
+    s_clean = re.sub(r"[^\w\s]", "", sentence_text.lower()).strip()
+    if not s_clean:
+        return None
+    
+    # Try exact or substring matches first
+    for s in segs:
+        s_text_clean = re.sub(r"[^\w\s]", "", s.text.lower()).strip()
+        if s_clean in s_text_clean or s_text_clean in s_clean:
+            return s.start_time, s.end_time
+            
+    # Fallback to word overlap Jaccard-like matching
+    words = set(s_clean.split())
+    best_seg = None
+    max_overlap = 0
+    for s in segs:
+        s_text_clean = re.sub(r"[^\w\s]", "", s.text.lower()).strip()
+        s_words = set(s_text_clean.split())
+        overlap = len(words.intersection(s_words))
+        if overlap > max_overlap:
+            max_overlap = overlap
+            best_seg = s
+            
+    if best_seg and max_overlap >= 2:
+        return best_seg.start_time, best_seg.end_time
+        
+    return None
+
+
+def apply_narrative_grammar_trimming(
+    start: float,
+    end: float,
+    strategy: str,
+    sentence_analysis: Optional[List[Dict[str, Any]]],
+    segs: List[Any]
+) -> Tuple[float, float]:
+    """
+    Refines the clip boundaries (start_time and end_time) based on the
+    sentence-by-sentence narrative role analysis.
+    """
+    if not sentence_analysis or not segs:
+        return start, end
+
+    analyzed_with_times = []
+    for sent in sentence_analysis:
+        text = sent.get("text", "")
+        times = find_segment_for_sentence(text, segs)
+        if times:
+            analyzed_with_times.append((sent, times[0], times[1]))
+
+    if not analyzed_with_times:
+        return start, end
+
+    new_start = start
+    new_end = end
+
+    # 1. Cliffhanger strategy trimming (cut before the reveal/resolution)
+    if strategy == "cliffhanger":
+        trim_idx = None
+        for idx, (sent, s_start, s_end) in enumerate(analyzed_with_times):
+            role = str(sent.get("role", "")).upper()
+            resolves = sent.get("resolves_curiosity", False) or sent.get("resolves_tension", False)
+            
+            # Identify where resolution or reveal starts, and cut before it.
+            # But only cut if there's at least one sentence before it to prevent zero-length clips.
+            if (resolves or role in ["REVEAL", "EVIDENCE", "EXAMPLE", "REACTION", "CONCLUSION", "CALLBACK", "RESOLUTION"]) and idx > 0:
+                trim_idx = idx
+                break
+        
+        if trim_idx is not None:
+            _, prev_start, prev_end = analyzed_with_times[trim_idx - 1]
+            new_end = prev_end
+            logger.info(f"Narrative Grammar: Cliffhanger trimmed end from {end} to {new_end} (cut before '{analyzed_with_times[trim_idx][0]['text']}')")
+
+    # 2. Payoff strategy trimming (cut trailing fluff)
+    elif strategy == "payoff":
+        trim_idx = None
+        n = len(analyzed_with_times)
+        
+        # Scan backward from the end to remove trailing explanation/fluff
+        for idx in range(n - 1, -1, -1):
+            sent, s_start, s_end = analyzed_with_times[idx]
+            role = str(sent.get("role", "")).upper()
+            resolves = sent.get("resolves_curiosity", False) or sent.get("resolves_tension", False)
+            
+            # If the trailing sentence is just evidence/example/setup and doesn't resolve anything:
+            if role in ["EVIDENCE", "EXAMPLE", "SETUP", "CONTEXT", "JUSTIFICATION"] and not resolves:
+                # Ensure we have a resolving or payoff sentence earlier in the clip
+                has_earlier_payoff = any(
+                    (s.get("resolves_curiosity", False) or s.get("resolves_tension", False) or str(s.get("role", "")).upper() in ["REACTION", "CONCLUSION", "REVEAL", "ANSWER", "PUNCHLINE", "LESSON", "RESOLUTION"])
+                    for s, _, _ in analyzed_with_times[:idx]
+                )
+                if has_earlier_payoff:
+                    trim_idx = idx
+            else:
+                break
+                
+        if trim_idx is not None:
+            _, prev_start, prev_end = analyzed_with_times[trim_idx - 1]
+            new_end = prev_end
+            logger.info(f"Narrative Grammar: Payoff trimmed trailing fluff from {end} to {new_end} (removed '{analyzed_with_times[trim_idx][0]['text']}')")
+
+    return new_start, new_end
 
 
 # ============================================================
@@ -1065,7 +1458,17 @@ def enrich_clip(
     start = float(raw_clip.get("start_time", 0.0))
     end = float(raw_clip.get("end_time", 0.0))
     hook = raw_clip.get("hook_line", "")
-    strategy = raw_clip.get("clip_strategy", CATEGORY_CONFIG[category]["clip_strategy"])
+    cfg = (
+        CATEGORY_CONFIG.get(category)
+        or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    )
+    raw_strategy = raw_clip.get("clip_strategy")
+    if raw_strategy is not None:
+        strategy = str(raw_strategy)
+    else:
+        strategy = str(cfg.get("clip_strategy", "standard"))
+
+    boundaries_clean = True
 
     # Precise Snapping Logic using original database transcript segments
     if video_id != "unknown":
@@ -1082,10 +1485,10 @@ def enrich_clip(
                 closest_start_diff = float("inf")
                 snapped_start = start
                 for s in segs:
-                    diff = abs(s.start_time - start)
+                    diff = abs(cast(float, s.start_time) - start)
                     if diff < closest_start_diff:
                         closest_start_diff = diff
-                        snapped_start = s.start_time
+                        snapped_start = cast(float, s.start_time)
 
                 # 2. End alignment (suspense cut / cliffhanger):
                 # Search for the exact segment that contains the cliffhanger/hook text
@@ -1096,7 +1499,7 @@ def enrich_clip(
                     for s in segs:
                         s_text_clean = s.text.lower().strip()
                         if hook_clean in s_text_clean or s_text_clean in hook_clean:
-                            if abs(s.end_time - end) < 20.0:
+                            if abs(cast(float, s.end_time) - end) < 20.0:
                                 hook_seg = s
                                 break
 
@@ -1107,35 +1510,45 @@ def enrich_clip(
                             s_words = set(s.text.lower().split())
                             overlap = len(hook_words.intersection(s_words))
                             if overlap > max_overlap and overlap >= 2:
-                                if abs(s.end_time - end) < 20.0:
+                                if abs(cast(float, s.end_time) - end) < 20.0:
                                     max_overlap = overlap
                                     hook_seg = s
 
                 if hook_seg:
-                    snapped_end = hook_seg.end_time
-                    logger.info(f"Precise cliffhanger snap: '{hook}' -> Segment [{hook_seg.start_time}s - {hook_seg.end_time}s]")
+                    snapped_end = cast(float, hook_seg.end_time)
+                    logger.info(f"Precise cliffhanger snap: '{hook}' -> Segment [{cast(float, hook_seg.start_time)}s - {cast(float, hook_seg.end_time)}s]")
                 else:
                     closest_end_diff = float("inf")
                     snapped_end = end
                     for s in segs:
-                        diff = abs(s.end_time - end)
+                        diff = abs(cast(float, s.end_time) - end)
                         if diff < closest_end_diff:
                             closest_end_diff = diff
-                            snapped_end = s.end_time
+                            snapped_end = cast(float, s.end_time)
 
                 start = snapped_start
                 end = snapped_end
+
+                # Apply the Narrative Grammar Boundary Trimming!
+                start, end = apply_narrative_grammar_trimming(
+                    start, end, strategy,
+                    raw_clip.get("sentence_analysis"),
+                    segs
+                )
 
                 # --- SENTENCE-BOUNDARY REPAIR (applies to every category) ---
                 # The snapping above only finds the nearest segment edge, which is not
                 # necessarily a complete sentence — this is what produced clips that
                 # opened or closed mid-clause. This repair pass walks outward from the
                 # snapped boundaries until they land on real sentence starts/ends.
-                cfg_bounds = CATEGORY_CONFIG.get(category, CATEGORY_CONFIG[DEFAULT_CATEGORY])
+                cfg_bounds = (
+                    CATEGORY_CONFIG.get(category)
+                    or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+                )
                 repaired_start, repaired_end, boundaries_clean = repair_sentence_boundaries(
                     start, end, segs,
-                    min_duration_sec=cfg_bounds.get("min_duration_sec", 15.0),
-                    max_duration_sec=cfg_bounds.get("max_duration_sec", 60.0),
+                    min_duration_sec=float(cfg_bounds.get("min_duration_sec", 15.0)),
+                    max_duration_sec=float(cfg_bounds.get("max_duration_sec", 60.0)),
                 )
                 if (repaired_start, repaired_end) != (start, end):
                     logger.info(
@@ -1170,9 +1583,12 @@ def enrich_clip(
     sentence_clean = check_sentence_boundary(excerpt)
     
     # check category duration bounds
-    cfg = CATEGORY_CONFIG.get(category, CATEGORY_CONFIG[DEFAULT_CATEGORY])
-    min_dur = cfg.get("min_duration_sec", 15.0)
-    max_dur = cfg.get("max_duration_sec", 60.0)
+    cfg = (
+        CATEGORY_CONFIG.get(category)
+        or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    )
+    min_dur = float(cfg.get("min_duration_sec", 15.0))
+    max_dur = float(cfg.get("max_duration_sec", 60.0))
     
     needs_review = raw_clip.get("needs_manual_review", False)
     flagged_reason = raw_clip.get("reason", "")
@@ -1246,7 +1662,10 @@ def compute_virality_score(clip: Dict[str, Any], category: str) -> float:
       2. Real audio signal (audio_score — laughter/applause/energy/pitch)
       3. Text heuristic signal (heuristic_score — Stage 1 keyword scan, supporting only)
     """
-    cfg = CATEGORY_CONFIG.get(category, CATEGORY_CONFIG[DEFAULT_CATEGORY])
+    cfg = (
+        CATEGORY_CONFIG.get(category)
+        or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    )
     w = cfg["weights"]
 
     curiosity = float(clip.get("curiosity_score", 5.0))
@@ -1287,610 +1706,230 @@ def compute_virality_score(clip: Dict[str, Any], category: str) -> float:
 # for both, since both speak the OpenAI-compatible chat.completions API.
 # ============================================================
 
-# ============================================================
-# NEW 3-PASS PIPELINE IMPLEMENTATION
-# ============================================================
-
-SECTION_TYPE_WEIGHTS = {
-    "story": {"curiosity": 0.20, "scroll_stop": 0.20, "part2": 0.25, "rewatch": 0.10, "standalone": 0.15, "cliffhanger": 0.10},
-    "reveal": {"curiosity": 0.20, "scroll_stop": 0.15, "part2": 0.30, "rewatch": 0.10, "standalone": 0.15, "cliffhanger": 0.10},
-    "debate": {"curiosity": 0.15, "scroll_stop": 0.20, "part2": 0.20, "rewatch": 0.15, "standalone": 0.20, "cliffhanger": 0.10},
-    "lesson": {"curiosity": 0.15, "scroll_stop": 0.15, "part2": 0.15, "rewatch": 0.25, "standalone": 0.20, "cliffhanger": 0.10},
-    "confession": {"curiosity": 0.15, "scroll_stop": 0.25, "part2": 0.20, "rewatch": 0.15, "standalone": 0.15, "cliffhanger": 0.10},
-    "prediction": {"curiosity": 0.20, "scroll_stop": 0.20, "part2": 0.20, "rewatch": 0.10, "standalone": 0.20, "cliffhanger": 0.10},
-    "default": {"curiosity": 0.20, "scroll_stop": 0.20, "part2": 0.20, "rewatch": 0.10, "standalone": 0.15, "cliffhanger": 0.15}
-}
-
-def _get_instructor_mode(provider_name: str):
-    """
-    Returns the correct instructor mode for each provider.
-    - NVIDIA NIM and Groq: output JSON in the content field (Mode.JSON)
-    - OpenRouter: supports tool-call protocol (Mode.TOOLS)
-    Using Mode.TOOLS with NIM/Groq raises 'No tool calls found' since those
-    models write JSON into the content block rather than emitting function-call objects.
-    """
-    import instructor
-    if provider_name in ("nvidia_nim", "groq"):
-        return instructor.Mode.JSON
-    return instructor.Mode.TOOLS  # openrouter
-
-
-def _run_pass1_via_instructor(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+    """Instructor + Pydantic guaranteed-schema attempt against one provider. Raises on failure."""
     import instructor
     from openai import OpenAI
     import httpx
+
+    is_local = provider["name"] == "ollama"
+
+    # Local inference (Ollama) needs a much longer timeout — gemma3:12b at 20-30 tok/s
+    # generating ~3,000 tokens takes 100-150s; 420s gives ample headroom.
+    # Cloud providers are fast; keep the original 120s.
+    timeout_seconds = 420.0 if is_local else 120.0
 
     base_client = OpenAI(
         base_url=provider["base_url"],
         api_key=provider["api_key"],
-        default_headers=provider.get("extra_headers") or {},
-        http_client=httpx.Client(timeout=httpx.Timeout(180.0, connect=15.0)),
+        http_client=httpx.Client(timeout=httpx.Timeout(timeout_seconds, connect=10.0)),
     )
-    mode = _get_instructor_mode(provider["name"])
-    client = instructor.from_openai(base_client, mode=mode)
-
-    logger.info(f"[{provider['name']}] Calling Pass 1 [{provider['model']}] via Instructor (mode={mode.value})...")
-    result = _call_with_retry(
-        client.chat.completions.create,
-        model=provider["model"],
-        response_model=NarrativeMapResponse,
-        max_retries=1,
-        temperature=0.4,
-        max_tokens=4096,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_content},
-        ],
-        provider_name=provider["name"],
-        pass_label="Pass 1 (Instructor)",
-    )
-    return result.model_dump()
-
-def _run_pass1_via_legacy(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
-    from openai import OpenAI
-    import httpx
-
-    client = OpenAI(
-        base_url=provider["base_url"],
-        api_key=provider["api_key"],
-        default_headers=provider.get("extra_headers") or {},
-        http_client=httpx.Client(timeout=httpx.Timeout(180.0, connect=15.0)),
-    )
-
-    logger.info(f"[{provider['name']}] Calling Pass 1 [{provider['model']}] (legacy manual-parse)...")
-    completion = _call_with_retry(
-        client.chat.completions.create,
-        model=provider["model"],
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_content},
-        ],
-        temperature=0.4,
-        max_tokens=4096,
-        stream=False,
-        provider_name=provider["name"],
-        pass_label="Pass 1 (legacy)",
-    )
-    content = completion.choices[0].message.content.strip()
-    if "```json" in content:
-        content = content.split("```json")[1].split("```")[0]
-    elif "```" in content:
-        content = content.split("```")[1].split("```")[0]
-    content = content.strip()
-    return json.loads(content)
-
-def _run_pass2_via_instructor(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+    # Mode.JSON  → writes JSON into the content field (nvidia_nim, ollama).
+    # Mode.TOOLS → uses the function-call protocol        (groq).
+    # Ollama's OpenAI-compatible endpoint handles Mode.JSON reliably;
+    # it does NOT support Mode.TOOLS at the same fidelity level.
     import instructor
-    from openai import OpenAI
-    import httpx
-
-    base_client = OpenAI(
-        base_url=provider["base_url"],
-        api_key=provider["api_key"],
-        default_headers=provider.get("extra_headers") or {},
-        http_client=httpx.Client(timeout=httpx.Timeout(180.0, connect=15.0)),
-    )
-    mode = _get_instructor_mode(provider["name"])
+    mode = instructor.Mode.JSON if provider["name"] in ("nvidia_nim", "ollama") else instructor.Mode.TOOLS
     client = instructor.from_openai(base_client, mode=mode)
 
-    logger.info(f"[{provider['name']}] Calling Pass 2 [{provider['model']}] via Instructor (mode={mode.value})...")
-    result = _call_with_retry(
-        client.chat.completions.create,
+    logger.info(f"[{provider['name']}] Calling [{provider['model']}] via Instructor (mode={mode.value})...")
+
+    # Local models: lower temperature tightens JSON schema adherence without sacrificing
+    # reasoning quality (temperature controls token sampling randomness, not judgment).
+    # Smaller max_tokens is safe because we're not generating sentence_analysis.
+    temperature = 0.25 if is_local else 0.6
+    max_tokens  = 3000  if is_local else 7000
+
+    result: ClipResponseModel = client.chat.completions.create(
         model=provider["model"],
-        response_model=RetentionPeaksResponse,
-        max_retries=1,
-        temperature=0.4,
-        max_tokens=4096,
+        response_model=ClipResponseModel,
+        max_retries=2,
+        temperature=temperature,
+        top_p=0.95,
+        max_tokens=max_tokens,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content},
         ],
-        provider_name=provider["name"],
-        pass_label="Pass 2 (Instructor)",
     )
-    return result.model_dump()
 
-def _run_pass2_via_legacy(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+    data = result.model_dump()
+    if not data.get("clips"):
+        logger.warning(f"[{provider['name']}] Instructor returned zero clips.")
+        return None
+
+    logger.info(f"[{provider['name']}] Successfully parsed guaranteed-schema response via Instructor.")
+    return data
+
+
+def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+    """Manual streaming + string-parse attempt against one provider. Raises on failure."""
     from openai import OpenAI
     import httpx
+    import re
+
+    is_local = provider["name"] == "ollama"
+    timeout_seconds = 420.0 if is_local else 120.0
+    temperature = 0.25 if is_local else 0.6
+    max_tokens = 3000 if is_local else 5000
 
     client = OpenAI(
         base_url=provider["base_url"],
         api_key=provider["api_key"],
-        default_headers=provider.get("extra_headers") or {},
-        http_client=httpx.Client(timeout=httpx.Timeout(180.0, connect=15.0)),
+        http_client=httpx.Client(timeout=httpx.Timeout(timeout_seconds, connect=10.0)),
     )
 
-    logger.info(f"[{provider['name']}] Calling Pass 2 [{provider['model']}] (legacy manual-parse)...")
-    completion = _call_with_retry(
-        client.chat.completions.create,
+    logger.info(f"[{provider['name']}] Calling [{provider['model']}] (legacy manual-parse path)...")
+
+    completion = client.chat.completions.create(
         model=provider["model"],
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content},
         ],
-        temperature=0.4,
-        max_tokens=4096,
-        stream=False,
-        provider_name=provider["name"],
-        pass_label="Pass 2 (legacy)",
-    )
-    content = completion.choices[0].message.content.strip()
-    if "```json" in content:
-        content = content.split("```json")[1].split("```")[0]
-    elif "```" in content:
-        content = content.split("```")[1].split("```")[0]
-    content = content.strip()
-    return json.loads(content)
-
-def narrative_map_transcript(full_transcript_lines: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    # 5-minute chunks (300s) — keeps each LLM call well within the free model's
-    # effective context budget when combined with the large system prompt.
-    # Previously 600s; halving this cuts payload size in half per call.
-    chunk_size_sec = 300.0
-
-    # Max characters of transcript text sent per chunk.
-    # ~5000 chars ≈ 1250 tokens; leaves plenty of room for the system prompt
-    # (~800 tokens) and the JSON output within an 8k context window.
-    CHUNK_TEXT_CHAR_LIMIT = 5000
-    
-    # Group lines by their start time
-    chunks = []
-    current_chunk_lines = []
-    current_chunk_end = chunk_size_sec
-    
-    for line in full_transcript_lines:
-        if line.get("start_time", 0.0) >= current_chunk_end:
-            if current_chunk_lines:
-                chunks.append(current_chunk_lines)
-                current_chunk_lines = []
-            while current_chunk_end <= line.get("start_time", 0.0):
-                current_chunk_end += chunk_size_sec
-        current_chunk_lines.append(line)
-        
-    if current_chunk_lines:
-        chunks.append(current_chunk_lines)
-        
-    all_units = []
-    unit_counter = 1
-    
-    for idx, chunk_lines in enumerate(chunks):
-        logger.info(f"Mapping narrative units for chunk {idx+1}/{len(chunks)}...")
-        raw_chunk_text = " ".join(
-            f"[{line.get('speaker', 'Speaker')}] {line.get('text', '')}"
-            for line in chunk_lines
-        )
-        # Hard-cap the text sent to the model so we never blow the context window.
-        # If the chunk is longer than the limit, truncate at the last full word.
-        if len(raw_chunk_text) > CHUNK_TEXT_CHAR_LIMIT:
-            truncated = raw_chunk_text[:CHUNK_TEXT_CHAR_LIMIT]
-            last_space = truncated.rfind(" ")
-            chunk_text = truncated[:last_space] if last_space > 0 else truncated
-            logger.info(
-                f"Chunk {idx+1}: text truncated from {len(raw_chunk_text)} "
-                f"to {len(chunk_text)} chars to stay within context budget."
-            )
-        else:
-            chunk_text = raw_chunk_text
-        
-        providers = _get_llm_providers()
-        if not providers:
-            logger.warning("No LLM providers configured for Pass 1.")
-            return []
-
-        system_prompt = (
-            "You are Marcus, a veteran documentary and podcast editor with 12 years of experience "
-            "identifying the most compelling, short-formable moments in long-form content. "
-            "You have cut thousands of viral clips for comedy specials, interview podcasts, "
-            "spiritual/self-help shows, true crime, and debate-style content.\n\n"
-
-            "YOUR JOB — NARRATIVE UNIT MAPPING:\n"
-            "Scan the transcript and identify every distinct narrative unit that could potentially "
-            "become a viral short-form clip. A narrative unit is a self-contained moment with its "
-            "own internal arc — it has a beginning (why we care), a middle (tension or buildup), "
-            "and an end (payoff, punchline, revelation, or cliffhanger).\n\n"
-
-            "CLIPABILITY FILTER — Only flag units that pass ALL of these tests:\n"
-            "✓ A cold stranger (who has never heard of this show) would understand it within 5 seconds\n"
-            "✓ It contains at least ONE of: a surprising fact, an emotional confession, a punchline, "
-            "a controversial claim, a personal story with stakes, or a jaw-dropping reveal\n"
-            "✓ It does NOT start with pleasantries, sponsor reads, topic transitions, or off-topic filler\n"
-            "✓ It does NOT require watching a previous clip to make sense\n"
-            "SKIP any unit that fails even one of these tests — do not include boring transitions, "
-            "generic Q&A openers, or content that is purely setup with no payoff.\n\n"
-
-            "UNIT TYPE DEFINITIONS AND WHAT TO EXTRACT FOR EACH:\n\n"
-
-            "story / personal_experience / failure / success:\n"
-            "  → These are narrative arcs. A person tells something that HAPPENED to them.\n"
-            "  → hook: The sentence that makes you think 'wait what happened?' (e.g. 'The night I lost everything...')\n"
-            "  → tension_point: The exact sentence where stakes are highest or the outcome is most uncertain\n"
-            "  → climax: The moment of highest drama or decision\n"
-            "  → reveal: What actually happened / the answer / the outcome\n"
-            "  → For cliffhanger clips: cut AFTER tension_point, BEFORE reveal\n\n"
-
-            "analogy / lesson / mindset_shift:\n"
-            "  → These are insight moments. Someone explains something in a way you've never heard before.\n"
-            "  → hook: The counterintuitive or surprising premise (e.g. 'Most people think X — they're completely wrong')\n"
-            "  → climax: The core insight or reframe that changes how you see things\n"
-            "  → tension_point: The moment before the insight lands — maximum curiosity\n"
-            "  → A good lesson clip ends ON the insight, not after it\n\n"
-
-            "debate / argument / question_answer:\n"
-            "  → These are exchange moments between two voices (or implied challenge/response).\n"
-            "  → hook: The question, challenge, or provocative claim that opens the exchange\n"
-            "  → tension_point: The moment the challenge lands or the most direct confrontation\n"
-            "  → climax: The most surprising or forceful response/rebuttal\n"
-            "  → reveal: The resolution or final position — only include if resolved within 60 seconds\n"
-            "  → CRITICAL: Both the question AND the answer must fit in a 60-second window\n\n"
-
-            "twist / reveal / prediction:\n"
-            "  → These are 'wait, WHAT?' moments. Something unexpected is dropped.\n"
-            "  → hook: The setup or expectation being established\n"
-            "  → tension_point: The moment right before the reveal — maximum suspense\n"
-            "  → climax / reveal: The unexpected fact, outcome, or twist itself\n"
-            "  → Best as cliffhangers: cut right at the moment of maximum suspense\n\n"
-
-            "confession:\n"
-            "  → Someone admits something vulnerable, embarrassing, or deeply personal.\n"
-            "  → hook: The admission or vulnerable opening line\n"
-            "  → tension_point: The deepest point of vulnerability — where the speaker is most exposed\n"
-            "  → climax: The realization, acceptance, or lesson that came from it\n"
-            "  → Great confession clips end on a line a viewer would screenshot\n\n"
-
-            "CRITICAL FIELD RULES:\n"
-            "- start_sentence and end_sentence MUST be exact verbatim sentences from the transcript — "
-            "copy them character-for-character so we can locate them with string matching.\n"
-            "- Do NOT invent or paraphrase. If you cannot find an exact match, use the closest real sentence.\n"
-            "- summary: One sentence describing what this unit is about and why it's interesting.\n"
-            "- If the transcript contains sponsor reads, intros/outros, or pure small talk "
-            "('How are you?', 'Thanks for having me', 'Welcome back'), skip them entirely.\n\n"
-
-            "Return ONLY the requested JSON format. No markdown, no explanation."
-        )
-        user_content = f"Here is the transcript segment to analyze:\n\n{chunk_text}"
-
-        chunk_units = []
-        for provider in providers:
-            try:
-                if _INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE:
-                    data = _run_pass1_via_instructor(provider, system_prompt, user_content)
-                else:
-                    data = _run_pass1_via_legacy(provider, system_prompt, user_content)
-                if data and "units" in data:
-                    chunk_units = data["units"]
-                    break
-            except Exception as e:
-                logger.error(f"[{provider['name']}] Pass 1 failed on chunk {idx+1}: {e}")
-                
-        for unit in chunk_units:
-            unit["unit_id"] = unit_counter
-            unit_counter += 1
-            all_units.append(unit)
-
-        # Brief pause between chunks to avoid slamming the fallback provider
-        # (OpenRouter free tier has very tight per-minute token limits).
-        if idx < len(chunks) - 1:
-            time.sleep(2.0)
-
-    return all_units
-
-def select_retention_peaks(narrative_units: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    providers = _get_llm_providers()
-    if not providers or not narrative_units:
-        logger.warning("No LLM providers configured for Pass 2, or narrative units empty.")
-        return []
-
-    # Build a section-type summary to inject genre-aware cutting rules into Pass 2
-    section_types_present = list({u.get("section_type", "story") for u in narrative_units})
-    section_type_cutting_rules = {
-        "story": (
-            "STORY/PERSONAL EXPERIENCE units → Use CLIFFHANGER strategy. "
-            "Cut AFTER the tension_point — right when the stakes are highest and the outcome is most uncertain. "
-            "NEVER include the resolution or reveal inside the clip. "
-            "The viewer should be left thinking 'but what happened next?!'"
-        ),
-        "personal_experience": (
-            "PERSONAL EXPERIENCE units → Use CLIFFHANGER strategy. "
-            "Cut right after the moment where the person's situation is most uncertain or most painful. "
-            "Do not resolve the story — make the viewer desperate for the ending."
-        ),
-        "failure": (
-            "FAILURE units → Use CLIFFHANGER strategy. "
-            "Cut at the lowest point — the moment of maximum failure, humiliation, or loss. "
-            "Do NOT include the recovery or lesson. Leave the viewer in the pit."
-        ),
-        "success": (
-            "SUCCESS units → Use PAYOFF strategy. "
-            "Include both the struggle AND the breakthrough. "
-            "End on the exact sentence that delivers the emotional payoff — the win, the realization, the transformation."
-        ),
-        "debate": (
-            "DEBATE/ARGUMENT units → Use PAYOFF strategy. "
-            "BOTH the challenge AND the response must be inside the clip. "
-            "Cut after the most surprising or decisive rebuttal. "
-            "NEVER cut mid-challenge with no answer — that is a broken clip."
-        ),
-        "question_answer": (
-            "Q&A units → Use PAYOFF strategy. "
-            "The question AND the full answer must both be inside the clip. "
-            "Cut after the answer lands — ideally after the most surprising part of the answer. "
-            "A clip that ends on a question with no answer is INVALID."
-        ),
-        "lesson": (
-            "LESSON/MINDSET SHIFT units → Use PAYOFF strategy. "
-            "End on the exact insight sentence — the 'aha moment' that reframes everything. "
-            "This sentence should be quotable, universal, and screenshot-worthy. "
-            "Do not end BEFORE the insight lands."
-        ),
-        "analogy": (
-            "ANALOGY units → Use PAYOFF strategy. "
-            "End on the moment the analogy snaps into place — when the listener goes 'oh wow.' "
-            "The analogy must be fully explained before the cut."
-        ),
-        "mindset_shift": (
-            "MINDSET SHIFT units → Use PAYOFF strategy. "
-            "End on the reframe — the sentence that flips the viewer's assumption. "
-            "It must be self-contained: a viewer with no prior context must fully understand the shift."
-        ),
-        "reveal": (
-            "REVEAL units → Use CLIFFHANGER strategy. "
-            "Cut right BEFORE the reveal is fully explained — at maximum suspense. "
-            "Leave the viewer screaming internally. The moment of maximum 'wait WHAT?' is the cut point."
-        ),
-        "twist": (
-            "TWIST units → Use CLIFFHANGER strategy. "
-            "Cut immediately AFTER the twist is dropped but BEFORE any explanation, reaction, or processing. "
-            "The raw shock is the hook — don't dilute it with aftermath."
-        ),
-        "confession": (
-            "CONFESSION units → Use PAYOFF strategy. "
-            "End on the most vulnerable, quotable line — the sentence a viewer would screenshot and share. "
-            "Must include both the admission AND the emotional resolution (acceptance/lesson/realization)."
-        ),
-        "prediction": (
-            "PREDICTION units → Use PAYOFF strategy. "
-            "End right after the prediction is stated confidently. "
-            "Include enough context so the viewer understands what's being predicted and why it's bold."
-        ),
-        "argument": (
-            "ARGUMENT units → Use PAYOFF strategy (or CLIFFHANGER if unresolved). "
-            "Include the full argument — setup, the provocative claim, and the strongest supporting point. "
-            "End at maximum conviction — before any walk-back or qualification."
-        ),
-        "quote": (
-            "QUOTE units → Use PAYOFF strategy. "
-            "The quote must be fully delivered. End right after the quote lands, with 1-2 seconds of reaction "
-            "if available. Never cut mid-quote."
-        ),
-    }
-
-    cutting_rules_for_present_types = "\n".join(
-        f"  • {section_type_cutting_rules.get(st, 'Use PAYOFF strategy. End on the strongest, most self-contained moment.')}"
-        for st in section_types_present
+        temperature=temperature,
+        top_p=0.95,
+        max_tokens=max_tokens,
+        extra_body=provider.get("extra_body") or {},
+        stream=True,
     )
 
-    system_prompt = (
-        "You are Dr. Reena Shah — a behavioral psychologist AND viral content editor. "
-        "You have a PhD in attention and decision-making, and you've spent the last decade applying "
-        "that knowledge to short-form video. You know EXACTLY what happens in a human brain in the "
-        "3 seconds before someone swipes away, and you know how to engineer a clip that prevents it.\n\n"
-
-        "YOUR JOB — RETENTION PEAK SELECTION:\n"
-        "For each narrative unit below, determine the single best cut point that maximizes viewer "
-        "retention and engagement on TikTok and Instagram Reels. Your audience is COLD — they have "
-        "never seen this show, never heard of the speaker, and have zero patience for slow intros.\n\n"
-
-        "PLATFORM PSYCHOLOGY (internalize this before judging anything):\n"
-        "- First 3 seconds: The viewer decides whether to stay or swipe. The opening must be viscerally "
-        "compelling — shocking, funny, vulnerable, or counterintuitive.\n"
-        "- Seconds 3-15: The viewer is on probation. Every sentence must justify staying. Boring = swipe.\n"
-        "- Seconds 15-60: If they're still watching, they're invested. But they'll still bail if the "
-        "payoff doesn't come or if the clip drags.\n"
-        "- Comments are gold: clips that generate 'Part 2?', 'Wait WHAT?', or heated debate comments "
-        "get boosted by the algorithm. Engineer for comments.\n\n"
-
-        "GENRE-SPECIFIC CUTTING RULES (apply these based on each unit's section_type):\n"
-        f"{cutting_rules_for_present_types}\n\n"
-
-        "GENERAL ANTI-PATTERNS — these are the most common clipping mistakes. Avoid them:\n"
-        "✗ Cutting right BEFORE a punchline lands (comedy killer — the viewer gets no payoff)\n"
-        "✗ Cutting mid-sentence or mid-thought (broken clips feel amateurish and kill trust)\n"
-        "✗ Ending on a question with no answer inside the clip (viewers feel cheated)\n"
-        "✗ Starting with 'Yeah', 'So', 'Like I was saying', 'As I mentioned' (no hook)\n"
-        "✗ Including the host intro or show pleasantries ('Welcome back!', 'How are you?')\n"
-        "✗ Selecting a moment that only makes sense if you've watched the full episode\n"
-        "✗ Choosing 'safe' clips that are mildly interesting but not emotionally activating\n\n"
-
-        "SCORING RUBRIC — use exact definitions, not gut feel:\n"
-        "curiosity_score (0-100): How badly does a cold viewer NEED to know what happens next?\n"
-        "  100 = They would comment 'Part 2???' immediately. Cannot stop thinking about it.\n"
-        "   70 = Genuinely wants to know more. Would click a 'Part 2' link.\n"
-        "   40 = Mildly curious. Might remember it, might not.\n"
-        "    0 = Zero unresolved tension. No reason to seek more information.\n"
-        "scroll_stop_score (0-100): How hard does the FIRST LINE of this clip hit a cold scroller?\n"
-        "  100 = First sentence is so shocking/funny/vulnerable that swiping is physically impossible.\n"
-        "   70 = Strong opener. Most viewers pause.\n"
-        "   40 = Decent opener. Some viewers pause, many swipe.\n"
-        "    0 = Forgettable opener. Almost everyone swipes immediately.\n"
-        "part2_score (0-100): How likely is a viewer to comment 'Part 2?' or actively seek the full video?\n"
-        "  100 = They WILL search for the rest of this conversation. Guaranteed.\n"
-        "   70 = High chance they seek more. 60%+ would look for Part 2.\n"
-        "   40 = Some interest in more, but not urgent.\n"
-        "    0 = The clip is complete. No Part 2 needed or desired.\n"
-        "rewatch_score (0-100): How likely is a viewer to watch this clip a second (or third) time?\n"
-        "  100 = They save it and send it to 3 people. They watch it again immediately.\n"
-        "   70 = They watch it twice. They might save it.\n"
-        "   40 = One watch is enough. Forgettable after viewing.\n"
-        "    0 = Would not rewatch under any circumstances.\n"
-        "standalone_score (0-100): Can a person with ZERO context understand and enjoy this clip?\n"
-        "  100 = Perfectly self-contained. No prior knowledge needed. Works for anyone, anywhere.\n"
-        "   70 = Mostly self-contained. One or two things might be unclear but the core works.\n"
-        "   40 = Requires some context. A newcomer might be confused.\n"
-        "    0 = Completely incomprehensible without the full episode.\n"
-        "cliffhanger_score (0-100): How effectively does the clip END at a moment of unresolved tension?\n"
-        "  100 = Ends at the exact peak of tension. The next sentence would answer everything — we cut before it.\n"
-        "   70 = Ends at a good tension point. Some unresolved curiosity.\n"
-        "   40 = Mildly cliffhanger-ish. Ends a bit too early or too late.\n"
-        "    0 = Completely resolved. No tension remaining at the end.\n\n"
-
-        "OUTPUT REQUIREMENTS:\n"
-        "- cut_after_sentence: EXACT verbatim sentence from the transcript. Copy character-for-character.\n"
-        "- cut_rationale: 2-3 sentences explaining the psychological mechanism — WHY does cutting here "
-        "maximize retention? What specific emotion or cognitive state does it leave the viewer in?\n"
-        "- why_viewers_keep_watching: One sharp sentence from a viewer psychology POV — "
-        "e.g. 'The viewer is left in a state of cognitive dissonance — their belief about X was just "
-        "challenged and they need resolution.'\n"
-        "- suggested_title: A hooky, clickable title (8 words max) that would stop someone mid-scroll. "
-        "Use numbers, provocative adjectives, or open loops. e.g. 'He Lost Everything In One Night' or "
-        "'The Truth About Karma Nobody Tells You'\n"
-        "- estimated_duration_sec: Realistic estimate in seconds (15-60 range).\n\n"
-
-        "Return ONLY the requested JSON format. No markdown, no extra commentary."
-    )
-    user_content = f"Here are the narrative units to evaluate:\n\n{json.dumps(narrative_units, indent=2)}"
-
-    # ── BATCH PROCESSING ──────────────────────────────────────────────────────
-    # Sending ALL units in one call can produce very large payloads on long
-    # podcasts (30+ units = 10k+ tokens of JSON). We batch into groups of 6
-    # units so each call stays within budget. Results are merged afterward.
-    PASS2_BATCH_SIZE = 6
-
-    # Slim each unit down to the fields Pass 2 actually needs — drop the
-    # raw transcript excerpt fields that were only needed for Pass 1 matching.
-    PASS2_KEEP_FIELDS = {
-        "unit_id", "section_type", "summary", "hook",
-        "buildup", "climax", "reveal", "resolution", "tension_point",
-    }
-
-    def _slim_unit(u: Dict[str, Any]) -> Dict[str, Any]:
-        return {k: v for k, v in u.items() if k in PASS2_KEEP_FIELDS}
-
-    unit_batches = [
-        [_slim_unit(u) for u in narrative_units[i: i + PASS2_BATCH_SIZE]]
-        for i in range(0, len(narrative_units), PASS2_BATCH_SIZE)
-    ]
-    logger.info(
-        f"Pass 2: {len(narrative_units)} units split into "
-        f"{len(unit_batches)} batch(es) of up to {PASS2_BATCH_SIZE}."
-    )
-
-    all_peaks: List[Dict[str, Any]] = []
-
-    for batch_idx, batch in enumerate(unit_batches):
-        logger.info(f"Pass 2: processing batch {batch_idx+1}/{len(unit_batches)}...")
-        batch_user_content = (
-            f"Here are the narrative units to evaluate (batch "
-            f"{batch_idx+1}/{len(unit_batches)}):\n\n"
-            f"{json.dumps(batch, indent=2)}"
-        )
-        batch_peaks: List[Dict[str, Any]] = []
-        for provider in providers:
-            try:
-                if _INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE:
-                    data = _run_pass2_via_instructor(provider, system_prompt, batch_user_content)
-                else:
-                    data = _run_pass2_via_legacy(provider, system_prompt, batch_user_content)
-                if data and "peaks" in data:
-                    batch_peaks = data["peaks"]
-                    break
-            except Exception as e:
-                logger.error(f"[{provider['name']}] Pass 2 batch {batch_idx+1} failed: {e}")
-
-        if batch_peaks:
-            all_peaks.extend(batch_peaks)
-        else:
-            logger.warning(f"Pass 2 batch {batch_idx+1} returned no peaks — skipping.")
-
-        # Small courtesy delay between batches to avoid hammering the free tier
-        if batch_idx < len(unit_batches) - 1:
-            time.sleep(1.5)
-
-    if not all_peaks:
-        logger.error("All Pass 2 batches returned no peaks.")
-    else:
-        logger.info(f"Pass 2 complete. Total peaks collected: {len(all_peaks)}.")
-
-    return all_peaks
-
-def find_closest_segment_idx(sentence: str, segments: List[Dict[str, Any]], search_from_idx: int = 0) -> int:
-    """
-    Finds the index of the segment that most likely contains or matches the given sentence.
-    """
-    clean_sentence = re.sub(r"[^\w\s]", "", sentence.lower()).strip()
-    if not clean_sentence:
-        return search_from_idx
-
-    best_idx = search_from_idx
-    best_score = 0.0
-
-    for i in range(search_from_idx, len(segments)):
-        seg_text = re.sub(r"[^\w\s]", "", segments[i].get("text", "").lower()).strip()
-        if not seg_text:
+    full_content = ""
+    for chunk in completion:
+        if not chunk.choices:
             continue
-        
-        if clean_sentence in seg_text or seg_text in clean_sentence:
-            return i
-            
-        words_s = set(clean_sentence.split())
-        words_seg = set(seg_text.split())
-        overlap = len(words_s & words_seg)
-        union = len(words_s | words_seg)
-        score = overlap / union if union > 0 else 0.0
-        
-        if score > best_score:
-            best_score = score
-            best_idx = i
+        if chunk.choices[0].delta.content is not None:
+            full_content += chunk.choices[0].delta.content
 
-    return best_idx
+    content = full_content.strip()
+    if "```json" in content:
+        content = content.split("```json")[1].split("```")[0]
+    elif "```" in content:
+        content = content.split("```")[1].split("```")[0]
+    content = content.strip()
 
-def compute_narrative_virality_score(clip: Dict[str, Any], section_type: str) -> float:
-    weights = SECTION_TYPE_WEIGHTS.get(section_type, SECTION_TYPE_WEIGHTS["default"])
-    
-    curiosity = float(clip.get("curiosity_score", 50.0))
-    scroll_stop = float(clip.get("scroll_stop_score", 50.0))
-    part2 = float(clip.get("part2_score", 50.0))
-    rewatch = float(clip.get("rewatch_score", 50.0))
-    standalone = float(clip.get("standalone_score", 50.0))
-    cliffhanger = float(clip.get("cliffhanger_score", 50.0))
-    
-    base_score = (
-        (curiosity * weights["curiosity"]) +
-        (scroll_stop * weights["scroll_stop"]) +
-        (part2 * weights["part2"]) +
-        (rewatch * weights["rewatch"]) +
-        (standalone * weights["standalone"]) +
-        (cliffhanger * weights["cliffhanger"])
-    ) / 10.0
-    
-    audio_score = float(clip.get("audio_score", 5.0))
-    combined = (base_score * 0.8) + (audio_score * 0.2)
-    
-    low_substance_ratio = clip.get("low_substance_ratio", 0.0)
-    if low_substance_ratio > 0.0:
-        combined *= (1.0 - low_substance_ratio)
-        
-    return round(combined, 2)
+    if not content:
+        logger.warning(f"[{provider['name']}] returned empty content.")
+        return None
+
+    logger.debug(f"[{provider['name']}] [RAW LLM RESPONSE] ({len(content)} chars):\n{content}")
+    preview = content[:400].replace('\n', ' ')
+    logger.info(f"[{provider['name']}] [LLM RAW PREVIEW] ({len(content)} chars): {preview}...")
+
+    # Attempt to repair common JSON malformation (like unquoted string values) before parsing
+    repaired_content = content
+    for field in ["clip_strategy", "hook_line", "reason"]:
+        pattern = rf'"{field}"\s*:\s*([^"\s{{\[][^,}}\n]*)'
+        def repl(match):
+            val = match.group(1).strip()
+            if val.endswith('"'):
+                val = val[:-1]
+            return f'"{field}": "{val}"'
+        repaired_content = re.sub(pattern, repl, repaired_content)
+
+    try:
+        data = json.loads(repaired_content)
+    except json.JSONDecodeError as json_err:
+        logger.error(
+            f"[{provider['name']}] JSON parse failed at char {json_err.pos} "
+            f"(line {json_err.lineno} col {json_err.colno}). Raw content around failure: "
+            f"...{repaired_content[max(0, json_err.pos-80):json_err.pos+80]}..."
+        )
+        return None
+
+    if not data.get("clips"):
+        logger.warning(f"[{provider['name']}] returned JSON with no clips.")
+        return None
+
+    logger.info(f"[{provider['name']}] Successfully parsed batch response (legacy path).")
+    return data
+
+
+def call_nvidia_nim_batch_scoring(candidates: List[Dict[str, Any]], video_id: str, category: str) -> Dict[str, Any]:
+    """
+    Stage 2: Batch-evaluate and rank candidate clips using the lean,
+    category-specific schema, trying each configured LLM provider in order
+    (NVIDIA NIM, then Groq) before giving up and using the heuristic fallback.
+
+    For each provider: primary path is Instructor + Pydantic (guaranteed valid
+    JSON, auto-retry on validation failure); fallback path is manual streaming
+    + string parsing (kept for resilience if instructor/pydantic aren't
+    installed, or if a provider's Instructor call fails for another reason).
+    Only after every provider has been tried does this drop to the heuristic
+    fallback — same behavior/name kept as before (build_fallback), just now
+    reached less often.
+    """
+
+    def build_fallback() -> Dict[str, Any]:
+        fallback_clips = []
+        for cand in candidates[:5]:
+            fake_raw = {
+                "start_time": cand["start_time"],
+                "end_time": cand["end_time"],
+                "clip_strategy": (
+                    CATEGORY_CONFIG.get(category)
+                    or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+                )["clip_strategy"],
+                "hook_line": cand["text"][:60],
+                "reason": "Heuristic fallback — no LLM provider available or all returned invalid data.",
+                "curiosity_score": cand.get("heuristic_score", 5.0),
+                "hook_score": cand.get("heuristic_score", 5.0),
+                "heuristic_score": cand.get("heuristic_score", 5.0),
+            }
+            fallback_clips.append(fake_raw)
+        return {
+            "video_id": str(video_id),
+            "language": "en",
+            "overall_summary": "Heuristic fallback summary.",
+            "clips": fallback_clips,
+        }
+
+    providers = _get_llm_providers()
+    if not providers:
+        logger.warning("No LLM provider API keys configured (NVIDIA_API_KEY / GROQ_API_KEY). Using heuristic fallback.")
+        return build_fallback()
+
+    candidates_str = ""
+    for idx, cand in enumerate(candidates):
+        candidates_str += (
+            f"--- CANDIDATE {idx+1} ---\n"
+            f"Original Time Window: {cand['start_time']} seconds to {cand['end_time']} seconds\n"
+            f"Transcript:\n{cand['text']}\n\n"
+        )
+
+    user_content = (
+        f"Here is the video_id: \"{video_id}\"\n"
+        f"Here are the candidate segments:\n\n{candidates_str}"
+    )
+
+    for provider in providers:
+        is_local = provider["name"] == "ollama"
+        # Build the right prompt variant for this provider:
+        #   lean=True  → Ollama: no sentence_analysis output requirement
+        #   lean=False → Cloud: full sentence_analysis included
+        system_prompt = build_system_prompt(category, lean=is_local)
+
+        # --- PRIMARY PATH for this provider: Instructor + Pydantic ---
+        if _INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE:
+            try:
+                data = _score_via_instructor(provider, system_prompt, user_content)
+                if data:
+                    return data
+            except Exception as e:
+                logger.error(f"[{provider['name']}] Instructor path failed ({e}). Trying legacy parse on same provider...")
+
+        # --- FALLBACK PATH for this provider: manual streaming + string parsing ---
+        try:
+            data = _score_via_legacy_parse(provider, system_prompt, user_content)
+            if data:
+                return data
+        except Exception as e:
+            logger.error(f"[{provider['name']}] Legacy parse path failed ({e}).")
+
+        logger.warning(f"Provider '{provider['name']}' exhausted (Instructor + legacy both failed). Trying next provider...")
+
+    logger.error("All configured LLM providers failed for batch scoring. Using heuristic fallback.")
+    return build_fallback()
 
 
 def detect_intro_preview_boundary(segments: Optional[List[Dict[str, Any]]]) -> float:
@@ -1948,6 +1987,7 @@ def detect_intro_preview_boundary(segments: Optional[List[Dict[str, Any]]]) -> f
 # ============================================================
 
 def rank_candidates(
+
     candidates: List[Dict[str, Any]],
     video_id: str = "unknown",
     limit: int = 5,
@@ -1956,185 +1996,166 @@ def rank_candidates(
     transcript_lines: Optional[List[Dict[str, Any]]] = None,  # per-line speaker data, enables exchange validation
 ) -> List[Dict[str, Any]]:
     """
-    Ranks candidates using the 3-Pass Narrative Intelligence Pipeline:
-    Pass 1: Map narrative units from the entire transcript.
-    Pass 2: Select retention peaks ('Part 2' cut points) for narrative units.
-    Pass 3: Resolve exact timestamps, apply boundary repair, and score candidates.
+    Ranks candidates using the upgraded pipeline:
+    1. Score all candidates using fast heuristics (supporting signal only).
+    2. Deduplicate/filter to top 10 by overlap.
+    3. Auto-classify content category via embeddings (LLM verifies low-confidence cases).
+    4. Call Llama Nemotron with a lean, category-specific prompt/schema via Instructor
+       (guaranteed valid JSON, auto-retries on validation failure).
+    5. Enrich LLM output in Python: snap boundaries, attach real audio-signal scores,
+       validate speaker-exchange completeness for interview_discussion.
+    6. Apply category-specific virality weights across LLM + audio + heuristic signals.
+    7. Return the top 'limit' clips.
     """
-    if not transcript_lines:
-        logger.warning("No transcript lines available for Pass 1 narrative mapping.")
+    if not candidates:
         return []
 
-    # 1. Combine segments to get full transcript text
-    full_transcript = " ".join(f"[{line.get('speaker', 'Speaker')}] {line.get('text', '')}" for line in transcript_lines)
-    
-    # Pass 1: Narrative Map
-    logger.info("Executing Pass 1: Narrative Mapping on transcript segments...")
-    units = narrative_map_transcript(transcript_lines)
-    if not units:
-        logger.warning("Pass 1 returned no narrative units.")
-        return []
-    logger.info(f"Pass 1 complete. Identified {len(units)} narrative units.")
+    # --- INTRO PREVIEW DEDUPLICATION ---
+    # Some podcasts stitch a "highlights reel" (30-90s of out-of-order clips) onto
+    # the front of the full interview. Detect and drop those duplicated early segments
+    # so they don't pollute the candidate pool or produce spurious top-ranked clips.
+    intro_boundary = detect_intro_preview_boundary(transcript_lines)
+    if intro_boundary > 0.0:
+        filtered = [c for c in candidates if c.get("start_time", 0.0) >= intro_boundary]
+        if filtered:
+            logger.warning(f"Intro stripper active: Excluded {len(candidates) - len(filtered)} candidates starting before {intro_boundary:.1f}s.")
+            candidates = filtered
+        else:
+            logger.warning("All candidates were inside the intro window — keeping originals to avoid empty pool.")
 
-    # Pass 2: Retention Peaks
-    logger.info("Executing Pass 2: Selecting retention peaks for units...")
-    peaks = select_retention_peaks(units)
-    if not peaks:
-        logger.warning("Pass 2 returned no retention peaks.")
-        return []
-    logger.info(f"Pass 2 complete. Selected {len(peaks)} retention peaks.")
+    # --- AUTO CLASSIFICATION ---
+    if category is None or category not in CATEGORY_CONFIG:
+        if category is not None:
+            logger.warning(f"Unknown category '{category}' passed in, auto-classifying instead.")
+        full_text = " ".join(c["text"] for c in candidates)
+        category = classify_content_category(full_text)
+        logger.info(f"Auto-classified video_id={video_id} as category='{category}'")
 
-    # Pass 3: Timestamp Resolution, Sentence-Boundary Snapping, and Scoring
-    logger.info("Executing Pass 3: Resolving timestamps, boundary repair, and scoring...")
+    logger.info(f"Ranking {len(candidates)} candidates for category='{category}'. Stage 1 heuristic pre-filter...")
+
+    # Stage 1: Heuristic scoring (supporting signal only)
+    scored_candidates = []
+    for cand in candidates:
+        h_score = heuristic_pre_filter_score(cand["text"])
+        scored_candidates.append({**cand, "heuristic_score": h_score})
+
+    scored_candidates.sort(key=lambda x: x["heuristic_score"], reverse=True)
+
+    # Deduplicate by overlap (max 20%)
+    top_candidates = []
+    for cand in scored_candidates:
+        overlap_found = False
+        s1, e1 = cand["start_time"], cand["end_time"]
+        dur1 = e1 - s1
+        for existing in top_candidates:
+            s2, e2 = existing["start_time"], existing["end_time"]
+            dur2 = e2 - s2
+            intersection = max(0.0, min(e1, e2) - max(s1, s2))
+            if intersection > 0.0:
+                overlap_ratio = intersection / min(dur1, dur2)
+                if overlap_ratio > 0.2:
+                    overlap_found = True
+                    break
+        if not overlap_found:
+            top_candidates.append(cand)
+            if len(top_candidates) >= STAGE1_CANDIDATE_POOL_SIZE:
+                break
+
+    logger.info(f"Stage 1 complete. Batch scoring {len(top_candidates)} candidates using Llama Nemotron...")
+
+    # Stage 2: Lean batch LLM scoring (Instructor-guaranteed)
+    nim_result = call_nvidia_nim_batch_scoring(top_candidates, video_id, category)
+    raw_clips = nim_result.get("clips", [])
     final_clips = []
-    
-    # Map units by unit_id for quick lookup
-    units_by_id = {u["unit_id"]: u for u in units}
-    
-    for peak in peaks:
+
+    for clip in raw_clips:
         try:
-            unit_id = peak["unit_id"]
-            if unit_id not in units_by_id:
-                continue
-            unit = units_by_id[unit_id]
-            
-            # Fuzzy match start sentence and cut sentence to segment index
-            start_idx = find_closest_segment_idx(unit["start_sentence"], transcript_lines, 0)
-            cut_idx = find_closest_segment_idx(peak["cut_after_sentence"], transcript_lines, start_idx)
-            
-            start_time = transcript_lines[start_idx]["start_time"]
-            end_time = transcript_lines[cut_idx]["end_time"]
-            
-            # Slide start time forward if duration is too long
-            max_duration = 60.0
-            if (end_time - start_time) > max_duration:
-                while start_idx < cut_idx and (end_time - transcript_lines[start_idx]["start_time"]) > max_duration:
-                    start_idx += 1
-                start_time = transcript_lines[start_idx]["start_time"]
-                
-            # Align boundaries and perform sentence-boundary repair
-            # Using database segments for precise boundary snapping
-            segs_list = []
-            if video_id != "unknown":
-                from app.db import SessionLocal
-                from app import models
-                db = SessionLocal()
-                try:
-                    segs_list = db.query(models.TranscriptSegment).filter(
-                        models.TranscriptSegment.video_id == int(video_id)
-                    ).order_by(models.TranscriptSegment.start_time).all()
-                except Exception as db_err:
-                    logger.error(f"Error fetching TranscriptSegments from DB: {db_err}")
-                finally:
-                    db.close()
-            
-            min_dur, max_dur = 15.0, 60.0
-            
-            if segs_list:
-                repaired_start, repaired_end, boundaries_clean = repair_sentence_boundaries(
-                    start_time, end_time, segs_list,
-                    min_duration_sec=min_dur,
-                    max_duration_sec=max_dur
+            clip_start = float(clip.get("start_time", 0.0))
+            match = next(
+                (c for c in top_candidates if c["start_time"] <= clip_start <= c["end_time"]),
+                None
+            )
+            clip["heuristic_score"] = match["heuristic_score"] if match else 5.0
+
+            enriched = enrich_clip(clip, top_candidates, category, video_id, audio_path=audio_path)
+
+            # --- SPEAKER-TURN / EXCHANGE VALIDATION ---
+            # Fixes: "LLM picked a clip that's just a question, no answer"
+            if category == "interview_discussion":
+                is_valid, invalid_reason = validate_exchange_completeness(
+                    enriched["start_time"], enriched["end_time"], transcript_lines
                 )
-                start_time, end_time = repaired_start, repaired_end
+                if not is_valid:
+                    logger.warning(f"Clip [{enriched['start_time']}-{enriched['end_time']}] failed exchange validation: {invalid_reason}")
+                    enriched["needs_manual_review"] = True
+                    enriched["reason"] = (enriched.get("reason", "") + f" [FLAGGED: {invalid_reason}]").strip()
+                    virality = compute_virality_score(enriched, category) * 0.5  # heavy penalty, not a hard drop
+                else:
+                    virality = compute_virality_score(enriched, category)
             else:
-                boundaries_clean = True
-                
-            duration = round(end_time - start_time, 2)
+                virality = compute_virality_score(enriched, category)
+
+            enriched["virality_score"] = round(virality, 2)
+            final_clips.append(enriched)
+        except Exception as e:
+            logger.error(f"Error mapping candidate output clip: {e}")
+
+    # --- HARD SAFETY / SANITY GATES BEFORE RANKING ---
+    safe_and_valid_clips = []
+    for clip in final_clips:
+        start_t = clip["start_time"]
+        end_t = clip["end_time"]
+        dur = clip["duration_sec"]
+        
+        # 1. Content Safety Check
+        is_safe, safety_reason = check_content_safety(clip["transcript_excerpt"])
+        if not is_safe:
+            logger.warning(
+                f"Clip [{start_t:.2f}s - {end_t:.2f}s] PULLED from ranking competition due to "
+                f"content safety violation: {safety_reason}"
+            )
+            continue
+
+        # 1b. Sentence-Boundary Gate — applies to every category equally.
+        # This is the fix for the bug that let clip_14 and clip_15 render despite
+        # cutting off mid-sentence: needs_manual_review used to be advisory-only.
+        # Now a clip we couldn't repair to clean boundaries never reaches render.
+        if clip.get("auto_render_blocked"):
+            logger.warning(
+                f"Clip [{start_t:.2f}s - {end_t:.2f}s] PULLED from ranking competition — "
+                f"unrepairable mid-sentence boundary: {clip.get('reason')}"
+            )
+            continue
+
+        # 2. Absurd Duration Check
+        cfg = (
+            CATEGORY_CONFIG.get(clip.get("category"))
+            or CATEGORY_CONFIG.get(category)
+            or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+        )
+        min_allowed = float(cfg.get("min_duration_sec", 15.0))
+        max_allowed = float(cfg.get("max_duration_sec", 60.0))
+        
+        # Pull clip if it is less than 5 seconds or more than 120 seconds,
+        # or extremely outside the allowed category limits (e.g. < 40% of min or > 160% of max)
+        if dur < 5.0 or dur > 120.0 or dur < (min_allowed * 0.4) or dur > (max_allowed * 1.6):
+            logger.warning(
+                f"Clip [{start_t:.2f}s - {end_t:.2f}s] PULLED from ranking competition due to "
+                f"absurd duration: {dur:.2f}s (Category Limits: {min_allowed}s - {max_allowed}s)"
+            )
+            continue
             
-            # Excerpt text
-            excerpt_list = [
-                s.get("text", "") for s in transcript_lines 
-                if s.get("start_time", 0.0) >= start_time and s.get("end_time", 0.0) <= end_time
-            ]
-            full_excerpt = " ".join(excerpt_list)
-            excerpt = full_excerpt[:220]
-            
-            # Safety checks
-            is_safe, safety_reason = check_content_safety(full_excerpt)
-            if not is_safe:
-                logger.warning(f"Clip [{start_time}-{end_time}] pulled: safety violation {safety_reason}")
-                continue
-                
-            # Audio analysis
-            audio_signals = detect_audio_events(audio_path, start_time, end_time) if audio_path else {
-                "energy_spike_ratio": 1.0, "pitch_variance": 0.0,
-                "has_laughter": False, "has_applause": False, "audio_score": 5.0,
-            }
-            
-            # Low substance check
-            low_substance_ratio = compute_low_substance_ratio(full_excerpt)
-            auto_render_blocked = False
-            needs_review = False
-            flagged_reason = peak["cut_rationale"]
-            
-            if not boundaries_clean:
-                needs_review = True
-                auto_render_blocked = True
-                flagged_reason += " [BLOCKED: Unrepairable sentence boundaries]"
-                
-            if low_substance_ratio > LOW_SUBSTANCE_REVIEW_THRESHOLD:
-                needs_review = True
-                flagged_reason += f" [FLAGGED: Low-substance filler {low_substance_ratio:.0%}]"
-                if low_substance_ratio > LOW_SUBSTANCE_HARD_BLOCK_THRESHOLD:
-                    auto_render_blocked = True
-            
-            # Construct candidate clip dict
-            clip_dict = {
-                "start_time": round(start_time, 2),
-                "end_time": round(end_time, 2),
-                "duration_sec": duration,
-                "category": unit["section_type"],
-                "clip_strategy": "cliffhanger" if "cliffhanger" in peak["cut_rationale"].lower() else "payoff",
-                "curiosity_score": peak["curiosity_score"],
-                "hook_score": peak["scroll_stop_score"],
-                "emotion_score": peak["part2_score"],
-                "surprise_score": peak["rewatch_score"],
-                "reaction_score": peak["standalone_score"],
-                "context_completeness": peak["cliffhanger_score"],
-                # New fields
-                "scroll_stop_score": peak["scroll_stop_score"],
-                "part2_score": peak["part2_score"],
-                "rewatch_score": peak["rewatch_score"],
-                "standalone_score": peak["standalone_score"],
-                "cliffhanger_score": peak["cliffhanger_score"],
-                "section_type": unit["section_type"],
-                "narrative_summary": unit["summary"],
-                "cut_rationale": peak["cut_rationale"],
-                
-                "audio_score": audio_signals["audio_score"],
-                "has_laughter": audio_signals["has_laughter"],
-                "has_applause": audio_signals["has_applause"],
-                "energy_spike_ratio": audio_signals["energy_spike_ratio"],
-                
-                "why_viewers_keep_watching": peak["why_viewers_keep_watching"],
-                "reason": flagged_reason,
-                "hook_line": peak["cut_after_sentence"],
-                "transcript_excerpt": excerpt,
-                "suggested_title": peak["suggested_title"],
-                "suggested_caption": excerpt[:100],
-                "needs_manual_review": needs_review,
-                "auto_render_blocked": auto_render_blocked,
-                "best_aspect_ratio": "9:16",
-                "low_substance_ratio": low_substance_ratio,
-            }
-            
-            # Calculate combined virality score using new weighted formula
-            virality = compute_narrative_virality_score(clip_dict, unit["section_type"])
-            clip_dict["virality_score"] = virality
-            
-            final_clips.append(clip_dict)
-        except Exception as ex:
-            logger.error(f"Error resolving peak candidate: {ex}")
-            
+        safe_and_valid_clips.append(clip)
+
     # Sort by virality score descending
-    final_clips.sort(key=lambda x: x["virality_score"], reverse=True)
-    
-    # Deduplicate timeline (max 20% overlap)
-    final_ranked_clips = deduplicate_timeline(final_clips, max_overlap_ratio=0.20)
-    
+    safe_and_valid_clips.sort(key=lambda x: x["virality_score"], reverse=True)
+
+    # --- FINAL TIMELINE DEDUPLICATION ---
+    # After snapping, clips may drift back to overlapping. Dedup on the final enriched list.
+    final_ranked_clips = deduplicate_timeline(safe_and_valid_clips, max_overlap_ratio=0.20)
+
     # Assign ranks
     for idx, c in enumerate(final_ranked_clips):
         c["rank"] = idx + 1
-        
+
     return final_ranked_clips[:limit]

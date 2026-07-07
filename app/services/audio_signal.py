@@ -43,7 +43,7 @@ def _get_sense_voice_model():
     try:
         from funasr import AutoModel
         # Use iic/SenseVoiceSmall for ModelScope compatibility
-        _SENSE_VOICE_MODEL = AutoModel(model="iic/SenseVoiceSmall", trust_remote_code=True)
+        _SENSE_VOICE_MODEL = AutoModel(model="iic/SenseVoiceSmall", trust_remote_code=True, disable_update=True)
         logger.info("SenseVoiceSmall audio event detection model loaded.")
         return _SENSE_VOICE_MODEL
     except Exception as e:

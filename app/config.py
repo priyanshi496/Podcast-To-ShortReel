@@ -1,6 +1,5 @@
 import os
-from pydantic_settings import BaseSettings
-from pydantic import ConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/podcast"
@@ -15,12 +14,16 @@ class Settings(BaseSettings):
     # Groq (fallback LLM provider)
     GROQ_API_KEY: str = ""
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    # Ollama (local LLM — highest priority when running)
+    OLLAMA_BASE_URL: str = "http://localhost:11434/v1"
+    OLLAMA_MODEL: str = "qwen3:8b"
+    OLLAMA_ENABLED: bool = False  # flip to True in .env to activate
     UPLOAD_DIR: str = "uploads"
     OUTPUT_DIR: str = "output"
     TEMP_DIR: str = "temp"
     WORKER_POLL_INTERVAL: int = 5
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore"
