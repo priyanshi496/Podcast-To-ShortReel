@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     WHISPER_DEVICE: str = "cpu"
     # Deepgram (primary ASR provider — transcription + real speaker diarization)
     DEEPGRAM_API_KEY: str = "your_deepgram_api_key_here"
-    DEEPGRAM_MODEL: str = "nova-2"
+    DEEPGRAM_MODEL: str = "nova-3"
     # NVIDIA NIM (primary LLM provider)
     NVIDIA_API_KEY: str = "your_nvidia_api_key_here"
     NVIDIA_MODEL: str = "openai/gpt-oss-120b"

@@ -189,6 +189,12 @@ def process_job(db: Session, job: models.Job):
         if not clip:
             raise ValueError(f"Clip candidate {job.clip_candidate_id} not found.")
             
+        if not video.storage_path or not os.path.exists(video.storage_path):
+            crud.update_clip_status(db, clip.id, "failed")
+            crud.update_job(db, job.id, status="failed", error_message="No source video file found. Video rendering requires the original MP4 upload.")
+            logger.warning(f"Render job {job.id} failed: No source video file found for video {video.id}.")
+            return
+
         # 1. Update clip status
         crud.update_clip_status(db, clip.id, "rendering")
         crud.update_job(db, job.id, status="running", progress=0.2)

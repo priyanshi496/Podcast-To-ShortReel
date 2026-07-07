@@ -150,67 +150,51 @@ CATEGORY_CONFIG: Dict[str, Any] = {
         "description": "A back-and-forth conversation between two or more speakers, asking and answering questions, debating, or interviewing.",
         "clip_strategy": "mixed",
         "prompt_rules": (
-            "PERSONA: You are Sarah Chen — a debate segment producer who has spent 6 years cutting confrontational "
-            "exchanges for political news shows, hot-topic podcasts, and viral interview compilations. "
-            "You have an obsessive ability to identify the EXACT moment in a conversation where one speaker "
-            "says something that genuinely surprises, challenges, or contradicts the other. You know that "
-            "a clean Q&A exchange in under 60 seconds is the most reliable format for viral interview content — "
-            "but only if the answer is genuinely surprising, not expected.\n\n"
+            "PERSONA: You are Sarah Chen — Head of Social Media Strategy for a top-tier network (TikTok, Reels, Shorts). "
+            "You spent years cutting viral hooks for shows like Modern Wisdom, Diary of a CEO, and TRS Clips. "
+            "You know that social media doesn't reward academic completeness — it rewards SHAREABILITY. "
+            "Your golden rule is: 'If I showed this clip to a stranger, would they immediately send it to a friend?' "
+            "You look for screenshot-worthy quotes, controversial opinions, and strong emotions, NOT complete informative lectures.\n\n"
 
             "THE COLD THUMB TEST (apply to every candidate before selecting):\n"
-            "Someone sees this clip cold. They don't know either speaker. Does the opening line make them think "
-            "'wait, what's the answer to THAT?' or 'oh, another interview question'? "
-            "If the opening doesn't feel urgent and the answer doesn't feel worth waiting for — it's not the clip.\n\n"
+            "Picture a viewer at 2 AM, scrolling sound-on. If the first 2 seconds don't stop their thumb, they're gone. "
+            "Do NOT start with preamble, setup, or polite questions. Open with the punchiest, most provocative statement or question.\n\n"
 
-            "THE EXCHANGE COMPLETENESS RULE — NON-NEGOTIABLE:\n"
-            "Every interview clip has TWO halves: the question/challenge AND the answer/response. "
-            "BOTH must live inside the clip boundaries. A clip that ends on an unanswered question has "
-            "zero payoff. A clip that starts mid-answer with no context has zero hook. "
-            "For PAYOFF clips: include everything from the question through the full answer, including any "
-            "reaction or follow-up that makes the answer land harder.\n\n"
+            "THE STANDALONE VS. EXCHANGE RULE:\n"
+            "You do NOT need a complete host-guest Q&A exchange to make a great clip. "
+            "A Reel can be a single standalone insight (e.g., 'Every time you buy a new car, you become less wealthy'). "
+            "RULE: If a guest statement is completely self-contained, select ONLY that statement. "
+            "ONLY prepend the host's question if the guest starts with a context-dependent pronoun/referent (like 'It', 'That', 'He', 'They') "
+            "which makes the sentence incomprehensible to a cold viewer without the question.\n\n"
 
-            "THE FIRST 3 SECONDS FORMULA — THE PROVOCATIVE OPENING:\n"
-            "The opening sentence must signal that something REAL is about to happen. Compare:\n"
-            "WEAK: 'So can you tell me a little bit about your background and how you got into this field?'\n"
-            "STRONG: 'I have to ask you something that everyone is thinking but nobody's actually said out loud.'\n"
-            "The STRONG version creates immediate tension: what is that thing? The viewer STAYS to find out.\n\n"
+            "VIRAL DIMENSIONS & SCORING GUIDELINES:\n"
+            "Evaluate every moment strictly against these five pillars (0-10 scale):\n"
+            "1. **hook_score (30%)**: Does the first sentence stop the scroll? (e.g. 'I'm not a fan of FIRE' = 10, 'Let's talk about savings' = 2)\n"
+            "2. **curiosity_score (25%)**: Shareability. Does it make someone say 'I have to send this to my friend right now'?\n"
+            "3. **reaction_score (20%)**: Comment-magnet. Does it provoke debate or strong opinions that make viewers argue in the comments?\n"
+            "4. **surprise_score (15% / standalone_score)**: Screenshot-worthy. Is it an absolute gem/original quote or deep life logic ('Real wealth is time')?\n"
+            "5. **context / educational_value (10%)**: Purely instructional/academic. Put this dead last. Information without emotion is useless.\n\n"
 
-            "WHEN TO USE CLIFFHANGER (exceptions only):\n"
-            "Use CLIFFHANGER ONLY if: (a) the first speaker drops a genuinely shocking claim or reveals "
-            "something explosive, AND (b) the response is NOT yet in the transcript window you have. "
-            "The unresolved tension must be REAL — not just a mundane question awaiting an obvious answer. "
-            "If a viewer could reasonably guess the response, it's NOT a cliffhanger — it's an incomplete clip.\n\n"
+            "WHAT TO LOOK FOR (THE 10/10 GOLDMINE):\n"
+            "- Core life reframing (e.g. 'Real wealth is time', 'Trust compounds')\n"
+            "- Strong, contrarian opinions that spark comment wars (e.g. 'I'm not a fan of FIRE')\n"
+            "- Original analogies or narrative reframing ('Walmart did not acquire Flipkart to get their business, but to create founders')\n"
+            "- Emotional, raw human admissions ('Trust has no hacks')\n\n"
 
-            "WHAT MAKES AN ANSWER VIRAL-WORTHY:\n"
-            "The answer must do at least ONE of these: surprise (contradicts what you expected), "
-            "contradict (challenges a widespread belief), confess (admits something vulnerable or embarrassing), "
-            "flip the power dynamic (the guest gains the upper hand), or reveal (discloses something previously hidden). "
-            "A boring, expected answer to a boring, expected question is NOT a viral clip, "
-            "even if the exchange is technically complete.\n\n"
-
-            "PSYCHOLOGICAL TRIGGERS TO ENGINEER:\n"
-            "- Intellectual curiosity: the question unlocks a topic the viewer didn't know they cared about\n"
-            "- Social currency: 'I have to show this to someone who believes the opposite'\n"
-            "- Moral tension: one speaker says something the viewer must decide if they agree with\n"
-            "- Revelation: something that changes how the viewer sees a person, topic, or belief\n\n"
-
-            "ANTI-PATTERNS (these kill interview clips):\n"
-            "✗ THE #1 MISTAKE: Clip ends on an unanswered question — zero payoff, viewers feel cheated\n"
-            "✗ One speaker monologue — same voice the entire time is NOT an interview exchange\n"
-            "✗ Generic pleasantries ('great to be here', 'thank you so much') even with two speakers\n"
-            "✗ A clip where the 'surprising' answer is completely predictable from the question\n"
-            "✗ Selecting an exchange that only makes sense if you know the episode's earlier context"
+            "ANTI-PATTERNS (these kill social performance):\n"
+            "✗ Explaining basic investment calculations or mutual fund percentage returns (too academic, not viral)\n"
+            "✗ Long preambles, questions, and polite chatter before the point lands\n"
+            "✗ Monotone lectures that lack a punchline or screenshot-worthy line"
         ),
         "weights": {
+            "hook": 0.25,
             "curiosity": 0.20,
-            "context": 0.20,
-            "hook": 0.15,
-            "surprise": 0.10,
-            "emotion": 0.05,
-            "reaction": 0.10,
-            "audio_signal": 0.20,
+            "reaction": 0.15,
+            "surprise": 0.15,
+            "context": 0.10,
+            "audio_signal": 0.15,
         },
-        "min_duration_sec": 30.0,
+        "min_duration_sec": 10.0,  # Allow short clips down to 10 seconds (e.g., standalone punchy quotes)
         "max_duration_sec": 90.0,
     },
 
@@ -654,6 +638,35 @@ try:
         video_id: str
         clips: List[ClipCandidateModel]
 
+    class DiscoveredMoment(BaseModel):
+        start_segment_id: int
+        end_segment_id: int
+        opportunity_type: str
+        key_idea: str
+        why_viral: str
+
+    class MomentFinderResponse(BaseModel):
+        video_id: str
+        moments: List[DiscoveredMoment]
+
+    class EditedClip(BaseModel):
+        start_segment_id: int
+        end_segment_id: int
+        clip_strategy: str
+        editorial_style: str
+        hook_line: str
+        reason: str
+        curiosity_score: int = Field(ge=0, le=10)
+        hook_score: int = Field(ge=0, le=10)
+        surprise_score: int = Field(ge=0, le=10)
+        emotion_score: int = Field(ge=0, le=10)
+        reaction_score: int = Field(ge=0, le=10)
+        standalone_score: int = Field(ge=0, le=10)
+
+    class EditedClipsResponse(BaseModel):
+        video_id: str
+        clips: List[EditedClip]
+
     _PYDANTIC_AVAILABLE = True
 except Exception:
     _PYDANTIC_AVAILABLE = False
@@ -815,19 +828,42 @@ def _get_llm_providers() -> List[Dict[str, Any]]:
     Returns an ordered list of usable LLM provider configs.
 
     Priority order (highest → lowest):
-      1. Ollama  — local, free, zero-latency, runs when OLLAMA_ENABLED=true
-      2. NVIDIA NIM — cloud primary (large model, high quality)
-      3. Groq   — cloud fallback (fast, rate-limited)
+      1. NVIDIA NIM — cloud primary (large model, best instruction following for complex JSON tasks)
+      2. Groq       — cloud fallback (fast, rate-limited)
+      3. Ollama     — local last resort (free but slow and prone to hallucination on long prompts)
 
     Any provider missing its key / flag is silently skipped, so the
     chain degrades gracefully without any category-specific logic.
     """
     providers: List[Dict[str, Any]] = []
 
-    # ── 1. Ollama (local) ─────────────────────────────────────────────────────
-    # Inserted FIRST so local inference always runs before hitting cloud APIs.
-    # Set OLLAMA_ENABLED=true in .env to activate; default is false so existing
-    # deployments are unaffected until explicitly opted in.
+    # ── 1. NVIDIA NIM (cloud primary) ────────────────────────────────────────
+    nvidia_key = getattr(settings, "NVIDIA_API_KEY", None)
+    if nvidia_key and nvidia_key not in ["your_nvidia_api_key_here", ""]:
+        providers.append({
+            "name": "nvidia_nim",
+            "base_url": "https://integrate.api.nvidia.com/v1",
+            "api_key": nvidia_key,
+            "model": getattr(settings, "NVIDIA_MODEL", "nvidia/nemotron-3-super-120b-a12b"),
+            # NVIDIA's NIM Nemotron endpoint accepts this reasoning-suppression flag;
+            # Groq's endpoint does not, so this is only applied per-provider below.
+            "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
+        })
+
+    # ── 2. Groq (cloud fallback) ──────────────────────────────────────────────
+    # groq_key = getattr(settings, "GROQ_API_KEY", None)
+    # if groq_key and groq_key not in ["your_groq_api_key_here", ""]:
+    #     providers.append({
+    #         "name": "groq",
+    #         "base_url": GROQ_BASE_URL,
+    #         "api_key": groq_key,
+    #         "model": getattr(settings, "GROQ_MODEL", DEFAULT_GROQ_MODEL),
+    #         "extra_body": {},
+    #     })
+
+    # ── 3. Ollama (local last resort) ─────────────────────────────────────────
+    # Only used if all cloud providers fail. Slow and prone to hallucination on
+    # large JSON schema prompts, but free and offline-capable.
     ollama_enabled = getattr(settings, "OLLAMA_ENABLED", False)
     if ollama_enabled:
         ollama_url = getattr(settings, "OLLAMA_BASE_URL", "http://localhost:11434/v1")
@@ -844,31 +880,8 @@ def _get_llm_providers() -> List[Dict[str, Any]]:
         })
         logger.info(f"Ollama provider enabled: model='{ollama_model}' at '{ollama_url}'")
 
-    # ── 2. NVIDIA NIM (cloud primary) ────────────────────────────────────────
-    nvidia_key = getattr(settings, "NVIDIA_API_KEY", None)
-    if nvidia_key and nvidia_key not in ["your_nvidia_api_key_here", ""]:
-        providers.append({
-            "name": "nvidia_nim",
-            "base_url": "https://integrate.api.nvidia.com/v1",
-            "api_key": nvidia_key,
-            "model": getattr(settings, "NVIDIA_MODEL", "nvidia/nemotron-3-super-120b-a12b"),
-            # NVIDIA's NIM Nemotron endpoint accepts this reasoning-suppression flag;
-            # Groq's endpoint does not, so this is only applied per-provider below.
-            "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
-        })
-
-    # ── 3. Groq (cloud fallback) ──────────────────────────────────────────────
-    groq_key = getattr(settings, "GROQ_API_KEY", None)
-    if groq_key and groq_key not in ["your_groq_api_key_here", ""]:
-        providers.append({
-            "name": "groq",
-            "base_url": GROQ_BASE_URL,
-            "api_key": groq_key,
-            "model": getattr(settings, "GROQ_MODEL", DEFAULT_GROQ_MODEL),
-            "extra_body": {},
-        })
-
     return providers
+
 
 
 # ============================================================
@@ -953,7 +966,8 @@ def classify_content_category(full_transcript_text: str) -> str:
             f"Verifying with LLM classifier..."
         )
 
-    providers = _get_llm_providers()
+    # Exclude Ollama (local) from simple classification to save 20+ seconds of CPU/GPU latency
+    providers = [p for p in _get_llm_providers() if p["name"] != "ollama"]
     if not providers:
         logger.warning("No LLM provider API keys configured. Using embedding result if available, else heuristic fallback.")
         return embed_category if embed_category else heuristic_classify_category(full_transcript_text)
@@ -987,9 +1001,81 @@ def classify_content_category(full_transcript_text: str) -> str:
     return embed_category if embed_category else heuristic_classify_category(full_transcript_text)
 
 
-# ============================================================
-# PROMPT BUILDING
-# ============================================================
+def build_moment_finder_prompt(category: str) -> str:
+    cfg = CATEGORY_CONFIG.get(category) or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    rule_details = cfg.get("prompt_rules", "")
+    
+    interview_rule = ""
+    if category == "interview_discussion":
+        interview_rule = (
+            "=== INTERVIEW EXCHANGE RULE (MANDATORY) ===\n"
+            "This is an interview/discussion format with a HOST and one or more GUESTS.\n"
+            "Every moment you select MUST start with the HOST's question or setup, not the guest's answer.\n"
+            "A clip that starts with a guest answer and has NO preceding question is INCOMPLETE and worthless — "
+            "a viewer watching it for the first time has zero context and will swipe away immediately.\n"
+            "ALWAYS trace back to find the question or prompt that triggered the interesting response, and include that in your start_segment_id.\n"
+            "Exception: a guest can open a clip only if they are making an unprompted bold claim (e.g., interrupting with a hot take), "
+            "but ONLY if the claim is immediately self-explanatory with no prior context needed.\n\n"
+        )
+
+    return (
+        "You are Jamie Chen — Head of Viral Clip Strategy at a top-tier podcast network. "
+        "You are looking for the absolute best short vertical clip opportunities (for TikTok/Reels/Shorts) in this transcript.\n\n"
+        f"We have categorized this video's dominant style as: '{category}'\n"
+        f"Category Description: {cfg.get('description', '')}\n\n"
+        "=== GENRE-SPECIFIC PRODUCER GUIDELINES ===\n"
+        f"{rule_details}\n\n"
+        f"{interview_rule}"
+        "=== DISCOVERY TASK ===\n"
+        "Your job is to read the entire transcript segment list and identify up to 10 viral 'moments'.\n"
+        "For each moment, determine the start_segment_id and end_segment_id (inclusive) from the segment list.\n"
+        "A moment must represent a self-contained, high-retention reel opportunity: an intriguing question and its complete punchy answer, "
+        "a dramatic narrative arc/vulnerability shift, a standalone bold prediction, or a heated debate.\n"
+        "Do NOT think about duration or timestamps. Focus purely on structural and semantic completeness.\n"
+        "Assign each moment a type: 'cliffhanger', 'story', 'standalone_insight', 'debate', 'controversial_take', 'prediction', 'emotional_moment'.\n\n"
+        "=== NEVER SELECT — HARD BLACKLIST ===\n"
+        "IMMEDIATELY SKIP any segment that contains any of the following — these are structural/meta elements, not viral content:\n"
+        "- Channel outros: 'subscribe', 'like this video', 'hit the bell', 'comment below', 'share this episode'\n"
+        "- Call-to-action segments: 'follow us', 'check the link in bio', 'leave a review'\n"
+        "- Sponsor reads or ad breaks: 'brought to you by', 'use code', 'check out our sponsor'\n"
+        "- Generic intros/outros: 'welcome back to the podcast', 'thank you for watching', 'see you in the next episode'\n"
+        "- Episode housekeeping: 'in today's episode we will cover...', 'before we get started...'\n"
+        "If a segment matches ANY of these patterns, do not include it as a moment, period."
+    )
+
+
+def build_moment_editor_prompt(category: str) -> str:
+    cfg = CATEGORY_CONFIG.get(category) or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+    
+    interview_editing_rule = ""
+    if category == "interview_discussion":
+        interview_editing_rule = (
+            "=== INTERVIEW EDITING RULE (MANDATORY) ===\n"
+            "This is an INTERVIEW. The audience uses DIARIZATION (speaker labels) to follow who is speaking.\n"
+            "NEVER trim the start of a clip to remove the host's question — the question IS the hook.\n"
+            "A clip that opens with a guest mid-answer ('It's not something that...') is BROKEN — "
+            "a first-time viewer has zero context and will immediately swipe away.\n"
+            "RULE: If the discovered moment's start_segment_id is a guest speaking, you MUST scroll back to find "
+            "the preceding host question and use THAT segment as the new start_segment_id.\n"
+            "The HOOK LINE you write must be based on the host's question or the setup — NOT the guest's answer.\n\n"
+        )
+
+    return (
+        "You are Sarah Chen — a master vertical video editor who cuts high-retention clips.\n"
+        "Your job is to take the raw discovered moment ranges and edit them into the highest-retention short reels possible.\n\n"
+        f"{interview_editing_rule}"
+        "=== EDITING PRINCIPLES ===\n"
+        "1. **Tension-First Hook**: The opening segment of the edited clip must immediately grab attention (an urgent question, a bold claim, or an intriguing setup). Skip preamble, small talk, or polite introductions.\n"
+        "2. **Punchy Out-Frame**: Cut the clip *immediately* after the climax/payoff sentence lands (the peak resolution or key takeaway). Do not let the speaker ramble on, over-explain, or return to boring details.\n"
+        "3. **Strategy Alignment**: Choose 'cliffhanger' (if it leaves the viewer desperately wanting to swipe to Part 2 or read the caption) or 'payoff' (if it delivers a satisfying complete lesson/reveal).\n"
+        "4. **REAL QUOTES ONLY**: The hook_line field MUST be copied VERBATIM from the actual transcript text of the opening segment. "
+        "Do NOT invent, paraphrase, or creatively rewrite any hook line. If the first segment says 'Warren Buffett has been very vocal about crypto', "
+        "your hook_line must be that exact sentence, not a rewritten version.\n\n"
+        "=== TASK ===\n"
+        "For each of the proposed moments, you will receive the segment indices. Review the surrounding segments and define the new edited start and end segment IDs.\n"
+        "Determine the hook line (copy it verbatim from the transcript), editing strategy, editorial style, reasoning, and score the clip (0 to 10) on various viral dimensions (curiosity, hook, surprise, emotion, reaction, and standalone value)."
+    )
+
 
 def build_system_prompt(category: str, lean: bool = False) -> str:
     """
@@ -1159,42 +1245,55 @@ def validate_exchange_completeness(
 ) -> Tuple[bool, str]:
     """
     For interview_discussion clips: checks whether the clip window contains
-    a real exchange (2+ speakers, doesn't end mid-question with no answer).
+    either a real exchange (2+ speakers, doesn't end mid-question) OR a
+    self-contained standalone insight (1 speaker telling a coherent fact/thought).
 
     Returns (is_valid, reason_if_invalid). If transcript_lines is not
     provided, validation is skipped and always returns (True, "").
-
-    Diarization fallback: if all lines share the same speaker label (broken
-    diarization), falls back to Q/A turn detection via punctuation + silence gaps.
     """
     if not transcript_lines:
         return True, ""
 
+    EDGE_TOLERANCE = 0.15  # seconds — accept segments ending just past clip boundary
     lines_in_window = [
         l for l in transcript_lines
-        if l.get("start_time", 0) >= start and l.get("end_time", 0) <= end
+        if l.get("start_time", 0) >= (start - EDGE_TOLERANCE)
+        and l.get("end_time", 0) <= (end + EDGE_TOLERANCE)
     ]
 
-    if len(lines_in_window) < 2:
-        return False, "Clip window contains fewer than 2 transcript lines — too short to be a real exchange."
+    if len(lines_in_window) < 1:
+        return False, "Clip window contains 0 transcript lines."
+
+    first_line_text = (lines_in_window[0].get("text") or "").strip()
+    
+    # Define referents/pronouns that signify a dangling sentence (missing context)
+    dangling_context_words = {"it", "its", "it's", "they", "their", "them", "he", "him", "his", "she", "her", "this", "these", "that", "those", "but", "so", "because", "which"}
+    
+    words = first_line_text.split()
+    first_word = words[0].lower().strip(".,!?;:\"'()") if words else ""
 
     speakers = {l.get("speaker") for l in lines_in_window if l.get("speaker")}
 
     if len(speakers) < 2:
-        # --- DIARIZATION FALLBACK ---
-        # Whisper-small doesn't diarize. If all lines are labelled the same speaker,
-        # use Q/A pattern + silence gap detection instead of hard-failing every clip.
-        if _detect_qa_turns(lines_in_window):
-            logger.debug(
-                f"Clip [{start}-{end}]: Single-speaker label but Q/A turn pattern detected — "
-                f"treating as valid exchange (diarization fallback)."
-            )
-            # Don't penalise; fall through to the end-check
-        else:
-            return False, "Clip contains only one speaker — not a back-and-forth exchange."
+        # --- DIARIZATION FALLBACK / STANDALONE INSIGHT ---
+        # If all lines are labelled the same speaker, check if it's a Q/A turn (single-speaker label fallback)
+        # OR if it's a clean standalone insight that doesn't start with context-dependent words.
+        if not _detect_qa_turns(lines_in_window):
+            if first_word in dangling_context_words:
+                return False, f"Single-speaker clip starts with a context-dependent word '{first_word}' and lacks setup context."
 
     last_line_text = (lines_in_window[-1].get("text") or "").strip()
+    # Only reject if the VERY last line is a dangling question AND there is no
+    # answer line after it within the window (i.e. it is truly the final segment)
     if last_line_text.endswith("?"):
+        # Check if the segment before it is a different speaker providing an answer
+        if len(lines_in_window) >= 2:
+            second_last = (lines_in_window[-2].get("text") or "").strip()
+            last_speaker = lines_in_window[-1].get("speaker", "")
+            second_last_speaker = lines_in_window[-2].get("speaker", "")
+            # If the second-to-last segment is an answer from a different speaker, it's fine
+            if second_last_speaker != last_speaker and not second_last.endswith("?"):
+                return True, ""
         return False, "Clip ends mid-question with no answer captured inside the window."
 
     return True, ""
@@ -1670,18 +1769,27 @@ def compute_virality_score(clip: Dict[str, Any], category: str) -> float:
 
     curiosity = float(clip.get("curiosity_score", 5.0))
     hook = float(clip.get("hook_score", 5.0))
+    reaction = float(clip.get("reaction_score", 5.0))
+    surprise = float(clip.get("surprise_score", 5.0))
+    context = float(clip.get("context", clip.get("standalone_score", 5.0))) # standalone_score acts as the context/information metric in Pydantic schema
     audio_score = float(clip.get("audio_score", 5.0))
     heuristic_component = float(clip.get("heuristic_score", 5.0))
 
-    llm_weight_sum = w.get("curiosity", 0.0) + w.get("hook", 0.0)
+    llm_keys = ["curiosity", "hook", "reaction", "surprise", "context"]
+    llm_scores = {
+        "curiosity": curiosity,
+        "hook": hook,
+        "reaction": reaction,
+        "surprise": surprise,
+        "context": context
+    }
+
+    llm_weight_sum = sum(w.get(k, 0.0) for k in llm_keys)
     audio_weight = w.get("audio_signal", 0.0)
     remaining_weight = max(0.0, 1.0 - llm_weight_sum - audio_weight)
 
     if llm_weight_sum > 0:
-        llm_component = (
-            (w["curiosity"] / llm_weight_sum) * curiosity +
-            (w["hook"] / llm_weight_sum) * hook
-        )
+        llm_component = sum((w.get(k, 0.0) / llm_weight_sum) * llm_scores[k] for k in llm_keys)
     else:
         llm_component = 5.0
 
@@ -1706,7 +1814,7 @@ def compute_virality_score(clip: Dict[str, Any], category: str) -> float:
 # for both, since both speak the OpenAI-compatible chat.completions API.
 # ============================================================
 
-def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_content: str, response_model) -> Optional[Dict[str, Any]]:
     """Instructor + Pydantic guaranteed-schema attempt against one provider. Raises on failure."""
     import instructor
     from openai import OpenAI
@@ -1738,11 +1846,11 @@ def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_con
     # reasoning quality (temperature controls token sampling randomness, not judgment).
     # Smaller max_tokens is safe because we're not generating sentence_analysis.
     temperature = 0.25 if is_local else 0.6
-    max_tokens  = 3000  if is_local else 7000
+    max_tokens  = 6000  if is_local else 16384
 
-    result: ClipResponseModel = client.chat.completions.create(
+    result = client.chat.completions.create(
         model=provider["model"],
-        response_model=ClipResponseModel,
+        response_model=response_model,
         max_retries=2,
         temperature=temperature,
         top_p=0.95,
@@ -1754,8 +1862,8 @@ def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_con
     )
 
     data = result.model_dump()
-    if not data.get("clips"):
-        logger.warning(f"[{provider['name']}] Instructor returned zero clips.")
+    if not data:
+        logger.warning(f"[{provider['name']}] Instructor returned empty data.")
         return None
 
     logger.info(f"[{provider['name']}] Successfully parsed guaranteed-schema response via Instructor.")
@@ -1771,7 +1879,7 @@ def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_c
     is_local = provider["name"] == "ollama"
     timeout_seconds = 420.0 if is_local else 120.0
     temperature = 0.25 if is_local else 0.6
-    max_tokens = 3000 if is_local else 5000
+    max_tokens = 6000 if is_local else 16384
 
     client = OpenAI(
         base_url=provider["base_url"],
@@ -1837,12 +1945,42 @@ def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_c
         )
         return None
 
-    if not data.get("clips"):
-        logger.warning(f"[{provider['name']}] returned JSON with no clips.")
+    if not data:
+        logger.warning(f"[{provider['name']}] returned empty or invalid JSON.")
         return None
 
     logger.info(f"[{provider['name']}] Successfully parsed batch response (legacy path).")
     return data
+
+
+def _call_llm_with_fallback(system_prompt: str, user_content: str, response_model) -> Optional[Dict[str, Any]]:
+    """Tries all configured LLM providers in order with Instructor/legacy path and returns parsed response."""
+    providers = _get_llm_providers()
+    if not providers:
+        logger.warning("No LLM providers configured.")
+        return None
+
+    for provider in providers:
+        # --- Instructor Path ---
+        if _INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE:
+            try:
+                data = _score_via_instructor(provider, system_prompt, user_content, response_model)
+                if data:
+                    return data
+            except Exception as e:
+                logger.error(f"[{provider['name']}] Instructor path failed ({e}). Trying legacy parse on same provider...")
+
+        # --- Legacy Fallback Path ---
+        try:
+            data = _score_via_legacy_parse(provider, system_prompt, user_content)
+            if data:
+                return data
+        except Exception as e:
+            logger.error(f"[{provider['name']}] Legacy parse path failed ({e}).")
+
+        logger.warning(f"Provider '{provider['name']}' exhausted. Trying next provider...")
+
+    return None
 
 
 def call_nvidia_nim_batch_scoring(candidates: List[Dict[str, Any]], video_id: str, category: str) -> Dict[str, Any]:
@@ -1912,7 +2050,7 @@ def call_nvidia_nim_batch_scoring(candidates: List[Dict[str, Any]], video_id: st
         # --- PRIMARY PATH for this provider: Instructor + Pydantic ---
         if _INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE:
             try:
-                data = _score_via_instructor(provider, system_prompt, user_content)
+                data = _score_via_instructor(provider, system_prompt, user_content, ClipResponseModel)
                 if data:
                     return data
             except Exception as e:
@@ -2031,56 +2169,158 @@ def rank_candidates(
         category = classify_content_category(full_text)
         logger.info(f"Auto-classified video_id={video_id} as category='{category}'")
 
-    logger.info(f"Ranking {len(candidates)} candidates for category='{category}'. Stage 1 heuristic pre-filter...")
+    # Reconstruct transcript_lines if not provided
+    if not transcript_lines:
+        logger.info("No transcript_lines provided, reconstructing from candidates.")
+        transcript_lines = []
+        for idx, cand in enumerate(candidates):
+            transcript_lines.append({
+                "start_time": cand.get("start_time", idx * 10.0),
+                "end_time": cand.get("end_time", (idx + 1) * 10.0),
+                "text": cand.get("text", ""),
+                "speaker": cand.get("speaker", "Speaker 1")
+            })
 
-    # Stage 1: Heuristic scoring (supporting signal only)
-    scored_candidates = []
-    for cand in candidates:
-        h_score = heuristic_pre_filter_score(cand["text"])
-        scored_candidates.append({**cand, "heuristic_score": h_score})
+    # Prepare formatted segments list
+    formatted_segments = []
+    for idx, seg in enumerate(transcript_lines):
+        formatted_segments.append({
+            "id": idx,
+            "speaker": seg.get("speaker", "Speaker 1"),
+            "start_time": float(seg.get("start_time", 0.0)),
+            "end_time": float(seg.get("end_time", 0.0)),
+            "text": seg.get("text", "")
+        })
 
-    scored_candidates.sort(key=lambda x: x["heuristic_score"], reverse=True)
+    # --- STAGE 1: MOMENT DISCOVERY (Prompt A) ---
+    logger.info(f"Stage 1: Discovering moments in transcript for category='{category}'...")
+    segments_str = ""
+    for s in formatted_segments:
+        segments_str += f"[Segment {s['id']}] ({s['speaker']}, {s['start_time']:.2f}s - {s['end_time']:.2f}s): {s['text']}\n"
 
-    # Deduplicate by overlap (max 20%)
-    top_candidates = []
-    for cand in scored_candidates:
-        overlap_found = False
-        s1, e1 = cand["start_time"], cand["end_time"]
-        dur1 = e1 - s1
-        for existing in top_candidates:
-            s2, e2 = existing["start_time"], existing["end_time"]
-            dur2 = e2 - s2
-            intersection = max(0.0, min(e1, e2) - max(s1, s2))
-            if intersection > 0.0:
-                overlap_ratio = intersection / min(dur1, dur2)
-                if overlap_ratio > 0.2:
-                    overlap_found = True
-                    break
-        if not overlap_found:
-            top_candidates.append(cand)
-            if len(top_candidates) >= STAGE1_CANDIDATE_POOL_SIZE:
-                break
+    user_content_finder = (
+        f"Here is the video_id: \"{video_id}\"\n"
+        f"Here are the transcript segments:\n\n{segments_str}"
+    )
 
-    logger.info(f"Stage 1 complete. Batch scoring {len(top_candidates)} candidates using Llama Nemotron...")
+    system_prompt_finder = build_moment_finder_prompt(category)
+    finder_result = _call_llm_with_fallback(system_prompt_finder, user_content_finder, MomentFinderResponse)
+    
+    moments = finder_result.get("moments", []) if finder_result else []
+    if not moments:
+        logger.warning("Moment Finder returned zero moments. Generating a fallback moment.")
+        if formatted_segments:
+            moments = [{
+                "start_segment_id": 0,
+                "end_segment_id": len(formatted_segments) - 1,
+                "opportunity_type": "standalone_insight",
+                "key_idea": "Fallback full-transcript opportunity",
+                "why_viral": "Fallback"
+            }]
 
-    # Stage 2: Lean batch LLM scoring (Instructor-guaranteed)
-    nim_result = call_nvidia_nim_batch_scoring(top_candidates, video_id, category)
-    raw_clips = nim_result.get("clips", [])
+    logger.info(f"Moment Finder discovered {len(moments)} opportunity/opportunities:\n{json.dumps(moments, indent=2)}")
+
+    # --- STAGE 2: MOMENT EDITING (Prompt B) ---
+    logger.info(f"Stage 2: Editing discovered moments...")
+    # Process moments in batches of 3 to avoid output max_tokens truncation and improve LLM instruction accuracy
+    raw_clips = []
+    MOMENT_BATCH_SIZE = 3
+    
+    for i in range(0, len(moments), MOMENT_BATCH_SIZE):
+        batch_moments = moments[i:i + MOMENT_BATCH_SIZE]
+        logger.info(f"Editing moment batch {i // MOMENT_BATCH_SIZE + 1} ({len(batch_moments)} moments)...")
+        
+        batch_moments_str = ""
+        for idx, m in enumerate(batch_moments):
+            moment_num = i + idx + 1
+            batch_moments_str += (
+                f"=== DISCOVERED MOMENT {moment_num} ===\n"
+                f"Opportunity Type: {m.get('opportunity_type')}\n"
+                f"Proposed Segment Range: Segment {m.get('start_segment_id')} to Segment {m.get('end_segment_id')}\n"
+                f"Key Idea: {m.get('key_idea')}\n"
+                f"Why Viral: {m.get('why_viral')}\n\n"
+            )
+
+        user_content_editor = (
+            f"Here is the video_id: \"{video_id}\"\n"
+            f"Here are the original transcript segments:\n\n{segments_str}\n"
+            f"Here are the discovered narrative/viral moments to edit (Batch {i // MOMENT_BATCH_SIZE + 1}):\n\n{batch_moments_str}"
+        )
+
+        system_prompt_editor = build_moment_editor_prompt(category)
+        editor_result = _call_llm_with_fallback(system_prompt_editor, user_content_editor, EditedClipsResponse)
+        
+        if editor_result and "clips" in editor_result:
+            raw_clips.extend(editor_result["clips"])
+
+    logger.info(f"Moment Editor output {len(raw_clips)} edited clips in total:\n{json.dumps(raw_clips, indent=2)}")
+
+    # Fallback to simple fallback clips if editor returned nothing
+    if not raw_clips:
+        logger.warning("Moment Editor returned zero clips. Using fallback heuristic windows.")
+        fallback_data = call_nvidia_nim_batch_scoring(candidates, video_id, category)
+        raw_clips = []
+        for fc in fallback_data.get("clips", []):
+            start_f = float(fc.get("start_time", 0.0))
+            end_f = float(fc.get("end_time", 0.0))
+            start_id = 0
+            end_id = len(formatted_segments) - 1
+            for idx, s in enumerate(formatted_segments):
+                if abs(s["start_time"] - start_f) < 2.0:
+                    start_id = idx
+                if abs(s["end_time"] - end_f) < 2.0:
+                    end_id = idx
+            
+            raw_clips.append({
+                "start_segment_id": start_id,
+                "end_segment_id": end_id,
+                "clip_strategy": fc.get("clip_strategy", "payoff"),
+                "editorial_style": "standalone_insight",
+                "hook_line": fc.get("hook_line", ""),
+                "reason": fc.get("reason", "Fallback heuristic"),
+                "curiosity_score": fc.get("curiosity_score", 5),
+                "hook_score": fc.get("hook_score", 5),
+                "surprise_score": 5,
+                "emotion_score": 5,
+                "reaction_score": 5,
+                "standalone_score": 5,
+            })
+
+    # Prepare for enrichment
     final_clips = []
-
     for clip in raw_clips:
         try:
-            clip_start = float(clip.get("start_time", 0.0))
-            match = next(
-                (c for c in top_candidates if c["start_time"] <= clip_start <= c["end_time"]),
-                None
-            )
-            clip["heuristic_score"] = match["heuristic_score"] if match else 5.0
+            start_seg = clip["start_segment_id"]
+            end_seg = clip["end_segment_id"]
+            start_seg = max(0, min(start_seg, len(formatted_segments) - 1))
+            end_seg = max(0, min(end_seg, len(formatted_segments) - 1))
+            if start_seg > end_seg:
+                start_seg, end_seg = end_seg, start_seg
 
-            enriched = enrich_clip(clip, top_candidates, category, video_id, audio_path=audio_path)
+            clip_start = formatted_segments[start_seg]["start_time"]
+            clip_end = formatted_segments[end_seg]["end_time"]
+            excerpt = " ".join(formatted_segments[i]["text"] for i in range(start_seg, end_seg + 1))
 
-            # --- SPEAKER-TURN / EXCHANGE VALIDATION ---
-            # Fixes: "LLM picked a clip that's just a question, no answer"
+            raw_clip_format = {
+                "start_time": clip_start,
+                "end_time": clip_end,
+                "clip_strategy": clip.get("clip_strategy", "payoff"),
+                "hook_line": clip.get("hook_line", ""),
+                "reason": clip.get("reason", ""),
+                "curiosity_score": clip.get("curiosity_score", 5),
+                "hook_score": clip.get("hook_score", 5),
+                "surprise_score": clip.get("surprise_score", 5),
+                "emotion_score": clip.get("emotion_score", 5),
+                "reaction_score": clip.get("reaction_score", 5),
+                "standalone_score": clip.get("standalone_score", 5),
+                "transcript_excerpt": excerpt,
+                "category": category,
+            }
+
+            raw_clip_format["heuristic_score"] = heuristic_pre_filter_score(excerpt)
+
+            enriched = enrich_clip(raw_clip_format, candidates, category, video_id, audio_path=audio_path)
+
             if category == "interview_discussion":
                 is_valid, invalid_reason = validate_exchange_completeness(
                     enriched["start_time"], enriched["end_time"], transcript_lines
@@ -2089,13 +2329,18 @@ def rank_candidates(
                     logger.warning(f"Clip [{enriched['start_time']}-{enriched['end_time']}] failed exchange validation: {invalid_reason}")
                     enriched["needs_manual_review"] = True
                     enriched["reason"] = (enriched.get("reason", "") + f" [FLAGGED: {invalid_reason}]").strip()
-                    virality = compute_virality_score(enriched, category) * 0.5  # heavy penalty, not a hard drop
+                    virality = compute_virality_score(enriched, category) * 0.5
                 else:
                     virality = compute_virality_score(enriched, category)
             else:
                 virality = compute_virality_score(enriched, category)
 
             enriched["virality_score"] = round(virality, 2)
+            enriched["narrative_summary"] = clip.get("reason", "")
+            enriched["why_viewers_keep_watching"] = clip.get("reason", "")
+            enriched["section_type"] = clip.get("editorial_style", category)
+            enriched["suggested_title"] = clip.get("hook_line", "Untitled")[:40]
+
             final_clips.append(enriched)
         except Exception as e:
             logger.error(f"Error mapping candidate output clip: {e}")

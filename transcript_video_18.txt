@@ -1,0 +1,791 @@
+[00:00.16 - 00:03.77] Speaker 1: What if some people come together and decide they wanna ban crypto?
+[00:03.83 - 00:06.00] Speaker 2: It's not something that you will be able to bet.
+[00:06.00 - 00:08.41] Speaker 2: It has now gone into mass adoption.
+[00:08.56 - 00:12.41] Speaker 2: It's a mode in which future financial infrastructure is being built.
+[00:13.27 - 00:17.62] Speaker 1: Warren Buffett, he's been very vocal about not favoring crypto.
+[00:17.62 - 00:20.60] Speaker 1: When you meet people like him, what worries them the most about crypto?
+[00:21.21 - 00:23.46] Speaker 2: I don't think it's something that they worry about.
+[00:23.46 - 00:27.46] Speaker 2: I think it's something that they have not spent enough time, energy to understand.
+[00:27.46 - 00:31.51] Speaker 2: If you look at BlackRock, mister Larry Finn's CEO, for the longest time, he was a sharp critic.
+[00:31.51 - 00:34.97] Speaker 2: And the more he understand it, now he has turned into a keen supporter.
+[00:36.47 - 00:40.34] Speaker 1: Isn't crypto essentially an alternative for the dollar?
+[00:40.64 - 00:42.96] Speaker 2: I don't think it's gonna be alternative.
+[00:42.96 - 00:44.40] Speaker 2: Crypto is a asset class.
+[00:44.40 - 00:50.97] Speaker 2: In many instances, extremely useful and the best form of transport value globally.
+[00:52.15 - 00:57.32] Speaker 1: You had $100, and you can only put in the banks, government, or technology companies.
+[00:57.32 - 00:59.89] Speaker 1: Which one do you think would give you maximum return?
+[00:59.96 - 01:00.67] Speaker 1: I would say that
+[01:00.67 - 01:04.45] Speaker 2: in the first instance, it's always about the technology.
+[01:04.76 - 01:07.98] Speaker 2: Then the government and the institutions will come into play.
+[01:09.71 - 01:19.40] Speaker 1: If some builder is watching you right right now, who is probably in early twenties, what one specific thing they should look at to create wealth in the next ten, twenty, thirty years?
+[01:19.40 - 01:29.09] Speaker 2: I think it's important for them first understand the different landscape, do deep dives, focus on building things that will create value, that's sustainable, that has utility about it, that strong use cases.
+[01:29.09 - 01:33.26] Speaker 2: Because these are things that people will continue to use to create value for the world, for yourself.
+[01:33.26 - 01:35.43] Speaker 2: So those are the areas that they should focus on.
+[01:36.14 - 01:41.62] Speaker 1: Is there any specific sector that you believe is going to see the disruption in next five, ten years?
+[01:41.62 - 01:43.07] Speaker 2: I really believe that.
+[01:43.54 - 01:51.10] Speaker 1: If somebody is just waking up from a coma of thirty one years and has no clue what's going on in the world, what would shock them the most about money today?
+[01:51.89 - 01:52.39] Speaker 1: Well
+[01:56.76 - 02:02.31] Speaker 1: Before we start today's podcast, if you have found anything valuable from this channel, please subscribe.
+[02:02.85 - 02:06.78] Speaker 1: It's free, it takes less than a minute, but it means a lot to us.
+[02:06.78 - 02:11.03] Speaker 1: And to listen to the audio experience of this episode, please follow us on Spotify.
+[02:11.18 - 02:20.71] Speaker 1: Our today's guest is Richard Teng, co CEO of Binance, the world largest crypto exchange with two twenty million users globally.
+[02:21.09 - 02:30.00] Speaker 1: He spent thirty one years in traditional finance, starting at Singapore Central Bank, then running Abu Dhabi's financial regulator before moving into crypto.
+[02:30.21 - 02:39.59] Speaker 1: And today, the biggest names on Wall Street, JP Morgan, BlackRock, Standard Chartered are embracing the same crypto world he leads.
+[02:39.90 - 02:45.84] Speaker 1: In this episode, we'll discuss, can a digital wallet replace your bank account in the future?
+[02:46.16 - 02:49.46] Speaker 1: Will the future generations ever have a bank account?
+[02:50.00 - 02:53.94] Speaker 1: Is the US dollar really dying or is that just a rumor?
+[02:54.56 - 02:57.87] Speaker 1: Banks lend out over 90% of your deposits.
+[02:58.21 - 03:00.71] Speaker 1: So is your money really safe in a bank?
+[03:00.93 - 03:05.84] Speaker 1: And if an AI trading agent loses your money, who is responsible for that?
+[03:05.96 - 03:07.81] Speaker 1: Watch this episode till the end.
+[03:07.81 - 03:11.06] Speaker 1: And to know more about Binance, check the link in the description below.
+[03:16.59 - 03:19.40] Speaker 1: Before we start, I wanna ask you
+[03:21.31 - 03:23.55] Speaker 1: if if someone's watching you for the first time
+[03:23.71 - 03:23.99] Speaker 2: Yep.
+[03:24.27 - 03:26.18] Speaker 1: And they have no clue who you are.
+[03:26.18 - 03:26.68] Speaker 1: Okay?
+[03:28.00 - 03:32.09] Speaker 1: And they're like this 1% audience who's never even googled you.
+[03:32.56 - 03:33.68] Speaker 1: How would you explain them?
+[03:33.68 - 03:34.25] Speaker 1: Who are you?
+[03:34.25 - 03:35.15] Speaker 1: What do you do?
+[03:35.53 - 03:37.71] Speaker 2: Well, currently, I'm the co CEO of Binance.
+[03:37.84 - 03:41.06] Speaker 2: Binance is the largest crypto ecosystem in the world.
+[03:41.43 - 03:43.03] Speaker 2: We are a financial superb.
+[03:43.03 - 03:52.38] Speaker 2: So be beyond crypto, we offer our investors exposure, ability to take positions across a suite of products.
+[03:52.38 - 03:52.62] Speaker 2: Right?
+[03:52.62 - 03:53.77] Speaker 2: It's not only crypto.
+[03:54.21 - 03:55.03] Speaker 2: It's commodities.
+[03:55.09 - 03:55.90] Speaker 2: It's petrochemicals.
+[03:56.37 - 03:57.90] Speaker 2: It's precious metals.
+[03:58.28 - 03:59.50] Speaker 2: It's US stocks.
+[03:59.65 - 04:01.65] Speaker 2: It's pre IPO counters as well.
+[04:01.65 - 04:03.33] Speaker 2: And the products will keep expanding.
+[04:03.33 - 04:08.00] Speaker 2: So we have more than 220,000,000 customers globally and expanding very quickly.
+[04:08.21 - 04:11.43] Speaker 2: So we are part of of the global financial infrastructure.
+[04:11.97 - 04:12.30] Speaker 1: Right.
+[04:12.30 - 04:13.36] Speaker 1: But who is Richard?
+[04:13.74 - 04:15.90] Speaker 2: Oh, Richard is, uh, I'm trained.
+[04:15.90 - 04:25.06] Speaker 2: I've been I spent many, many spent more than two and a half decades in financial by now, you know, I've been in financial services for more than thirty years.
+[04:25.06 - 04:33.48] Speaker 2: I started my career with the Central Bank of Singapore, then I was in Singapore exchange, then became CEO of Abu Dhabi Global Market, which is a financial services regulator.
+[04:34.29 - 04:38.47] Speaker 2: So my background historically has been in traditional finance, has been in regulations.
+[04:39.25 - 04:42.38] Speaker 2: I got to discover crypto right about 2017.
+[04:42.85 - 04:48.93] Speaker 2: And the more I deep dive into it, I realized that this is gonna be the future of financial services, future of money.
+[04:48.93 - 04:49.43] Speaker 2: Right?
+[04:49.49 - 04:49.99] Speaker 1: Nice.
+[04:50.31 - 04:51.54] Speaker 1: So if,
+[04:52.49 - 04:58.99] Speaker 1: let's say, you you spent, like, about two and a half decades, which is, like, twenty five, twenty six years in finance.
+[04:59.12 - 04:59.60] Speaker 2: Yes.
+[04:59.60 - 04:59.93] Speaker 2: Nice.
+[04:59.93 - 05:02.39] Speaker 2: By now, I spent more than thirty one years in finance.
+[05:02.39 - 05:02.81] Speaker 2: Perfect.
+[05:02.81 - 05:03.29] Speaker 2: So
+[05:03.29 - 05:04.89] Speaker 1: it's thirty one years now.
+[05:05.12 - 05:10.80] Speaker 1: So if if somebody is just waking up from a coma of thirty one years Yes.
+[05:11.10 - 05:11.33] Speaker 2: Yes.
+[05:11.57 - 05:13.66] Speaker 1: And has no clue what's going on in the world.
+[05:13.66 - 05:14.16] Speaker 1: Right?
+[05:14.54 - 05:17.04] Speaker 1: What would shock them the most about money today?
+[05:17.89 - 05:18.95] Speaker 2: Well, people
+[05:20.37 - 05:24.73] Speaker 2: the concept of financial institutions and the concept of money
+[05:25.81 - 05:26.95] Speaker 2: are rapidly changing.
+[05:27.01 - 05:27.43] Speaker 2: Right?
+[05:27.43 - 05:31.25] Speaker 2: So, I mean, I grew up in the area where it's a brick and mortar world.
+[05:31.25 - 05:31.50] Speaker 2: Right?
+[05:31.50 - 05:39.06] Speaker 2: So if you want to set, uh, set up a bank account, you have to go to a bank, you know, you you have your you need your thumbprint on the passbook.
+[05:39.83 - 05:42.89] Speaker 2: There's no white spread ATM there.
+[05:43.04 - 05:44.42] Speaker 2: You need to do a withdrawal.
+[05:44.48 - 05:45.92] Speaker 2: You queue up in the branch.
+[05:45.92 - 05:46.42] Speaker 2: Right?
+[05:46.80 - 05:47.54] Speaker 2: So the
+[05:48.54 - 05:57.19] Speaker 2: innovation has happened a bit slower throughout the past two decades, but it it has happened to quite a fair fair bit of extent.
+[05:59.10 - 06:02.77] Speaker 2: But blockchain technology, crypto, has the ability to transform all that.
+[06:02.77 - 06:08.22] Speaker 2: So if if you rethink from now on the future of financial services and
+[06:09.63 - 06:10.54] Speaker 2: given today's
+[06:11.48 - 06:21.31] Speaker 2: tools, architecture, infrastructure, and I say build a new bank, build a new securities firm, build a new asset manager, you'll not be the model that you see in the past.
+[06:21.31 - 06:21.81] Speaker 2: Right?
+[06:22.12 - 06:27.32] Speaker 2: It will be something that's totally different because with the usage of blockchain and AI,
+[06:28.26 - 06:35.54] Speaker 2: the future of how a bank provider, a payment provider exchange look like will be totally different.
+[06:36.24 - 06:38.48] Speaker 2: So many things can be fundamentally changed.
+[06:38.48 - 06:38.98] Speaker 2: Right?
+[06:39.12 - 06:45.86] Speaker 2: We we are living in a very legacy system that has plenty of challenges.
+[06:46.14 - 06:51.30] Speaker 2: If you do a bank transfer today cross border, it takes two to three days.
+[06:51.50 - 06:52.87] Speaker 2: It takes huge cost.
+[06:52.87 - 06:53.18] Speaker 2: Right?
+[06:53.18 - 06:59.93] Speaker 2: So if you look at, for example, India has more than a 100,000,000,000 of remittance, right, in any given year.
+[07:00.25 - 07:14.75] Speaker 2: And if you look at the fees that the bank charge, six to 7%, so you're taking off 6 to $7,000,000,000 that, you know, that can be substantially saved and give to given to your loved ones, to your families, to the vendors that you need to pay.
+[07:15.81 - 07:23.35] Speaker 2: But if you do that via stablecoin and crypto, right, those money can go to your loved ones, your vendors.
+[07:23.81 - 07:27.81] Speaker 2: The money can reach the end recipient in an instantaneous basis.
+[07:28.41 - 07:29.62] Speaker 2: Payments can be done.
+[07:29.76 - 07:33.05] Speaker 2: There's certainty of how much capital a corporate needs.
+[07:33.05 - 07:33.37] Speaker 2: Right?
+[07:33.37 - 07:41.05] Speaker 2: Instead of holding a large amount of capital, if you have certainty of when the money is going to reach the end recipient, you don't have to hold so much capital.
+[07:41.05 - 07:41.55] Speaker 2: Right?
+[07:41.61 - 07:43.85] Speaker 2: So there's a much more efficient way of doing.
+[07:44.07 - 07:48.25] Speaker 2: But this chain is replicated in every aspect of financial services.
+[07:48.25 - 07:57.19] Speaker 2: So if you rethink the future of financial services and you rebuild the future of financial services, it's gonna look very, very different even from what we see today.
+[07:57.19 - 07:57.69] Speaker 2: Right?
+[07:57.86 - 08:03.62] Speaker 2: So Stablecoin is just starting to tick off with clarity provided by the Genius Act.
+[08:03.62 - 08:08.12] Speaker 2: And many other countries around the world are now embracing Stablecoin and coming out with clear legislation.
+[08:08.57 - 08:13.50] Speaker 2: I mean, if you think about it, one of the biggest problem with trading today
+[08:14.45 - 08:14.95] Speaker 2: is
+[08:16.12 - 08:19.64] Speaker 2: you I can only trade within a certain amount of hours a day.
+[08:19.64 - 08:20.14] Speaker 2: Right?
+[08:20.30 - 08:27.36] Speaker 2: Whether it's nine to five, whether it's ten to four, depending on the countries you are in, it's helped by you know, it's constrained.
+[08:27.98 - 08:34.29] Speaker 2: And people don't realize the amount of liquidity risk that institutions, the corporates, the retail have to bear.
+[08:34.29 - 08:44.03] Speaker 2: Once the market closes, so to say, right, if there's anything that's happening in the world in terms of news flow, you can't take on new positions.
+[08:44.58 - 08:46.12] Speaker 2: You can't hedge your risk.
+[08:46.41 - 08:47.87] Speaker 2: You can't offset your position.
+[08:48.01 - 08:48.51] Speaker 2: Right?
+[08:48.65 - 08:55.79] Speaker 2: So you're bearing a lot of risk until tomorrow the market opens and the price point opens at a totally different level.
+[08:56.37 - 09:09.42] Speaker 2: So if you think about it, isn't it better if you are allowed to do twenty four seven, manage your risk effectively, you know, uh, whether it's through human, whether it's through AI intervention, etcetera.
+[09:10.04 - 09:15.48] Speaker 2: So that is what crypto has already offered twenty four seven trading from the start.
+[09:15.53 - 09:15.86] Speaker 2: Right?
+[09:15.86 - 09:20.84] Speaker 2: So the future will, in terms of how all these things are being managed, will be very different.
+[09:21.53 - 09:26.42] Speaker 2: Many securities companies in the world, exchanges, still operate on t plus too.
+[09:26.50 - 09:27.00] Speaker 2: Right?
+[09:27.54 - 09:32.21] Speaker 2: So during that two days of clearing and settlement, there's a lot of risk that's being bought.
+[09:32.66 - 09:35.71] Speaker 2: In crypto, we have already moved to atomic settlement.
+[09:35.71 - 09:38.85] Speaker 2: It's instantaneous because the technology provides for them.
+[09:39.07 - 09:45.39] Speaker 2: So if you think about it, there are so many facets within financial services that will be transformed very drastically.
+[09:46.11 - 09:58.42] Speaker 2: Once you have more and more institutions and once you have more new fintechs, more new providers coming to the market, providing much better alternative of how financial infrastructure will look like.
+[09:58.42 - 09:58.92] Speaker 2: K?
+[09:59.30 - 10:01.33] Speaker 2: The transformation will take place very quickly.
+[10:01.38 - 10:02.61] Speaker 1: See, all of this
+[10:03.78 - 10:05.49] Speaker 1: to you, it sounds very obvious.
+[10:05.87 - 10:06.11] Speaker 1: Right?
+[10:06.11 - 10:08.75] Speaker 1: And you because you are in this world, you understand this.
+[10:08.75 - 10:16.00] Speaker 1: And probably for 6% people in the world also, this sounds obvious, and that's why they're betting towards this future.
+[10:16.08 - 10:16.58] Speaker 1: Right?
+[10:16.78 - 10:21.60] Speaker 1: But for a lot of people, majority of people, they still believe in the old way of money.
+[10:21.60 - 10:22.00] Speaker 2: Yeah.
+[10:22.00 - 10:23.37] Speaker 1: That money is still powerful.
+[10:23.71 - 10:23.78] Speaker 1: Yes.
+[10:23.78 - 10:26.75] Speaker 1: That money is still the most important source for them.
+[10:26.75 - 10:27.25] Speaker 1: Right?
+[10:27.54 - 10:28.35] Speaker 1: So what do you think?
+[10:28.35 - 10:30.75] Speaker 1: Why why people still hold on to it?
+[10:30.75 - 10:32.04] Speaker 1: Or rather, I would say,
+[10:32.99 - 10:36.85] Speaker 1: what is that one lie about money that people still believe today?
+[10:36.90 - 10:37.23] Speaker 2: Yeah.
+[10:37.23 - 10:39.21] Speaker 2: Brought up in the world, Right?
+[10:39.21 - 10:50.50] Speaker 2: That the only sensible way or the only way that you you can transfer money is you go up to a remittance house or you go to the bank and say that this is how I send money to the firstly, it's habit.
+[10:50.73 - 10:50.97] Speaker 2: Right?
+[10:50.97 - 10:58.66] Speaker 2: Secondly, you are not open up to new areas of growth and new areas that you can do that much quicker.
+[10:58.97 - 11:00.19] Speaker 2: And thirdly, structural.
+[11:00.80 - 11:01.21] Speaker 2: Right?
+[11:01.21 - 11:03.23] Speaker 2: There are a lot of structural impediments.
+[11:04.16 - 11:10.76] Speaker 2: Um, even today, the way financial institutions are are engineered, they're structured in a certain fashion.
+[11:10.76 - 11:11.00] Speaker 2: Right?
+[11:11.00 - 11:11.58] Speaker 1: In the front
+[11:11.58 - 11:13.74] Speaker 2: office, there's middle office, there's back office.
+[11:13.74 - 11:15.75] Speaker 2: Middle and back office do certain functions.
+[11:16.28 - 11:18.54] Speaker 2: Uh, they have to do through go through reconciliation.
+[11:18.92 - 11:21.26] Speaker 2: They have to go through accounting settlement.
+[11:21.41 - 11:21.91] Speaker 2: Right?
+[11:22.22 - 11:22.72] Speaker 2: But
+[11:25.35 - 11:32.07] Speaker 2: if another competing bank come through or another big bank to say that, look, I'm gonna do middle and back office very different.
+[11:32.07 - 11:34.87] Speaker 2: I'm not going to do reconciliation because I don't have to.
+[11:34.87 - 11:37.69] Speaker 2: Once we blockchain technology, everything is immutable.
+[11:38.25 - 11:41.63] Speaker 2: So reconciliation become irrelevant.
+[11:42.25 - 11:42.75] Speaker 2: Right?
+[11:43.13 - 11:51.72] Speaker 2: So once all those structural changes come true, both in terms of the financial institutions itself, but in terms of financial landscape.
+[11:51.72 - 11:51.96] Speaker 2: Right?
+[11:51.96 - 11:59.48] Speaker 2: So with with stablecoin coming through and growing so rapidly, with real assets, tokenization coming through.
+[11:59.48 - 12:03.88] Speaker 2: So even the swift of the world are forced to look at it and say, hey.
+[12:03.88 - 12:04.12] Speaker 2: Look.
+[12:04.12 - 12:05.42] Speaker 2: We're gonna support blockchain.
+[12:05.50 - 12:06.00] Speaker 2: Right?
+[12:06.21 - 12:09.75] Speaker 2: So it's also habit, and it's also literacy
+[12:10.70 - 12:11.60] Speaker 2: and awareness.
+[12:12.52 - 12:27.70] Speaker 2: But once a lot of all these things come true, then people realize through media, through education, through your friends to say, instead of paying six to 7%, you can pay 0.1%.
+[12:28.00 - 12:29.53] Speaker 2: Isn't this much more superior?
+[12:30.39 - 12:31.07] Speaker 2: But that
+[12:32.08 - 12:35.77] Speaker 2: change, especially depending on demographics, may come through differently.
+[12:35.85 - 12:45.50] Speaker 2: So if you talk to the two person twenty to thirty years old, digitally savvy, right, uh, using mobile most of the time, uh, they know how it works.
+[12:45.83 - 12:48.73] Speaker 2: They will be the first embracer of this, yeah, definitely.
+[12:49.35 - 12:56.71] Speaker 2: And then if you go up the age group and the value chain, those change will take a a slightly more time, right, for them to embrace it.
+[12:56.71 - 12:58.57] Speaker 2: But it will come through because
+[12:59.76 - 13:01.54] Speaker 2: technology will come through.
+[13:02.00 - 13:07.62] Speaker 2: It's just like, initially, when the Internet came through, uh, did the embracement take place overnight?
+[13:07.62 - 13:07.92] Speaker 2: No.
+[13:07.92 - 13:08.34] Speaker 2: Right?
+[13:08.34 - 13:09.72] Speaker 2: It'll take a period of time.
+[13:09.92 - 13:14.86] Speaker 2: It'll take for mobile penetration, Internet penetration to take place.
+[13:15.00 - 13:17.01] Speaker 2: So that penetration will take place.
+[13:17.32 - 13:18.67] Speaker 2: So it's a matter of speed.
+[13:18.67 - 13:20.12] Speaker 1: Let's say if you had $100
+[13:20.36 - 13:20.79] Speaker 2: Yes.
+[13:21.24 - 13:30.24] Speaker 1: And you had to you can only put in banks, government, or technology companies for the future who can either bring change Okay.
+[13:30.38 - 13:36.00] Speaker 1: And actually end up giving you a lot of, uh, power compounding or whatever you wanna put it.
+[13:36.00 - 13:37.70] Speaker 2: And you're saying that $100
+[13:39.20 - 13:39.70] Speaker 2: is
+[13:41.52 - 13:43.12] Speaker 2: from a private investor or
+[13:43.12 - 13:44.40] Speaker 1: do you have to pay private investor.
+[13:44.40 - 13:45.14] Speaker 1: Just you.
+[13:45.76 - 13:48.25] Speaker 2: You you cannot afford to put a $100 in the government.
+[13:48.25 - 13:51.62] Speaker 2: Government has its own funding and dumber and its own mechanism.
+[13:51.92 - 13:52.42] Speaker 2: Right?
+[13:52.57 - 13:53.85] Speaker 2: There's no way that you can put a
+[13:54.00 - 13:59.16] Speaker 1: Let's Let's say all three have had one stock and equally priced $100.
+[13:59.54 - 14:06.04] Speaker 1: Which one do you think will give you, uh, maximum return on the scale of power, not in scale of actually money?
+[14:06.12 - 14:10.86] Speaker 2: I would say that in the first instance, it's always about the technology.
+[14:11.48 - 14:11.98] Speaker 2: Right?
+[14:12.20 - 14:18.27] Speaker 2: Without the technology, without showing the world the capabilities, right, the rest may not follow.
+[14:18.27 - 14:18.77] Speaker 2: Right?
+[14:19.00 - 14:30.78] Speaker 2: So like you or not, reg regulations is always half a step, one step, one and half steps behind because the regulations can never keep up with changes and the new technology advances.
+[14:31.49 - 14:33.89] Speaker 2: So it's very, very important that we place,
+[14:35.17 - 14:39.36] Speaker 2: you know, the emphasis on technology, on the use case, on the utility.
+[14:39.50 - 14:41.12] Speaker 2: How do we transform the world?
+[14:41.50 - 14:43.10] Speaker 2: Same that you're seeing in AI.
+[14:43.10 - 14:45.50] Speaker 2: I mean, the the regulations don't come in first.
+[14:45.50 - 14:45.82] Speaker 2: Right?
+[14:45.82 - 14:48.63] Speaker 2: Same that you're seeing in con quantum computing, etcetera.
+[14:49.46 - 14:55.08] Speaker 2: Because you have to prove that this has the ability to take root.
+[14:55.22 - 14:57.08] Speaker 2: This has the ability to transform
+[14:58.17 - 15:03.52] Speaker 2: and present a much better use case than what is the current state.
+[15:03.52 - 15:04.00] Speaker 2: Right?
+[15:04.00 - 15:07.12] Speaker 2: Without that, the government does doesn't know what it's looking at.
+[15:07.12 - 15:07.62] Speaker 2: Right?
+[15:07.69 - 15:12.25] Speaker 2: The financial institutions are not understanding what it's gonna look at.
+[15:12.25 - 15:14.99] Speaker 2: So I would say in the first instance, it's always the technology.
+[15:15.58 - 15:17.50] Speaker 2: The technology is the most important part.
+[15:17.50 - 15:23.90] Speaker 2: You have to show what is the future state, what is the use case, what's the utility, right, how do you bring about the development.
+[15:24.37 - 15:28.87] Speaker 2: How is it a technology that can bring about betterment for the people.
+[15:29.00 - 15:29.50] Speaker 2: Right?
+[15:29.74 - 15:32.01] Speaker 2: So those are extremely important.
+[15:32.48 - 15:35.60] Speaker 2: Then the government and the institutions will come into play.
+[15:35.60 - 15:36.39] Speaker 1: Warren Buffett.
+[15:36.39 - 15:36.72] Speaker 1: Right?
+[15:36.72 - 15:40.65] Speaker 1: And he's been very vocal about not favouring crypto.
+[15:40.87 - 15:41.37] Speaker 1: Yes.
+[15:41.51 - 15:45.89] Speaker 1: Charlie Munger and him, they both have said it multiple times in multiple occasions.
+[15:45.89 - 15:46.39] Speaker 1: Yes.
+[15:46.87 - 15:48.25] Speaker 1: So when you meet
+[15:49.75 - 15:51.37] Speaker 1: people like him or people
+[15:52.95 - 15:58.96] Speaker 1: who believe in that kind of philosophy, what worries them the most about crypto and this new asset class?
+[15:59.23 - 16:01.95] Speaker 2: I I don't think it's something that they worry about.
+[16:01.95 - 16:12.10] Speaker 2: I think it's something that for the skeptics is something that they have not spent enough time energy to invest to investigate and to understand.
+[16:12.14 - 16:12.48] Speaker 2: Right?
+[16:12.48 - 16:19.50] Speaker 2: So for the longest time, some of the largest money manager in the world, some of the largest financial institutions are skeptics and critics.
+[16:19.50 - 16:20.00] Speaker 2: Right?
+[16:20.14 - 16:21.46] Speaker 2: So if you look at BlackRock,
+[16:22.71 - 16:27.19] Speaker 2: um, mister Larry Finn, CEO, for the longest time, he was a sharp critic of crypto.
+[16:27.64 - 16:31.75] Speaker 2: And then the more he understand it, now he has turned into a keen supporter.
+[16:32.52 - 16:41.35] Speaker 2: Jamie Dimon, one of the sharpest critics critics for the longest time for seven years has been coming out to say negative things about crypto.
+[16:41.54 - 16:42.83] Speaker 2: He has changed his stance.
+[16:42.83 - 16:43.33] Speaker 2: Right?
+[16:43.48 - 16:50.86] Speaker 2: The more he understands it and what this technology represents and how he can transform financial landscape.
+[16:51.24 - 17:02.21] Speaker 2: Now JPMorgan is trying to work with, for example, DBS on tokenized deposits, which is a important use case for cryptography, for blockchain as well.
+[17:02.21 - 17:02.69] Speaker 2: Right?
+[17:02.69 - 17:05.58] Speaker 2: So they are starting to embrace it in a very, very quick way.
+[17:05.97 - 17:15.11] Speaker 2: So it's about the awareness, about understandings, about deep dive and knowing the technology and what it can bring and how it can shape the future world.
+[17:15.11 - 17:20.73] Speaker 1: Do you think one of the reasons for a lot of these people to change their stance is about
+[17:22.58 - 17:23.49] Speaker 1: dollar devalue.
+[17:25.23 - 17:28.93] Speaker 1: Well Like, everybody keeps saying that dollar is dying.
+[17:30.26 - 17:33.97] Speaker 2: You know, there are many people that may subscribe to that view.
+[17:34.02 - 17:35.17] Speaker 2: I actually don't.
+[17:35.23 - 17:35.47] Speaker 2: Right?
+[17:35.47 - 17:36.13] Speaker 1: You don't?
+[17:36.39 - 17:37.13] Speaker 2: I don't.
+[17:37.26 - 17:39.26] Speaker 2: Um, and I can explain to you why.
+[17:39.26 - 17:39.76] Speaker 2: Right?
+[17:40.63 - 17:42.49] Speaker 2: Um, I think that meant
+[17:43.59 - 17:48.00] Speaker 2: there are some there are countries that want to move away from dollar denominence.
+[17:48.39 - 17:49.26] Speaker 2: I think that's a fact.
+[17:49.26 - 17:52.41] Speaker 2: And that fact has been in existence for a long period of time.
+[17:52.41 - 17:52.91] Speaker 2: Right?
+[17:53.32 - 17:57.84] Speaker 2: Uh, but for that to come true, you need several elements to come into play.
+[17:57.84 - 17:58.08] Speaker 2: Right?
+[17:58.08 - 18:00.67] Speaker 2: So today, if you look at globally,
+[18:01.69 - 18:06.88] Speaker 2: which is not only a reserve currency but a safe haven currency.
+[18:08.61 - 18:10.94] Speaker 2: Essentially, that's just US dollars.
+[18:10.94 - 18:11.44] Speaker 2: Right?
+[18:11.50 - 18:13.36] Speaker 2: So why are we in this currency?
+[18:14.14 - 18:22.65] Speaker 2: Because the US dollars is used as a denomination for majority of all the trade flows.
+[18:22.65 - 18:22.97] Speaker 2: Right?
+[18:22.97 - 18:25.30] Speaker 2: So global trade flows is denominated.
+[18:26.08 - 18:30.10] Speaker 2: You have a war and infrastructure under the existing system
+[18:31.36 - 18:36.00] Speaker 2: pretty much controlled by The US financial system.
+[18:36.00 - 18:36.25] Speaker 2: Right?
+[18:36.25 - 18:46.21] Speaker 2: If you look at just US equities alone, it accounts for close to 70% of equity value of the world.
+[18:46.21 - 18:46.71] Speaker 2: Right?
+[18:47.09 - 18:52.82] Speaker 2: If you want to do a fundraising, right, at high valuation for tech company, where do you go to?
+[18:53.04 - 18:54.00] Speaker 2: The The US market.
+[18:54.00 - 18:54.50] Speaker 2: Right?
+[18:54.73 - 19:02.82] Speaker 2: So, again, because of all the different parts of the ecosystem, are you able to move quickly?
+[19:03.53 - 19:04.11] Speaker 2: Uh, no.
+[19:05.05 - 19:10.03] Speaker 2: Would all the different countries want to come out with their own solutions?
+[19:10.49 - 19:10.99] Speaker 2: Definitely.
+[19:11.38 - 19:11.88] Speaker 2: Right?
+[19:12.01 - 19:20.80] Speaker 2: So c b for example, CBDCs is what the kind the countries wanted to do to also try to derisk from US currency.
+[19:21.34 - 19:24.95] Speaker 2: But, uh, that should take some time.
+[19:24.95 - 19:25.26] Speaker 2: Right?
+[19:25.26 - 19:35.00] Speaker 2: And whether those experiment are gonna be used is gonna be transformational, it really depends on what is being embarked in those experiments.
+[19:35.39 - 19:35.71] Speaker 1: True.
+[19:35.71 - 19:41.25] Speaker 1: But then isn't crypto essentially an alternative for the dollar?
+[19:42.26 - 19:43.15] Speaker 2: Well, I I don't
+[19:43.23 - 19:44.69] Speaker 1: crypto but let's say Bitcoin.
+[19:44.91 - 19:47.09] Speaker 2: I don't think it's gonna be alternative.
+[19:48.03 - 19:52.44] Speaker 2: I mean, if you look at most of the stablecoin today, it's still denominated in US dollars.
+[19:52.44 - 19:52.83] Speaker 2: Right?
+[19:52.83 - 19:56.53] Speaker 2: So I uh, crypto is a is a asset class.
+[19:56.75 - 19:57.25] Speaker 2: Right?
+[19:58.83 - 20:02.27] Speaker 2: It is, in many instances, extremely
+[20:03.21 - 20:08.11] Speaker 2: useful and the best form of transfer of value, right, globally.
+[20:08.57 - 20:09.07] Speaker 2: Right?
+[20:09.13 - 20:12.27] Speaker 2: But the transfer of value has to be denominated in something.
+[20:13.47 - 20:16.43] Speaker 2: So I don't see crypto as that.
+[20:16.43 - 20:23.00] Speaker 2: And the crypto usage goes way more be beyond just, uh, more mode of transfer of that.
+[20:23.06 - 20:25.49] Speaker 2: It's a store of value used in most instances.
+[20:25.54 - 20:26.76] Speaker 2: It's a mode of payment.
+[20:27.21 - 20:32.02] Speaker 2: It's a mode in which future financial infrastructure is being built.
+[20:33.11 - 20:37.54] Speaker 2: Um, it's a mode that really facilitate twenty four seven settlement,
+[20:39.97 - 20:42.36] Speaker 2: grower asset tokenization, and many money.
+[20:42.36 - 20:44.60] Speaker 2: And the use case are are being developed as you speak.
+[20:44.60 - 20:47.75] Speaker 2: You know, DeFi space, there are so many new different projects.
+[20:48.45 - 20:55.02] Speaker 2: Um, so in the payment space, again, in RW space, that's grown by 25 times in the last year alone.
+[20:55.93 - 20:58.25] Speaker 2: The script is just being written at this point in time.
+[20:58.25 - 21:00.33] Speaker 2: There are so many strong use case coming through.
+[21:00.33 - 21:01.88] Speaker 2: So it's just not one dimension.
+[21:02.17 - 21:04.89] Speaker 1: Crypto is giving a lot of freedom to people.
+[21:04.89 - 21:05.39] Speaker 1: Right?
+[21:05.61 - 21:14.35] Speaker 1: There's not gonna be a bank in the middle or no government in the middle or uh, no charge, which is 7% essentially comes down to point 1%.
+[21:14.35 - 21:14.59] Speaker 1: Right?
+[21:14.59 - 21:20.38] Speaker 1: So it's it's like a lot of freedom for people to not put their trust into one institution.
+[21:20.68 - 21:21.18] Speaker 1: Right?
+[21:21.79 - 21:24.77] Speaker 1: But that's also a gateway and freedom
+[21:26.30 - 21:31.68] Speaker 1: for, let's say, a scammer or a dictator or a trafficker to just attack an individual.
+[21:32.14 - 21:40.49] Speaker 1: So maybe this technology, which is empowering a lot of freedom, is at the same time empowering a lot of bad actors.
+[21:41.57 - 21:42.07] Speaker 1: So
+[21:43.01 - 21:47.81] Speaker 1: do you think about that sometimes that both sides are just getting empowered at the same time
+[21:47.81 - 21:48.48] Speaker 2: with technology?
+[21:49.09 - 21:50.48] Speaker 2: Same problem with any technology.
+[21:50.70 - 21:50.85] Speaker 2: Right?
+[21:50.85 - 21:54.40] Speaker 2: So so just let me elaborate a lot more.
+[21:54.76 - 22:00.45] Speaker 2: The scammers, the fraudsters has existed for the longest time within financial services.
+[22:00.45 - 22:06.30] Speaker 2: I don't know whether you do this you receive this in India, but in Singapore, we receive a lot of scam calls.
+[22:06.88 - 22:12.72] Speaker 2: People and even people masquerading as our prime minister asking for transfer from banks.
+[22:12.72 - 22:19.94] Speaker 2: And, uh, one unfortunate individual has been scammed to transfer $4,900,000 if you look at the press article.
+[22:20.00 - 22:20.38] Speaker 2: Right?
+[22:20.61 - 22:24.72] Speaker 2: So scams, fraudsters exist in any situation.
+[22:24.95 - 22:25.45] Speaker 2: Right?
+[22:25.90 - 22:29.28] Speaker 2: Especially the advent of technology such as AI.
+[22:29.90 - 22:30.40] Speaker 2: Right?
+[22:31.10 - 22:33.36] Speaker 2: Uh, people have to be very, very cautious.
+[22:33.50 - 22:34.00] Speaker 2: Right?
+[22:34.28 - 22:35.50] Speaker 2: So there are
+[22:37.08 - 22:45.43] Speaker 2: areas that we need to continue to invest in both in the traditional financial institutions to provide enough guardrails.
+[22:45.56 - 22:46.06] Speaker 2: Right?
+[22:46.69 - 22:53.28] Speaker 2: But for our users, for the global users, whether they are users of financial institution
+[22:54.38 - 22:55.60] Speaker 2: or crypto,
+[22:56.53 - 22:59.66] Speaker 2: they have to an they have to do a lot of understanding, research.
+[22:59.66 - 23:02.20] Speaker 2: Don't trust all these things coming through.
+[23:02.20 - 23:02.70] Speaker 2: Right?
+[23:02.75 - 23:04.51] Speaker 2: Uh, have your independent mind.
+[23:04.51 - 23:12.22] Speaker 2: Don't just trust I mean, normally, the scammers play up to emotions to say that, you know, if you don't do this,
+[23:13.53 - 23:14.82] Speaker 2: there's either a risk.
+[23:14.82 - 23:15.14] Speaker 2: Right?
+[23:15.14 - 23:17.32] Speaker 2: You you have to give me access.
+[23:17.70 - 23:22.74] Speaker 2: Otherwise, your account will be, you know, accessed by other people, etcetera.
+[23:22.74 - 23:27.21] Speaker 2: So I'm trying to secure your all opportunity is too good to to miss.
+[23:27.21 - 23:27.36] Speaker 2: Right?
+[23:27.36 - 23:30.34] Speaker 2: I'm gonna offer you how many percent return, etcetera.
+[23:31.28 - 23:36.49] Speaker 2: So whatever is, you have to be prudent and be cautious in whatever format that's coming through.
+[23:36.49 - 23:43.20] Speaker 2: So it's not limited, right, unlike what you say, um, in crypto, it happens all the time in financial institutions.
+[23:44.14 - 23:45.44] Speaker 2: So I think that's one.
+[23:46.14 - 23:51.11] Speaker 2: But as a responsible entity, we have built in so many gutturalks.
+[23:51.25 - 23:51.74] Speaker 2: Right?
+[23:51.74 - 23:56.36] Speaker 2: And we are utilizing this technology in many sense that financial institutions are now utilizing.
+[23:57.78 - 24:02.45] Speaker 2: So, for example, on the cybersecurity side, we have invested very heavily.
+[24:03.23 - 24:11.58] Speaker 2: We have invested we know today, we have more than 100 AI models just doing anti fraud scanning.
+[24:11.88 - 24:17.74] Speaker 2: And last year alone, we helped our users avoided close to 7,000,000,000 in terms of potential scams.
+[24:17.80 - 24:18.28] Speaker 2: Right?
+[24:18.28 - 24:23.16] Speaker 2: More than 5,400,000 users, close to 7,000,000,000 in potential scams.
+[24:23.53 - 24:27.70] Speaker 2: Because using all this new technology, we have the ability to detect that.
+[24:27.70 - 24:31.85] Speaker 2: And when our users want to transfer funds, we want them are you are you sure about this?
+[24:31.85 - 24:32.95] Speaker 2: Who are you trying to?
+[24:33.59 - 24:36.88] Speaker 2: So those are things that as a responsibility we do.
+[24:36.88 - 24:41.85] Speaker 1: You know, on this point, I I have a rather philosophical question to follow-up.
+[24:42.15 - 24:42.63] Speaker 1: Right?
+[24:42.63 - 24:43.85] Speaker 1: If you look at money,
+[24:45.21 - 24:48.67] Speaker 1: in the entire human time in last five thousand years of of a history,
+[24:49.69 - 24:52.82] Speaker 1: we always needed someone who we trusted.
+[24:53.28 - 24:53.60] Speaker 1: Right?
+[24:53.60 - 25:01.28] Speaker 1: Some kind of king, some kind of temple or a bank or a government or something in the middle there where we trust it.
+[25:01.28 - 25:01.78] Speaker 1: Right?
+[25:02.25 - 25:09.23] Speaker 1: Crypto for the first time is where we all are coming together and we are like, we don't trust someone.
+[25:09.28 - 25:10.43] Speaker 1: We trust math.
+[25:10.73 - 25:13.54] Speaker 1: We trust some code or some math formula.
+[25:13.61 - 25:14.11] Speaker 1: Right?
+[25:15.10 - 25:17.21] Speaker 1: So are we moving away from
+[25:18.30 - 25:27.94] Speaker 1: trusting an individual and outsourcing our, uh, what do you say, outsourcing betrayal to a form of math or a form of
+[25:31.77 - 25:31.78] Speaker 2: code.
+[25:31.78 - 25:31.79] Speaker 2: No.
+[25:31.79 - 25:31.84] Speaker 2: So what you say is not true.
+[25:31.84 - 25:38.18] Speaker 2: So in the very early days, uh, with butter trade, right, the transfer of value is different.
+[25:38.18 - 25:38.50] Speaker 2: Right?
+[25:38.50 - 25:39.00] Speaker 2: Um,
+[25:40.74 - 25:49.85] Speaker 2: and if you remember, if I bring you back sixteen years, how Bitcoin manifesto came about was really loss of faith
+[25:50.79 - 25:53.29] Speaker 2: faith not of the central authority,
+[25:54.31 - 25:57.18] Speaker 2: but of the centralized platforms.
+[25:57.72 - 26:00.04] Speaker 2: The Lehman Brothers collapse, etcetera etcetera.
+[26:00.04 - 26:01.02] Speaker 2: Financial institutions,
+[26:01.96 - 26:04.54] Speaker 2: uh, not being to manage the risk.
+[26:04.68 - 26:05.08] Speaker 2: You know?
+[26:05.08 - 26:07.42] Speaker 2: You you can see those collapse coming through.
+[26:08.11 - 26:09.58] Speaker 2: And people feel disenfranchised.
+[26:10.33 - 26:15.96] Speaker 2: When something collapse, they can't do what they need to do via proper transactions.
+[26:16.74 - 26:17.24] Speaker 2: Right?
+[26:17.94 - 26:19.48] Speaker 2: Uh, the system froze.
+[26:19.53 - 26:20.51] Speaker 2: You have a central
+[26:21.53 - 26:22.45] Speaker 2: party in that.
+[26:22.93 - 26:26.61] Speaker 2: So that's how, you know, Bitcoin was then said, look.
+[26:26.61 - 26:30.31] Speaker 2: This is a better alternative way of payment where you
+[26:31.33 - 26:39.47] Speaker 2: this intermediate from a centimeter man that there's a lot of vagueness and try it's opaque.
+[26:39.52 - 26:40.80] Speaker 2: We do not know what's in there.
+[26:40.80 - 26:42.26] Speaker 2: We do not know how they are regulated.
+[26:44.17 - 26:48.50] Speaker 2: The central bank said they are properly regulated, then how can they fail, right, so to say.
+[26:48.73 - 26:59.42] Speaker 2: So it's slightly different and that dantic root among a group of very early early adopters, early believers to say this is way superior.
+[26:59.48 - 27:05.67] Speaker 2: Instead of letting a middle man take six, seven, 10% of my transfer?
+[27:06.36 - 27:10.06] Speaker 2: Why shouldn't I do this using technology which is far superior?
+[27:11.65 - 27:13.25] Speaker 2: And today, it has transformed.
+[27:13.25 - 27:13.41] Speaker 2: Right?
+[27:13.41 - 27:19.67] Speaker 2: So if you look at stablecoin, it's, uh, one of the most important use cases of that technology.
+[27:21.15 - 27:23.07] Speaker 2: But even the banks are embracing it now.
+[27:23.07 - 27:28.28] Speaker 2: So if you look at global banks like Standard Chartered HSBC, they say that, you know, we're gonna issue stablecoins.
+[27:28.35 - 27:32.77] Speaker 2: They've gotten licenses in in jurisdiction, including in Hong Kong, to do that.
+[27:33.23 - 27:37.65] Speaker 2: So this technology is proving itself to be important and relevant
+[27:38.58 - 27:45.15] Speaker 2: and changing how future remittance, how future payment, how the future of financial services will look like.
+[27:45.15 - 27:47.65] Speaker 1: Aren't you as Binance is becoming the middlemen?
+[27:48.54 - 27:50.72] Speaker 2: So we are, uh,
+[27:50.78 - 27:52.16] Speaker 1: centralize again.
+[27:52.38 - 27:54.24] Speaker 1: You guys are becoming the same concept.
+[27:54.54 - 27:54.78] Speaker 2: No.
+[27:54.78 - 27:55.82] Speaker 2: So that's different.
+[27:55.82 - 27:59.42] Speaker 2: So the banks operate on a fractionalized reserve basis.
+[27:59.42 - 27:59.74] Speaker 2: Right?
+[27:59.74 - 28:02.94] Speaker 2: So for every $100 that they get,
+[28:04.75 - 28:10.53] Speaker 2: they keep 5%, 8% in terms of regulatory reserve.
+[28:11.00 - 28:12.68] Speaker 2: They then lend out the rest of that money.
+[28:12.68 - 28:12.92] Speaker 2: Right?
+[28:12.92 - 28:14.46] Speaker 2: So it's about risk management.
+[28:14.65 - 28:15.61] Speaker 2: For us, it's different.
+[28:15.61 - 28:18.35] Speaker 2: Customers customers' money, a 100%.
+[28:18.41 - 28:30.55] Speaker 2: And because we have this technology, we introduce proof of reserve so that customers can, at any point in time, check on the chain, check your address that the the money that's that the assets are there.
+[28:30.55 - 28:30.79] Speaker 2: Right?
+[28:30.79 - 28:37.53] Speaker 2: So at any point in time, we hold north of 140,000,000,000 of customer assets, but those assets are properly safeguarded.
+[28:38.07 - 28:42.09] Speaker 2: And we became the first global exchange to have a home regulator.
+[28:42.23 - 28:42.48] Speaker 2: Right?
+[28:42.48 - 28:49.53] Speaker 2: So other than 20 over countries that we are regulated in, we are the only one with a home regulator that regulate us on an end to end basis.
+[28:49.91 - 28:59.45] Speaker 2: So not just about AML, transaction monitoring, how we do our know your customer, know your business, how we do enforcement, these things.
+[28:59.99 - 29:01.93] Speaker 2: Our global liquidity is regulated.
+[29:02.71 - 29:17.05] Speaker 2: But also areas of how we customize, how we safeguard money, uh, when we do our proof of reserve, which give transparency to our customers that your money is held safe, where you can verify all this.
+[29:17.75 - 29:22.42] Speaker 2: The financial institutions, traditional financial institutions are not able to do that for customers.
+[29:22.42 - 29:24.27] Speaker 2: So it's a totally different concern.
+[29:24.66 - 29:27.07] Speaker 1: If you were 18 today, would you open a bank account?
+[29:28.09 - 29:29.72] Speaker 2: Well, it really depends.
+[29:30.18 - 29:33.14] Speaker 2: Um, it depends on whether I'm technologically savvy.
+[29:33.14 - 29:33.38] Speaker 2: Right?
+[29:33.38 - 29:39.50] Speaker 2: So if I'm I'm 18 and not technology savvy, uh, and depending on whether there are banks in my country.
+[29:39.80 - 29:44.54] Speaker 2: If you look at I mean, I've been financial services for more than thirty years.
+[29:45.16 - 29:51.10] Speaker 2: Since day one, central bankers, financial institutions around the world say that we have to bring about greater financial inclusion.
+[29:51.60 - 30:02.43] Speaker 2: But as of today, we have 1,400,000,000 people around the world with no access to proper payment system, with no access to proper banking system because financial institutions are making it too expensive.
+[30:02.65 - 30:03.13] Speaker 2: Right?
+[30:03.13 - 30:05.15] Speaker 2: They don't want to serve this group of people.
+[30:05.49 - 30:06.63] Speaker 2: So what's the alternative?
+[30:06.77 - 30:07.67] Speaker 2: What's the option?
+[30:08.38 - 30:10.07] Speaker 2: It is crypto.
+[30:11.41 - 30:13.67] Speaker 2: It is blockchain technologies, Bitcoin.
+[30:13.81 - 30:14.31] Speaker 2: Right?
+[30:14.70 - 30:36.99] Speaker 2: So I go around the world to many parts of the frontier market, global South, emerging markets, where people come out and thank thank me, right, and thank Binance because their life has improved tremendously once they got to know, firstly, crypto, secondly, Binance using it as a platform for store wealth, for transfer of value, etcetera.
+[30:37.04 - 30:40.56] Speaker 2: Because these are they get access to things that they couldn't get access before.
+[30:40.56 - 30:41.06] Speaker 2: Right?
+[30:41.84 - 30:43.54] Speaker 2: So those are extremely important.
+[30:44.24 - 30:50.75] Speaker 2: So I would say that if I'm eating, definitely, I I believe I'll be savvy enough, uh, hopefully.
+[30:51.53 - 30:55.48] Speaker 2: And I will definitely embrace this because I will give you a situation.
+[30:55.94 - 31:04.59] Speaker 2: The future will if you think about it, you don't need you don't necessarily need a bank account, but you definitely need a wallet.
+[31:04.73 - 31:07.07] Speaker 2: So the wallet infrastructure is very, very important.
+[31:07.13 - 31:07.53] Speaker 2: Right?
+[31:07.53 - 31:10.35] Speaker 2: So through your wallet, you get payments from your employers.
+[31:10.41 - 31:14.03] Speaker 2: It could be in a form of stable coins coming in on monthly basis.
+[31:14.53 - 31:17.59] Speaker 2: From there, using a combination of AI and blockchain,
+[31:18.77 - 31:20.72] Speaker 2: uh, you can pay your normal bills.
+[31:21.09 - 31:21.50] Speaker 2: Right?
+[31:21.50 - 31:23.11] Speaker 2: Whatever bills that you need to pay.
+[31:23.42 - 31:26.96] Speaker 2: You can then do using that diversification.
+[31:27.57 - 31:27.81] Speaker 2: Right?
+[31:27.81 - 31:30.53] Speaker 2: You can have a balanced portfolio.
+[31:30.84 - 31:34.70] Speaker 2: I have to invest in equities, commodities, credit.
+[31:35.32 - 31:38.06] Speaker 2: Uh, part of it will go to earn product and savings.
+[31:38.44 - 31:40.77] Speaker 2: Everything can be managed out from that wallet.
+[31:40.84 - 31:41.16] Speaker 2: Right?
+[31:41.16 - 31:45.42] Speaker 2: So the concept of a banking institution to the future generation,
+[31:46.44 - 31:54.53] Speaker 2: my, I believe, will look very different as we continue to evolve because it's the because through a mobile, through a wallet, you can do everything literally.
+[31:55.16 - 31:59.49] Speaker 2: So do you still need to go to a bank to set up a bank or no?
+[31:59.49 - 32:01.57] Speaker 2: You know, you you quite you need to is a wallet.
+[32:01.57 - 32:08.77] Speaker 2: So which is why it's very important to think forward and rethink the future of the world and what's coming.
+[32:08.77 - 32:09.25] Speaker 2: Right?
+[32:09.25 - 32:15.53] Speaker 2: So if you look at we we continue to invest very heavily into our Web three wallet on that front.
+[32:15.53 - 32:18.68] Speaker 2: Today, our market share stands at north of 80%.
+[32:19.29 - 32:24.66] Speaker 2: So we believe that this all this technology and infrastructure, these are infrastructural layer.
+[32:24.66 - 32:26.94] Speaker 2: They're extremely important for the future.
+[32:27.64 - 32:32.20] Speaker 1: So you believe that the wallet infrastructure will become more important than the bank infrastructure
+[32:32.36 - 32:32.68] Speaker 2: Absolutely.
+[32:33.00 - 32:33.72] Speaker 1: At some point?
+[32:33.72 - 32:34.22] Speaker 2: Absolutely.
+[32:34.51 - 32:39.58] Speaker 1: Do you think our kids will talk about bank accounts the way we talk about fax machines?
+[32:40.73 - 32:41.52] Speaker 2: I didn't know.
+[32:41.52 - 32:44.58] Speaker 2: But my my kids doesn't quite talk about bank account anymore.
+[32:46.80 - 32:47.95] Speaker 2: Yours should not.
+[32:50.80 - 32:55.63] Speaker 2: So but, uh, you know, different economy have different setup.
+[32:55.88 - 32:56.11] Speaker 2: Right?
+[32:56.11 - 32:57.49] Speaker 2: And different economy
+[32:58.43 - 33:00.35] Speaker 2: evolve and innovate at different pace.
+[33:00.35 - 33:01.41] Speaker 2: So it really depends.
+[33:01.95 - 33:11.17] Speaker 2: Uh, but I would say that the more the evolution goes, the more prevalent and important all these new technology, this all these new way of working.
+[33:11.43 - 33:15.84] Speaker 2: Because today, once I give you a much better alternative, you will not go back to the past alternative.
+[33:15.91 - 33:18.17] Speaker 2: You will demand the future alternative.
+[33:18.95 - 33:23.69] Speaker 2: Why am I paying six to 7% if I can do 0.1%?
+[33:23.99 - 33:30.15] Speaker 2: Why am I not allowed to take positions when there's twenty four seven trading?
+[33:30.38 - 33:30.88] Speaker 2: Right?
+[33:31.65 - 33:37.41] Speaker 2: Why do I wait have to wait for two to three days if I can do transfer on an instantaneous basis?
+[33:37.41 - 33:38.93] Speaker 2: It's not only the retail is asking that.
+[33:38.93 - 33:40.13] Speaker 2: The corporates are doing that.
+[33:40.13 - 33:52.49] Speaker 2: So you look at all the very big corporate treasuries, they are moving to say, look, I need to on a daily basis, I need to transfer hundreds of millions of funds from Australia to Europe to US to different parts of Asia.
+[33:52.49 - 33:53.77] Speaker 2: I need to allocate that.
+[33:54.01 - 34:02.43] Speaker 2: Isn't it better to make use of stablecoin or crypto technology to do that transfer so that I have to I hold less capital.
+[34:02.65 - 34:04.49] Speaker 2: My capital is put put to better use.
+[34:04.49 - 34:06.20] Speaker 2: It's much greater efficiency.
+[34:06.25 - 34:08.11] Speaker 2: I save a lot of cost for the organization.
+[34:08.57 - 34:14.82] Speaker 2: And I have certainty for myself, all my subsidiaries, all my vendors, when are they gonna receive the payment.
+[34:15.36 - 34:17.63] Speaker 2: That brings about greater capital velocity.
+[34:17.84 - 34:18.98] Speaker 2: There's a better alternative.
+[34:19.28 - 34:22.73] Speaker 2: And once they do that, they will not go back to the existing state of the trade.
+[34:22.73 - 34:23.23] Speaker 2: Right?
+[34:23.59 - 34:23.98] Speaker 1: True.
+[34:23.98 - 34:29.76] Speaker 1: You you said it depends on different economies how the manifestation will take place.
+[34:29.76 - 34:30.26] Speaker 1: Right?
+[34:31.36 - 34:36.73] Speaker 1: And it's an important question that different economies will function in different ways.
+[34:36.94 - 34:38.48] Speaker 1: They will have different thought process.
+[34:39.17 - 34:44.32] Speaker 1: What if some people come together and decide they wanna ban crypto?
+[34:44.69 - 34:45.67] Speaker 1: What happens then?
+[34:46.21 - 34:49.44] Speaker 2: Well, you have countries that bankrupt crypto.
+[34:49.57 - 34:50.07] Speaker 2: Right?
+[34:50.46 - 34:53.98] Speaker 2: But as with technology, you can try to curtail it.
+[34:53.98 - 34:59.28] Speaker 2: You can try to ban it, but the technology will continue to advance very, very quickly, right, like you're not.
+[34:59.51 - 35:02.71] Speaker 2: And there are many countries around the world that are embracing it.
+[35:03.34 - 35:04.80] Speaker 2: Crypto is becoming mainstream.
+[35:04.94 - 35:06.69] Speaker 2: You you can't turn back the clock now.
+[35:06.69 - 35:07.11] Speaker 2: Right?
+[35:07.34 - 35:15.44] Speaker 2: So the the longer you actually ban this technology, the further behind the value chain the country will be.
+[35:15.59 - 35:20.51] Speaker 2: And over time, it actually impacts a country's competitiveness, but those are country level consideration.
+[35:20.65 - 35:21.94] Speaker 2: Those are policy consideration.
+[35:22.57 - 35:27.05] Speaker 2: Countries will have their own consideration to take into play, why they do certain things.
+[35:27.05 - 35:37.63] Speaker 2: But from a competitive angle, as I mentioned, AI and blockchain crypto technology are the most two most important technology that will under underpin every economic sector.
+[35:38.01 - 35:51.82] Speaker 2: If you think about every sector economic sector in the world going forward, whether it's trade, whether it's financial services, whether it's media entertainment, every sector can be rebuilt using these two fundamental technology.
+[35:52.19 - 35:57.38] Speaker 2: They they look extremely different five, ten years from now compared to the current state that we see today.
+[35:57.38 - 35:59.26] Speaker 1: So it won't be completely banned?
+[36:00.36 - 36:02.67] Speaker 2: It's not something that you will be able to ban.
+[36:02.67 - 36:05.65] Speaker 2: It has now gone into mass adoption.
+[36:05.71 - 36:06.21] Speaker 2: Right?
+[36:06.67 - 36:10.30] Speaker 2: Uh, so I my view, but, uh, might be wrong.
+[36:10.51 - 36:17.32] Speaker 2: A lot of times, it's much better to embrace the technology, to embrace it and to regulate it.
+[36:17.32 - 36:24.30] Speaker 2: Then you have proper oversight of the of the technology, what it does, and then you can put in place guardrails.
+[36:24.42 - 36:24.92] Speaker 2: Right?
+[36:25.32 - 36:33.90] Speaker 2: So a lot of countries I mean, if you look at the history of the world, countries that close themselves off, right, and to the outside world
+[36:34.84 - 36:43.94] Speaker 2: tends to fall behind very quickly because they are not in touch with the latest innovation, the latest technology in the past world, uh, history.
+[36:43.94 - 36:48.44] Speaker 2: They don't get access to military technology like gunpowders, etcetera.
+[36:48.65 - 36:50.42] Speaker 2: And they fall behind very, very quickly.
+[36:50.42 - 36:58.55] Speaker 2: So every time the country shut its borders, etcetera, uh, and don't get don't continue to embrace innovation
+[37:00.21 - 37:02.55] Speaker 2: and all these new changes coming through.
+[37:03.25 - 37:04.94] Speaker 2: That's a risk to the country.
+[37:05.01 - 37:11.98] Speaker 1: Another technology, I was reading some comments that, uh, you guys are using AI agents a lot in Binance.
+[37:11.98 - 37:12.48] Speaker 1: Right?
+[37:12.94 - 37:15.98] Speaker 1: And are you using AI agent for better trading as well?
+[37:15.98 - 37:16.48] Speaker 2: Absolutely.
+[37:17.03 - 37:19.76] Speaker 2: So we use AI across the organization.
+[37:19.98 - 37:31.34] Speaker 2: So, for example, this year, every business unit leaders, the mandate is to make every function within Binance much more effective and much more efficient with the usage of AI.
+[37:31.63 - 37:38.38] Speaker 2: And then from our user level, it's also giving them the right tools through AI so to facilitate that.
+[37:38.61 - 37:38.78] Speaker 2: Right?
+[37:38.78 - 37:39.28] Speaker 2: So
+[37:40.46 - 37:44.71] Speaker 2: we introduced Binance AI Pro where you can do proper analytics.
+[37:44.86 - 37:47.76] Speaker 2: So you can do, uh, assessment of analytics.
+[37:48.69 - 37:50.88] Speaker 2: You can do trading on it.
+[37:51.19 - 37:58.98] Speaker 2: And the future will, again, of all the other things I mentioned, is one that agentic trading is gonna be prevalent.
+[37:59.11 - 37:59.61] Speaker 2: Right?
+[38:00.00 - 38:03.03] Speaker 2: So agentic trading, agentic payment is gonna be prevalent.
+[38:03.03 - 38:04.50] Speaker 2: So if you think about it,
+[38:05.88 - 38:08.30] Speaker 2: all these are important usage of blockchain.
+[38:09.80 - 38:28.17] Speaker 2: And important usage of payment going forward will be stablecoins and crypto because once you use agentic, you know tokens burn as a you I mean, if you talk about cents, you can't afford to make payments using your traditional card payment or traditional banking payment because it's too costly.
+[38:28.48 - 38:28.98] Speaker 2: Right?
+[38:29.51 - 38:32.98] Speaker 2: So crypto instantaneous transfer,
+[38:34.80 - 38:39.51] Speaker 2: low cost becomes the natural default currency for AI.
+[38:39.63 - 38:41.59] Speaker 2: That's why we always say that
+[38:42.53 - 38:49.57] Speaker 2: crypto stablecoin are the natural currency for the AI generation because of all these changes that you're seeing.
+[38:49.57 - 38:50.07] Speaker 2: Right?
+[38:50.34 - 38:54.11] Speaker 2: And agentic trading coming through, agentic payment coming through.
+[38:54.34 - 38:57.94] Speaker 2: It's only natural that the evolution will continue to evolve very, very quickly.
+[38:57.94 - 38:59.88] Speaker 1: Ex explain me agentic trading.
+[38:59.94 - 39:02.50] Speaker 1: It's like on my behalf, an agent will trade?
+[39:02.50 - 39:02.84] Speaker 2: Yes.
+[39:03.07 - 39:03.94] Speaker 2: So you give the So
+[39:03.94 - 39:05.40] Speaker 1: what if an AI agent
+[39:06.36 - 39:08.03] Speaker 1: loses my money at 3AM?
+[39:08.03 - 39:09.71] Speaker 1: Who do I who do I blame?
+[39:09.71 - 39:13.40] Speaker 2: The AI the AI model, you have to make sure that you have proper risk parameters.
+[39:13.46 - 39:13.71] Speaker 2: Right?
+[39:13.71 - 39:15.63] Speaker 2: You have proper cut loss measures, etcetera.
+[39:15.63 - 39:18.61] Speaker 2: I mean, you for for experienced trader, you know what to do.
+[39:18.61 - 39:21.11] Speaker 2: You can build in all these gut reels for yourself.
+[39:21.65 - 39:22.76] Speaker 1: But who do I blame?
+[39:22.76 - 39:29.40] Speaker 1: Let's say some bug feature happened, and then my agent end up losing my entire life savings on your platform.
+[39:29.57 - 39:31.01] Speaker 2: Save safeguard all those.
+[39:31.01 - 39:31.51] Speaker 2: Right?
+[39:32.05 - 39:35.59] Speaker 2: So do things that you understand and put in place proper guardrails.
+[39:35.88 - 39:37.26] Speaker 2: Uh, don't have fat finger.
+[39:37.26 - 39:39.40] Speaker 2: You know, traditional, oh, you have fat finger as well.
+[39:39.40 - 39:39.90] Speaker 2: Right?
+[39:40.05 - 39:46.01] Speaker 2: So have proper safeguards, and it's very important that you test the agent to make sure he's doing all the right things.
+[39:46.01 - 39:52.19] Speaker 1: Even after, like, putting proper safeguards, would you trust AI agent with all your money?
+[39:52.98 - 39:54.28] Speaker 2: It's about risk diversification.
+[39:54.65 - 39:54.82] Speaker 2: Right?
+[39:54.82 - 39:54.90] Speaker 2: So
+[39:55.13 - 39:56.92] Speaker 1: But would you trust yourself?
+[39:57.42 - 40:00.26] Speaker 2: I I will make sure that I test it properly first.
+[40:00.38 - 40:05.90] Speaker 2: I make sure that there's a proper track record of how it's operating before I continue to invest.
+[40:05.90 - 40:08.17] Speaker 2: As we I always say, alright, start small.
+[40:08.80 - 40:10.55] Speaker 2: Make sure that you understand it.
+[40:10.55 - 40:21.48] Speaker 2: Make sure you understand the potential and the pitfalls of anything, anything that you put your money into because it's your money that you're dealing with before you continue to expand that portfolio.
+[40:21.78 - 40:23.78] Speaker 1: But it here's the scary part about it.
+[40:23.78 - 40:24.03] Speaker 1: Right?
+[40:24.03 - 40:29.01] Speaker 1: What if I in my first few trades, I end up making money with my little amount.
+[40:29.07 - 40:31.15] Speaker 1: And then I put my whole amount and then
+[40:31.32 - 40:32.19] Speaker 2: Well, then then
+[40:32.19 - 40:33.09] Speaker 1: I'm not being prudent.
+[40:34.36 - 40:36.98] Speaker 1: Then my a AI agent messes up the entire thing.
+[40:36.98 - 40:37.07] Speaker 2: No.
+[40:37.07 - 40:37.88] Speaker 2: That is not yeah.
+[40:37.88 - 40:38.19] Speaker 2: Yeah.
+[40:38.19 - 40:39.38] Speaker 2: It's all about risk management.
+[40:39.38 - 40:44.84] Speaker 2: It's very important to make sure that the AI agent is tested for different market conditions.
+[40:45.53 - 40:46.03] Speaker 2: Right?
+[40:48.42 - 40:49.07] Speaker 2: Uh, different
+[40:50.17 - 40:51.48] Speaker 2: situations and circumstances.
+[40:52.17 - 40:55.94] Speaker 2: So it's very important for you to test the parameters, and you know what we're getting into.
+[40:55.94 - 41:00.69] Speaker 1: And what was the toughest thing for you personally as a CEO when you took over?
+[41:00.98 - 41:03.17] Speaker 2: Well, I I do think that is
+[41:04.28 - 41:13.28] Speaker 2: steering the ship and working through with all the regulators around the world to show that we have pivoted very, very strongly.
+[41:13.73 - 41:16.32] Speaker 2: We have invested greatly into compliance.
+[41:18.13 - 41:20.55] Speaker 2: I mean, financial institutions make mistakes.
+[41:21.01 - 41:21.98] Speaker 2: Uh, it's not only us.
+[41:21.98 - 41:27.05] Speaker 2: But if you look at all the global financial institutions, they have breached law, they have breached AML provisions,
+[41:28.63 - 41:30.01] Speaker 2: um, at some point in time.
+[41:30.38 - 41:34.73] Speaker 2: The rules and standards are ever evolving, so we need to keep pace with those rules and standard.
+[41:34.80 - 41:44.90] Speaker 2: But what is important as with responsible entity like ourself is to acknowledge those mistake, make the right investments, and then come out of it much stronger, which we have done.
+[41:44.90 - 41:45.15] Speaker 2: Right?
+[41:45.15 - 41:49.30] Speaker 2: So we have demonstrated that, okay, we make mistakes.
+[41:49.30 - 41:50.92] Speaker 2: We have underinvested in compliance.
+[41:51.48 - 41:55.88] Speaker 2: Now we have make huge commitment to investment, to compliance, and invested greatly.
+[41:55.88 - 42:00.63] Speaker 2: We work with global regulators to embrace regulations, to embrace compliance.
+[42:01.09 - 42:04.07] Speaker 2: We have a very strong and robust team now.
+[42:05.21 - 42:07.80] Speaker 2: And, you know, we continue to work very closely with policymakers,
+[42:08.73 - 42:17.96] Speaker 2: regulators around the world so that good regulations, smart regulations are being promulgated to regulate this sector for the benefit of everybody.
+[42:18.90 - 42:20.30] Speaker 2: We want proper regulations.
+[42:20.42 - 42:24.05] Speaker 2: Our interests are aligned with users and aligned with regulators.
+[42:24.84 - 42:31.57] Speaker 2: We want a responsible ecosystem in place that's properly regulated for the benefit of everybody.
+[42:31.90 - 42:44.63] Speaker 2: So our interests are all aligned is how do we get there and to make sure that smart regulations come through instead of one dimensional regulation that just focus on focus focus on risk, which then make a very purpose of legislation.
+[42:44.86 - 42:48.42] Speaker 2: Because for any legislation that just focus on risk without
+[42:49.36 - 42:54.17] Speaker 2: also supporting innovation and growth, right, then it's gonna be very challenging.
+[42:54.48 - 43:01.55] Speaker 2: As ex regulator, I can tell you that the easiest form of regulation is to regulate everything to the ground, is to have zero risk.
+[43:01.55 - 43:04.69] Speaker 2: But when you have zero risk, you have zero activity.
+[43:05.00 - 43:07.63] Speaker 2: How is it gonna benefit the economy and the people?
+[43:07.63 - 43:08.13] Speaker 2: Right?
+[43:08.19 - 43:12.84] Speaker 2: So you need to come up with a balanced smart regulations to support both sides.
+[43:12.84 - 43:19.82] Speaker 2: In Binance, I hope I continue to do the same as an enabler, as a builder, working with a fantastic team.
+[43:19.82 - 43:20.07] Speaker 2: Right?
+[43:20.07 - 43:24.32] Speaker 2: So I've the founders, co CEO, Yi, working alongside.
+[43:24.61 - 43:26.23] Speaker 2: We have many brilliant people.
+[43:26.55 - 43:30.11] Speaker 2: And we continue to believe that we need to continue that
+[43:31.13 - 43:41.00] Speaker 2: mission of finance, which is the freedom money, build the best platform out there into a financial support to serve our users in terms of all their financial services needs.
+[43:41.23 - 43:42.86] Speaker 2: And that's where we are heading towards.
+[43:43.32 - 43:44.86] Speaker 1: See so if one
+[43:45.88 - 43:49.34] Speaker 1: some builder is watching you right now who is probably
+[43:50.44 - 43:53.32] Speaker 1: in early twenties, want to build his career or her career.
+[43:53.32 - 43:53.82] Speaker 1: Right?
+[43:54.67 - 43:55.65] Speaker 1: The money is changing.
+[43:55.96 - 43:57.48] Speaker 1: World is changing.
+[43:57.48 - 43:59.00] Speaker 1: AI and technology is changing.
+[43:59.00 - 44:00.46] Speaker 1: Geopolitics is changing.
+[44:00.92 - 44:02.78] Speaker 1: So many changes happening in the world.
+[44:04.19 - 44:12.90] Speaker 1: What should they focus on or which industry perhaps or what one specific thing they should look at to create wealth in next ten, twenty, thirty years?
+[44:13.13 - 44:16.09] Speaker 2: I would say that the fun the the technology will always come true.
+[44:16.09 - 44:16.34] Speaker 2: Right?
+[44:16.34 - 44:18.90] Speaker 2: So there'll always be new technology coming through.
+[44:19.38 - 44:21.55] Speaker 2: Uh, the sectors will always evolve.
+[44:21.69 - 44:23.63] Speaker 2: The opportunities will always evolve.
+[44:24.11 - 44:31.82] Speaker 2: So I think it's important for them first to understand spend as much time possible, understand the different landscape, do deep dives.
+[44:32.11 - 44:37.65] Speaker 2: But it's also understanding if you are a builder, focus on building things that will create value.
+[44:38.11 - 44:39.00] Speaker 2: It's very important.
+[44:39.00 - 44:39.32] Speaker 2: Right?
+[44:39.32 - 44:47.13] Speaker 2: So if you focus on building things that will create value, that are sustainable, that has utility about it, that are strong use cases, you won't go too far wrong.
+[44:47.13 - 44:47.44] Speaker 2: Right?
+[44:47.44 - 44:52.03] Speaker 2: Because these are things that people will continue to use to create value for the world, for yourself.
+[44:52.28 - 44:54.76] Speaker 2: So those are the areas that should they should focus on.
+[44:54.76 - 44:59.55] Speaker 2: Continue to look at ways to create new value or enhance existing value.
+[44:59.55 - 45:06.21] Speaker 1: Is there any specific sector that you believe is going to see the disruption in next five, ten years?
+[45:06.71 - 45:07.59] Speaker 2: I would say that.
+[45:07.59 - 45:11.19] Speaker 1: Where there's not a lot of work has done, so somebody can maybe look at.
+[45:11.19 - 45:18.09] Speaker 2: I I really believe that every economic sector in the world will be transformed using AI and crypto,
+[45:19.90 - 45:20.48] Speaker 2: um, entertainment.
+[45:21.36 - 45:21.86] Speaker 2: Right?
+[45:22.69 - 45:26.07] Speaker 2: Payments in entertainment, for example, you'll be totally transformed.
+[45:26.46 - 45:30.48] Speaker 2: Supply chain financing will be totally transformed using AI and crypto.
+[45:31.01 - 45:33.28] Speaker 2: Financial services, I think we have touched on.
+[45:33.73 - 45:35.28] Speaker 2: But if you look at even
+[45:36.21 - 45:40.23] Speaker 2: different type of sectors, right, there are so many sectors with so many opportunities
+[45:41.57 - 45:43.19] Speaker 2: that's ripe for transformation.
+[45:43.82 - 45:44.21] Speaker 2: Right?
+[45:44.21 - 45:53.09] Speaker 2: So if you inject the right lens, if you have the right expertise, and you use the right technology, you can create a lot of new value in each of these economic sector.
+[45:53.71 - 45:54.36] Speaker 1: Got it.
+[45:54.36 - 45:55.73] Speaker 1: Well, thank you so much.
+[45:55.80 - 45:59.96] Speaker 1: Here is one last thing I I've started asking my guest these days.
+[45:59.96 - 46:02.30] Speaker 1: I'd really like to ask is,
+[46:03.40 - 46:06.21] Speaker 1: what is one advice that nobody should follow?
+[46:09.88 - 46:10.38] Speaker 2: Hey.
+[46:10.92 - 46:15.98] Speaker 2: I have this great investment that can generate huge returns for you.
+[46:16.30 - 46:17.76] Speaker 2: So don't trust those.
+[46:17.82 - 46:18.86] Speaker 2: Uh, do your own research.
+[46:18.86 - 46:20.25] Speaker 2: It's extremely important.
+[46:20.78 - 46:21.51] Speaker 2: Just don't trust
+[46:22.55 - 46:30.25] Speaker 2: I mean, just don't trust what other people tell you without understanding, without researching, without analyzing.
+[46:32.46 - 46:33.61] Speaker 2: Is gonna be challenging.
+[46:33.84 - 46:36.09] Speaker 2: So so importantly,
+[46:37.28 - 46:38.40] Speaker 2: do your own research.
+[46:39.11 - 46:44.34] Speaker 2: Uh, very important that you are the master of your own money and your own knowledge.
+[46:44.67 - 46:46.69] Speaker 2: So invest time in all those things.
+[46:46.82 - 46:47.23] Speaker 1: Alright.
+[46:47.23 - 46:48.03] Speaker 1: Thank you so much.
+[46:48.03 - 46:49.07] Speaker 1: That's a great point.
+[46:49.07 - 46:49.94] Speaker 2: Thank you so much.
+[46:49.94 - 46:50.69] Speaker 2: Thank you.
+[46:51.38 - 46:52.69] Speaker 2: So I was in Budapest.
+[46:53.38 - 46:55.30] Speaker 2: So I saw the match, um, between
+[46:55.46 - 46:57.17] Speaker 1: Are you a PSG fan or Arsenal?
+[46:57.48 - 46:58.38] Speaker 2: Actually, I'm
+[47:00.30 - 47:01.42] Speaker 2: a fan of football.
+[47:01.65 - 47:01.96] Speaker 2: Okay.
+[47:01.96 - 47:03.57] Speaker 2: I'm not a fan of both clubs.
+[47:03.57 - 47:11.25] Speaker 2: Uh, but I think, you know, they are very, very good clubs and play but it's very tight football that they play on the finals.
+[47:11.25 - 47:13.17] Speaker 2: Very, very, very cautious, very tight football.
+[47:13.17 - 47:13.65] Speaker 2: Yeah.
+[47:13.65 - 47:15.34] Speaker 1: Which which is your favorite club?
+[47:16.21 - 47:16.94] Speaker 2: Uh, Liverpool.
+[47:19.88 - 47:23.17] Speaker 1: Thank you so much for watching this episode till the end.
+[47:23.17 - 47:24.59] Speaker 1: Now you have to do three things.
+[47:24.82 - 47:27.86] Speaker 1: Number one, subscribe to this channel right now.
+[47:27.86 - 47:31.88] Speaker 1: The more you subscribe, the better the guess we will be able to get for you.
+[47:32.17 - 47:43.03] Speaker 1: Number two, please comment and let us know what did we do wrong and what did we do right because the more you give us feedback, the better we will be able to make episodes for you.
+[47:43.03 - 47:51.61] Speaker 1: And number three, please share this episode with at least one person because one conversation can change someone's entire life.
+[47:51.67 - 47:52.71] Speaker 1: I'll see you next time.
+[47:52.71 - 47:53.92] Speaker 1: Until then, keep figuring out.
+[48:01.44 - 48:01.94] Speaker 1: Out.
