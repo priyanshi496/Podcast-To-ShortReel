@@ -34,18 +34,22 @@ def _fetch_deepgram_transcript(audio_path: str) -> Dict[str, Any]:
 
     params = {
         "model": settings.DEEPGRAM_MODEL,
+        "language": "multi",     # nova-3 multilingual — REPLACES detect_language.
+                                  # detect_language never reliably picks up Hindi on nova-3;
+                                  # Hindi is only available through multilingual/code-switch mode.
         "smart_format": "true",
         "diarize": "true",       # real per-word speaker IDs — this is the whole point of the switch
         "punctuate": "true",
         "filler_words": "true",
-        "detect_language": "true",
+        "sentiment": "true",     # Deepgram Audio Intelligence — feeds rank.py's virality scoring
+        "topics": "true",        # Deepgram Audio Intelligence — informational, used for filtering/titles
     }
     headers = {
         "Authorization": f"Token {settings.DEEPGRAM_API_KEY}",
         "Content-Type": _guess_content_type(audio_path),
     }
 
-    logger.info(f"Sending audio to Deepgram (model='{settings.DEEPGRAM_MODEL}', diarize=true): {audio_path}")
+    logger.info(f"Sending audio to Deepgram (model='{settings.DEEPGRAM_MODEL}', language=multi, diarize=true): {audio_path}")
 
     response = requests.post(
         DEEPGRAM_URL,
@@ -83,6 +87,64 @@ def _extract_words(deepgram_json: Dict[str, Any]) -> List[Dict[str, Any]]:
             "confidence": float(w.get("confidence", 1.0)),
         })
     return words
+
+
+def _extract_sentiment_segments(deepgram_json: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Pulls Deepgram's own sentence-level sentiment segments. NOTE: these are on
+    Deepgram's own sentence boundaries, NOT our diarization-based segments — the
+    two timelines don't line up 1:1, so this list gets time-overlapped onto our
+    segments in _attach_sentiment_and_topics rather than zipped directly.
+    """
+    try:
+        segs = deepgram_json["results"]["sentiments"]["segments"]
+    except (KeyError, TypeError):
+        return []
+    return [{
+        "start": float(s.get("start", 0.0)),
+        "end": float(s.get("end", 0.0)),
+        "sentiment": s.get("sentiment", "neutral"),
+        "sentiment_score": float(s.get("sentiment_score", 0.0)),
+    } for s in segs]
+
+
+def _extract_topic_segments(deepgram_json: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Pulls Deepgram's topic-detection segments (text spans tagged with topics)."""
+    try:
+        segs = deepgram_json["results"]["topics"]["segments"]
+    except (KeyError, TypeError):
+        return []
+    return [{
+        "start": float(s.get("start", 0.0)),
+        "end": float(s.get("end", 0.0)),
+        "topics": [t.get("topic") for t in s.get("topics", []) if t.get("topic")],
+    } for s in segs]
+
+
+def _attach_sentiment_and_topics(
+    segments: List[Dict[str, Any]],
+    sentiment_segs: List[Dict[str, Any]],
+    topic_segs: List[Dict[str, Any]],
+) -> None:
+    """
+    Mutates our diarization-based segments in place, averaging in whichever
+    Deepgram sentiment/topic spans time-overlap each segment. This is what lets
+    rank.py's enrich_clip() pull sentiment_score/topics straight off each
+    candidate segment without needing to know about Deepgram's own timeline.
+    """
+    for seg in segments:
+        s_start, s_end = seg["start_time"], seg["end_time"]
+
+        overlap_sent = [d for d in sentiment_segs if d["start"] < s_end and d["end"] > s_start]
+        if overlap_sent:
+            seg["sentiment_score"] = round(sum(d["sentiment_score"] for d in overlap_sent) / len(overlap_sent), 3)
+            seg["sentiment"] = max(overlap_sent, key=lambda d: abs(d["sentiment_score"]))["sentiment"]
+        else:
+            seg["sentiment_score"] = 0.0
+            seg["sentiment"] = "neutral"
+
+        overlap_topics = [t for d in topic_segs if d["start"] < s_end and d["end"] > s_start for t in d["topics"]]
+        seg["topics"] = sorted(set(overlap_topics))
 
 
 def _build_speaker_label_map(words: List[Dict[str, Any]]) -> Dict[Optional[int], str]:
@@ -168,12 +230,24 @@ def transcribe_audio(audio_path: str) -> List[Dict[str, Any]]:
     """
     Transcribes the audio file via Deepgram (with real speaker diarization) and
     returns a list of segment dictionaries: start_time, end_time, text, speaker,
-    confidence — same output shape as before, so rank.py needs no changes.
+    confidence, sentiment, sentiment_score, topics.
 
     Replaces the previous local faster-whisper pipeline entirely. Speaker labels
     now come from Deepgram's diarize=true parameter (real per-word speaker IDs),
     mapped to friendly "Speaker 1", "Speaker 2", ... labels in order of first
     appearance — instead of the previous hardcoded "Speaker 1" for every segment.
+
+    language=multi (nova-3 multilingual) replaces the old detect_language=true —
+    detect_language never reliably surfaced Hindi on nova-3; Hindi is only
+    available through multilingual/code-switch mode. NOTE: there is a known
+    Deepgram issue where nova-3 multi occasionally misclassifies Hindi speech
+    as Spanish mid-conversation — worth spot-checking output on Hindi-English
+    content until Deepgram ships language-restriction prompting for multi mode.
+
+    sentiment/topics come from Deepgram's Audio Intelligence features and are
+    time-aligned onto our diarization-based segments (see
+    _attach_sentiment_and_topics) so rank.py's enrich_clip() can use them
+    directly as virality-scoring signals without any extra alignment work.
 
     NOTE: This is now the only transcription path. If DEEPGRAM_API_KEY is missing
     or the request fails, this raises loudly rather than silently degrading —
@@ -188,9 +262,9 @@ def transcribe_audio(audio_path: str) -> List[Dict[str, Any]]:
     duration = metadata.get("duration", 0.0)
     try:
         language = deepgram_json["results"]["channels"][0].get("detected_language") \
-            or metadata.get("language", "en")
+            or metadata.get("language", "multi")
     except (KeyError, IndexError):
-        language = "en"
+        language = "multi"
 
     words = _extract_words(deepgram_json)
     if not words:
@@ -211,6 +285,10 @@ def transcribe_audio(audio_path: str) -> List[Dict[str, Any]]:
         )
 
     results = _build_segments(words, speaker_label_map)
+
+    sentiment_segs = _extract_sentiment_segments(deepgram_json)
+    topic_segs = _extract_topic_segments(deepgram_json)
+    _attach_sentiment_and_topics(results, sentiment_segs, topic_segs)
 
     logger.info(
         f"Transcription complete. Audio duration: {duration:.1f}s, language: {language}. "
