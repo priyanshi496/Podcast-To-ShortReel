@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     # OpenRouter (fallback LLM provider)
     OPENROUTER_API_KEY: str = "your_openrouter_api_key_here"
     OPENROUTER_MODEL: str = "google/gemma-4-31b-it:free"
+    # OPENROUTER_MODEL_DISCOVERY: str = "google/gemini-3-flash-preview"
+    OPENROUTER_MODEL_DISCOVERY: str = "poolside/laguna-xs-2.1:free"
     # Groq (fallback LLM provider)
     GROQ_API_KEY: str = ""
     GROQ_MODEL: str = "llama-3.3-70b-versatile"

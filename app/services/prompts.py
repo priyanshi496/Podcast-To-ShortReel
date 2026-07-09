@@ -119,7 +119,7 @@ CATEGORY_CONFIG: Dict[str, Any] = {
             "SETUP LENGTH RULE — SHORT SETUPS WIN:\n"
             "If the setup runs longer than 20 seconds before the punchline turns, it is probably not the right clip. "
             "Look for a TIGHTER joke elsewhere in the transcript. The best comedy clips are short, punchy, and complete. "
-            "15-35 seconds is the sweet spot. Every second of setup is borrowed time.\n\n"
+            "30-60 seconds is the sweet spot. Every second of setup is borrowed time.\n\n"
 
             "ANTI-PATTERNS (these kill comedy clips):\n"
             "✗ THE #1 MISTAKE: Cutting right as the joke starts — before the twist lands. This is instant death.\n"
@@ -137,7 +137,7 @@ CATEGORY_CONFIG: Dict[str, Any] = {
             "context": 0.05,
             "audio_signal": 0.25,
         },
-        "min_duration_sec": 20.0,
+        "min_duration_sec": 30.0,
         "max_duration_sec": 90.0,
     },
 
@@ -189,7 +189,7 @@ CATEGORY_CONFIG: Dict[str, Any] = {
             "context": 0.10,
             "audio_signal": 0.15,
         },
-        "min_duration_sec": 10.0,
+        "min_duration_sec": 30.0,
         "max_duration_sec": 90.0,
     },
 
@@ -406,13 +406,12 @@ def build_moment_finder_prompt(category: str) -> str:
     if category == "interview_discussion":
         interview_rule = (
             "=== INTERVIEW EXCHANGE RULE (MANDATORY) ===\n"
-            "This is an interview/discussion format with a HOST and one or more GUESTS.\n"
-            "Every moment you select MUST start with the HOST's question or setup, not the guest's answer.\n"
-            "A clip that starts with a guest answer and has NO preceding question is INCOMPLETE and worthless — "
-            "a viewer watching it for the first time has zero context and will swipe away immediately.\n"
-            "ALWAYS trace back to find the question or prompt that triggered the interesting response, and include that in your start_segment_id.\n"
-            "Exception: a guest can open a clip only if they are making an unprompted bold claim (e.g., interrupting with a hot take), "
-            "but ONLY if the claim is immediately self-explanatory with no prior context needed.\n\n"
+            "The interviewer question is OPTIONAL.\n"
+            "Always search for a stronger opening AFTER the interviewer question.\n"
+            "Only include the interviewer if absolutely necessary.\n"
+            "If the guest naturally starts a story, statistic, confession, analogy, or controversial statement, begin there instead.\n"
+            "If the first viral sentence appears AFTER the interview question, start at the viral sentence.\n"
+            "Do not include the question merely because it came first.\n\n"
         )
 
     return (
@@ -423,11 +422,11 @@ def build_moment_finder_prompt(category: str) -> str:
         "=== GENRE-SPECIFIC PRODUCER GUIDELINES ===\n"
         f"{rule_details}\n\n"
         f"{interview_rule}"
-        "=== NARRATIVE COHESION & COMPLETE STORIES (MANDATORY) ===\n"
-        "If a speaker is telling a personal story, anecdote, or narrating a sequence of events (e.g., a breakup, a chase, a business pivot, or a personal struggle):\n"
-        "1. Do NOT fragment this story into separate clips (e.g., separating the breakup text, the train chase, and the marriage resolution into 3 different moments).\n"
-        "2. The entire story MUST be selected as a single, cohesive moment (from the setup to the final resolution/payoff).\n"
-        "3. Fragmenting a single narrative story into multiple short moments is a critical error—it leaves the viewer with no context in some clips and no resolution in others. Keep stories together as a single moment!\n\n"
+        "=== NARRATIVE COHESION & COMPLETE STORIES ===\n"
+        "If a speaker is telling a personal story, anecdote, or narrating a sequence of events:\n"
+        "Keep the entire story together ONLY if it fits within the maximum duration limit (60 seconds).\n"
+        "If the story exceeds the duration limit, locate the single highest-retention sub-story or cliffhanger within it.\n"
+        "Never keep an overlong story merely because it is complete. Duration limits overrule completeness.\n\n"
         "=== TOPIC & SUBJECT COHESION (MANDATORY) ===\n"
         "Every moment you select MUST focus on a single, unified topic or subject.\n"
         "If a speaker shifts to a different topic or person (e.g., shifting from talking about their father's business ethics to their mother's personality, or transitioning from product frameworks to a personal relationship question):\n"
@@ -436,9 +435,19 @@ def build_moment_finder_prompt(category: str) -> str:
         "=== DISCOVERY TASK ===\n"
         "Your job is to read the entire transcript segment list and identify up to 10 viral 'moments'.\n"
         "For each moment, determine the start_segment_id and end_segment_id (inclusive) from the segment list.\n"
-        "A moment must represent a self-contained, high-retention reel opportunity: an intriguing question and its complete punchy answer, "
+        "A moment must represent a self-contained, high-retention reel opportunity: a single powerful quote or statement, "
         "a dramatic narrative arc/vulnerability shift, a standalone bold prediction, or a heated debate.\n"
-        "CRITICAL DURATION RULE: Every moment you select MUST be short and under 60 seconds. Do NOT select a segment range where the duration (end_time of the last segment minus start_time of the first segment) exceeds 60 seconds. A perfect vertical reel is typically between 15 and 45 seconds.\n"
+        "CRITICAL DURATION RULE: Every moment you select MUST be short and under 60 seconds. Do NOT select a segment range where the duration (end_time of the last segment minus start_time of the first segment) exceeds 60 seconds. A perfect vertical reel is typically between 30 and 60 seconds.\n"
+        "MANDATORY ANCHOR LINE: For every moment you discover, you MUST identify the single sentence that is the absolute core of the virality (e.g., '97% rejected' or 'It's not enough.'). "
+        "This is the line that viewers will remember. Output this exact sentence in the 'mandatory_anchor_line' field so the editor knows it cannot be dropped.\n"
+        "MANDATORY CONTEXT LINES: The anchor line is often meaningless on its own — a number, a callback, or a reaction needs the sentence(s) that establish WHAT or WHO it refers to. "
+        "Ask yourself: 'If a stranger heard ONLY the anchor line with zero setup, would it make sense?' If not, identify the 1-3 verbatim sentences from EARLIER in this moment's OWN "
+        "proposed segment range that the anchor line depends on to be understandable (e.g., if the anchor is 'They told me 97%.', the context is the sentence that establishes it's "
+        "Netflix's rejection rate — without it, '97%' is a meaningless number). ALWAYS prefer the NEAREST sentence that sufficiently establishes the context over an earlier or more "
+        "detailed one further away — if the topic is mentioned more than once in the transcript, anchor to the mention closest to this moment's range, not a distant one, even if the "
+        "distant one is more thorough. The goal is the minimum context needed, positioned as close to the anchor as possible, not the most complete explanation available anywhere in "
+        "the transcript. Output these exact sentences, in order, in the 'mandatory_context_lines' field (as a list; use an empty list only if the anchor line is genuinely "
+        "self-contained). These are as non-negotiable as the anchor line itself — the editor is forbidden from cutting them out.\n"
         "Assign each moment a type: 'cliffhanger', 'story', 'standalone_insight', 'debate', 'controversial_take', 'prediction', 'emotional_moment'.\n\n"
         "=== NEVER SELECT — HARD BLACKLIST ===\n"
         "IMMEDIATELY SKIP any segment that contains any of the following — these are structural/meta elements, not viral content:\n"
@@ -459,22 +468,17 @@ def build_moment_editor_prompt(category: str) -> str:
         interview_editing_rule = (
             "=== INTERVIEW EDITING RULE (MANDATORY) ===\n"
             "This is an INTERVIEW. The audience uses DIARIZATION (speaker labels) to follow who is speaking.\n"
-            "NEVER trim the start of a clip to remove the host's question — the question IS the hook.\n"
-            "A clip that opens with a guest mid-answer ('It's not something that...') is BROKEN — "
-            "a first-time viewer has zero context and will immediately swipe away.\n"
-            "RULE: If the discovered moment's start_segment_id is a guest speaking, you MUST scroll back to find "
-            "the preceding host question and use THAT segment as the new start_segment_id.\n"
-            "The HOOK LINE you write must be based on the host's question or the setup — NOT the guest's answer.\n\n"
+            "Do not preserve interview context by default. Preserve only the minimum context required for the clip to stand on its own.\n"
+            "Always search for a stronger opening AFTER the interviewer question.\n"
+            "Only include the interviewer if absolutely necessary.\n"
+            "The HOOK LINE you write must be based on the actual first sentence of the clip, whether it's the host or the guest.\n\n"
         )
 
     return (
         "You are Sarah Chen — a master vertical video editor who cuts high-retention clips.\n"
         "Your job is to take the raw discovered moment ranges and edit them into the highest-retention short reels possible.\n\n"
         f"{interview_editing_rule}"
-        "=== COHESIVE STORY EDITING RULE (MANDATORY) ===\n"
-        "If the proposed moment contains a personal story or narrative anecdote:\n"
-        "1. Ensure the edited range preserves the entire narrative arc (Setup -> Escalation -> Climax -> Resolution).\n"
-        "2. Do NOT cut the clip before the final payoff/resolution of the story has landed. For example, if the story is about chasing someone on a train, do not end the clip when he jumps on the train; let it run until they meet and resolve the situation so the viewer gets a satisfying ending.\n\n"
+
         "=== TOPIC & SUBJECT COHESION (MANDATORY) ===\n"
         "If the proposed moment contains a transition or topic shift (e.g., changing speakers, shifting from one family member to another, or changing from business metrics to personal life):\n"
         "1. You MUST edit the boundaries (adjust end_segment_id) to slice off the new topic.\n"
@@ -497,11 +501,22 @@ def build_moment_editor_prompt(category: str) -> str:
         "next segment that actually completes the thought — even if that costs an extra segment or two of duration. "
         "A clip that is a few seconds longer but ends cleanly is always better than a shorter one that cuts off "
         "mid-thought.\n\n"
-        "3. **Strict 60-Second Duration Limit (MANDATORY)**: The edited clip MUST be under 60 seconds in duration. Calculate the duration by subtracting the start_time of the start_segment_id from the end_time of the end_segment_id. If the proposed moment's range is longer than 60 seconds, trim it down by adjusting start_segment_id/end_segment_id so the clip length never exceeds 60 seconds (aim for 15-45 seconds).\n"
+        "3. **Strict 60-Second Duration Limit (MANDATORY)**: The edited clip MUST be under 60 seconds in duration. Calculate the duration by subtracting the start_time of the start_segment_id from the end_time of the end_segment_id. If the proposed moment's range is longer than 60 seconds, trim it down by adjusting start_segment_id/end_segment_id so the clip length never exceeds 60 seconds (aim for 30-60 seconds).\n"
         "4. **Strategy Alignment**: Choose 'cliffhanger' (if it leaves the viewer desperately wanting to swipe to Part 2 or read the caption) or 'payoff' (if it delivers a satisfying complete lesson/reveal).\n"
         "5. **REAL QUOTES ONLY**: The hook_line field MUST be copied VERBATIM from the actual transcript text of the opening segment. "
-        "Do NOT invent, paraphrase, or creatively rewrite any hook line. If the first segment says 'Warren Buffett has been very vocal about crypto', "
-        "your hook_line must be that exact sentence, not a rewritten version.\n\n"
+        "Do NOT invent, paraphrase, or creatively rewrite any hook line.\n"
+        "6. **THE ANCHOR LINE RULE (MANDATORY)**: Stage 1 has provided a 'Mandatory Anchor Line' and, often, 'Mandatory Context Lines'. "
+        "The anchor is the center of gravity of the edit. The context lines are what make the anchor make sense to a stranger with zero setup — "
+        "e.g. if the anchor is a number or a callback, the context line is the sentence that tells the viewer what that number or callback refers to. "
+        "BOTH the anchor line and every mandatory context line are FORBIDDEN from being cut. Everything else in the range is fair game to trim. "
+        "Think of it as: anchor line = cannot remove, context lines = cannot remove, everything surrounding them = trim freely down to the minimum "
+        "needed to connect anchor and context into one coherent clip. If a mandatory context line sits several segments before the anchor, include "
+        "the segments between them rather than skipping straight to the anchor — a clip that jumps straight to 'They told me 97%' with no idea what "
+        "'they' or what the 97% refers to is a broken clip even if the anchor line itself is technically present.\n"
+        "7. **SOCIAL MEDIA TEST**: Imagine you can only keep ONE sentence from this clip. Find that sentence first. "
+        "Then expand outward only enough to make it understandable. Never build inward from context.\n"
+        "8. **HOOK-CENTRIC EDITING**: The strongest line discovered in Stage 1 should appear within the first 30% of the final clip. "
+        "If the strongest line appears near the end of the clip, the edit is probably too long.\n\n"
         "=== QUOTABLE vs. INFORMATIVE (score quotable higher — this is not the same axis) ===\n"
         "A correct, useful statement is not automatically a good clip. Score against this distinction directly:\n"
         "QUOTABLE (score high): a short, self-contained line someone would screenshot, put on a black background, "
@@ -511,7 +526,8 @@ def build_moment_editor_prompt(category: str) -> str:
         "requires context to land and reads like a lecture summary. Example: 'Indian consumers are value-conscious, "
         "not just price-sensitive.' — true and useful, but nobody screenshots it.\n"
         "When two candidate moments are otherwise close in quality, prefer the one a viewer would send to ONE "
-        "specific friend over the one that is merely educational.\n\n"
+        "specific friend over the one that is merely educational.\n"
+        "If forced to choose, prefer the clip that gets comments over the clip that teaches more information.\n\n"
         "=== SCORING RUBRIC — CALIBRATED ANCHORS (do not score on a curve; anchor against these) ===\n"
         "curiosity_score (0-10): How urgently does a cold viewer need to know what happens next?\n"
         "  10 = The moment they hear it, they MUST find out what happened — they'd pause, rewind, comment, "

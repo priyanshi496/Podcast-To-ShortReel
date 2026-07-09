@@ -292,6 +292,8 @@ try:
         end_segment_id: int
         opportunity_type: str
         key_idea: str
+        mandatory_anchor_line: str
+        mandatory_context_lines: List[str] = Field(default_factory=list)
         why_viral: str
 
     class MomentFinderResponse(BaseModel):
@@ -632,6 +634,13 @@ def classify_content_category(full_transcript_text: str) -> str:
 
     # Exclude Ollama (local) from simple classification to save 20+ seconds of CPU/GPU latency
     providers = [p for p in _get_llm_providers() if p["name"] != "ollama"]
+    # Classification is low-stakes and high-frequency, same profile as Stage 1 —
+    # use the same cheap discovery model on OpenRouter rather than the stronger default.
+    discovery_model = getattr(settings, "OPENROUTER_MODEL_DISCOVERY", None)
+    if discovery_model:
+        for p in providers:
+            if p["name"] == "openrouter":
+                p["model"] = discovery_model
     if not providers:
         logger.warning("No LLM provider API keys configured. Using embedding result if available, else heuristic fallback.")
         return embed_category if embed_category else heuristic_classify_category(full_transcript_text)
@@ -783,6 +792,177 @@ def _ends_clean(text: str) -> bool:
     which also screens the trailing word against _INCOMPLETE_TRAILING_WORDS.
     """
     return check_sentence_boundary(text)
+
+
+# ============================================================
+# ANCHOR / CONTEXT LINE ENFORCEMENT (code-level backstop)
+# The editor prompt tells the LLM never to cut the mandatory anchor line or its
+# mandatory context lines, but that's an instruction, not a guarantee — this is
+# the root cause behind clips like "They told me 97%." shipping with no mention
+# of Netflix. This function is the equivalent of repair_sentence_boundaries but
+# for CONTENT rather than grammar: it verifies each mandatory line actually
+# landed inside the clip's final segment range, and physically widens the range
+# to include any that didn't — bounded by the same duration budget repair uses.
+# ============================================================
+
+def _normalize_for_line_match(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", (text or "").lower()).strip()
+
+
+def _find_segment_for_line(
+    line: str,
+    formatted_segments: List[Dict[str, Any]],
+    near_start: int = 0,
+    near_end: int = 0,
+) -> Optional[int]:
+    """
+    Finds the formatted_segments index whose text best contains `line`, by
+    normalized token overlap against the anchor/context line Stage 1 quoted.
+
+    Proximity-aware: a transcript can mention the same word/phrase (e.g.
+    "Netflix") more than once. Among all segments clearing the overlap bar,
+    this prefers whichever is CLOSEST to [near_start, near_end] — the clip's
+    current range — rather than whichever has the single highest overlap
+    score. Without this, a context line could latch onto an unrelated distant
+    repeat of the same word and force a huge, wrong widen instead of the
+    nearby occurrence Stage 1 actually meant.
+
+    Returns None if nothing clears the overlap bar — meaning the LLM likely
+    paraphrased rather than quoted verbatim, in which case there's nothing
+    reliable to enforce against.
+    """
+    target_tokens = set(_normalize_for_line_match(line).split())
+    if not target_tokens:
+        return None
+
+    candidates = []  # (distance_from_range, -overlap, idx) — sort ascending
+    for idx, seg in enumerate(formatted_segments):
+        seg_tokens = set(_normalize_for_line_match(seg["text"]).split())
+        if not seg_tokens:
+            continue
+        overlap = len(target_tokens & seg_tokens) / len(target_tokens)
+        if overlap < 0.6:
+            continue
+        if idx < near_start:
+            distance = near_start - idx
+        elif idx > near_end:
+            distance = idx - near_end
+        else:
+            distance = 0
+        candidates.append((distance, -overlap, idx))
+
+    if not candidates:
+        return None
+    candidates.sort()
+    return candidates[0][2]
+
+
+_BACKCHANNEL_FILLERS = {
+    "hmm", "mhmm", "mhm", "haan", "han", "haa", "ok", "okay", "acha", "achha",
+    "ji", "yes", "right", "yeah", "theek", "hai", "sahi", "correct", "wow",
+    "really", "sach", "wah",
+}
+
+
+def _is_backchannel_filler(text: str) -> bool:
+    """
+    True if a segment is just a short acknowledgment/interjection — 'Mhmm.',
+    'हां.', 'ठीक है?', 'Right?' — rather than substantive speech. These get
+    skipped (not treated as turn boundaries) when walking back for a setup
+    question, since they're conversational noise, not a real topic shift.
+    """
+    tokens = _normalize_for_line_match(text).split()
+    if not tokens or len(tokens) > 3:
+        return False
+    return all(t in _BACKCHANNEL_FILLERS for t in tokens)
+
+
+def find_nearest_setup_question(
+    start_seg: int,
+    formatted_segments: List[Dict[str, Any]],
+    max_lookback: int = 10,
+) -> Optional[int]:
+    """
+    Walks backward from start_seg looking for the nearest preceding question
+    from the OTHER speaker — but only within the CONTINUOUS run of the current
+    speaker's own turn. Short backchannel interjections from the other speaker
+    ("Mhmm.", "हां।", "Right?") are tolerated and skipped, since they're not
+    real turn boundaries. The moment a SUBSTANTIVE non-question line from the
+    other speaker is hit, the search stops — that's a genuine topic/turn
+    boundary, and any question further back than that belongs to a different
+    exchange, not the one that set up the current answer.
+
+    Without this check, a fast back-and-forth interview could re-anchor to an
+    unrelated earlier question just because it happened to be the nearest
+    question mark within the lookback window, even though a real topic
+    boundary sat between it and the current answer.
+
+    Returns None if no qualifying question is found before either the lookback
+    limit or a topic boundary is hit, or if start_seg already opens on a
+    question itself.
+    """
+    if start_seg <= 0 or start_seg >= len(formatted_segments):
+        return None
+
+    current_speaker = formatted_segments[start_seg].get("speaker")
+    if formatted_segments[start_seg]["text"].strip().endswith("?"):
+        return None  # clip already opens on a question — no re-anchor needed
+
+    floor = max(0, start_seg - max_lookback)
+    for idx in range(start_seg - 1, floor - 1, -1):
+        seg = formatted_segments[idx]
+        text = seg["text"].strip()
+
+        if seg.get("speaker") == current_speaker:
+            continue  # still inside the answerer's own continuous turn
+
+        if text.endswith("?"):
+            return idx  # the question that opened this turn
+
+        if _is_backchannel_filler(text):
+            continue  # short ack — not a real turn boundary, keep walking back
+
+        break  # substantive non-question line from the other speaker — real topic boundary, stop
+
+    return None
+
+
+def enforce_mandatory_lines(
+    start_seg: int,
+    end_seg: int,
+    mandatory_anchor_line: str,
+    mandatory_context_lines: List[str],
+    formatted_segments: List[Dict[str, Any]],
+    max_duration_sec: float,
+) -> Dict[str, Any]:
+    """
+    Widens [start_seg, end_seg] to include any mandatory anchor/context line
+    the editor's chosen range dropped, bounded by max_duration_sec * 1.5 (same
+    budget as repair_sentence_boundaries). Lines that can't be recovered within
+    budget are returned in 'dropped_lines' so the caller can flag the clip for
+    manual review instead of silently shipping it broken.
+    """
+    dropped_lines: List[str] = []
+    all_lines = [mandatory_anchor_line] + list(mandatory_context_lines or [])
+
+    for line in all_lines:
+        if not line or not line.strip():
+            continue
+        seg_idx = _find_segment_for_line(line, formatted_segments, near_start=start_seg, near_end=end_seg)
+        if seg_idx is None:
+            continue  # not found verbatim anywhere — likely paraphrased by Stage 1, nothing to enforce
+        if start_seg <= seg_idx <= end_seg:
+            continue  # already inside the clip
+
+        new_start = min(start_seg, seg_idx)
+        new_end = max(end_seg, seg_idx)
+        candidate_duration = formatted_segments[new_end]["end_time"] - formatted_segments[new_start]["start_time"]
+        if candidate_duration <= max_duration_sec * 1.5:
+            start_seg, end_seg = new_start, new_end
+        else:
+            dropped_lines.append(line)
+
+    return {"start_seg": start_seg, "end_seg": end_seg, "dropped_lines": dropped_lines}
 
 
 def repair_sentence_boundaries(
@@ -1353,12 +1533,21 @@ def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_con
         http_client=httpx.Client(timeout=httpx.Timeout(timeout_seconds, connect=10.0)),
         max_retries=0,
     )
-    # Mode.JSON  → writes JSON into the content field (nvidia_nim, ollama).
-    # Mode.TOOLS → uses the function-call protocol        (groq).
-    # Ollama's OpenAI-compatible endpoint handles Mode.JSON reliably;
-    # it does NOT support Mode.TOOLS at the same fidelity level.
+    # Mode.JSON  → writes JSON into the content field.
+    # Mode.TOOLS → uses the function-call protocol.
+    # NVIDIA NIM, Ollama, AND OpenRouter (Gemini-family models) all handle
+    # Mode.JSON far more reliably than Mode.TOOLS for this schema — Gemini's
+    # tool-calling schema translation through OpenRouter was failing Instructor's
+    # validation on ~3/3 attempts per call (confirmed via token-usage logs: each
+    # retry roughly doubled/tripled in size from the growing failed-attempt
+    # history, before falling back to legacy parsing). Mode.TOOLS is reserved
+    # for providers with genuinely strong native function-calling (e.g. Groq,
+    # if it's ever re-added to the active provider list) — it should NOT be
+    # the default fallback for any provider not explicitly listed as JSON-mode.
     import instructor
-    mode = instructor.Mode.JSON if provider["name"] in ("nvidia_nim", "ollama") else instructor.Mode.TOOLS
+    # JSON_MODE_PROVIDERS = ("nvidia_nim", "ollama", "openrouter")
+    JSON_MODE_PROVIDERS = ("nvidia_nim", "ollama")
+    mode = instructor.Mode.JSON if provider["name"] in JSON_MODE_PROVIDERS else instructor.Mode.TOOLS
     client = instructor.from_openai(base_client, mode=mode)
 
     logger.info(f"[{provider['name']}] Calling [{provider['model']}] via Instructor (mode={mode.value})...")
@@ -1370,7 +1559,16 @@ def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_con
     if is_local:
         max_tokens = 6000
     elif provider["name"] == "openrouter":
-        max_tokens = 1000  # keep OpenRouter limit low to avoid 402 pre-auth cost checks
+        # NOTE: previously capped at 1000 to avoid OpenRouter's 402 pre-auth cost
+        # check on low-credit accounts — but 1000 tokens is nowhere near enough
+        # to complete a multi-moment JSON response (Stage 1 can return 20-30
+        # moments), so every response was getting truncated mid-generation and
+        # failing Instructor's schema validation on every attempt. Raised to a
+        # middle ground that should comfortably fit a full response while still
+        # keeping the pre-auth cost check from tripping on very low balances.
+        # If you still see 402s, top up OpenRouter credits rather than lowering
+        # this back down — 1000 was the actual cause of the retry storm.
+        max_tokens = 4096
     else:
         max_tokens = 16384  # give NVIDIA NIM enough tokens to complete response
 
@@ -1413,7 +1611,7 @@ class JSONParsingFallbackError(ValueError):
         self.raw_content = raw_content
 
 
-def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_content: str) -> Optional[Dict[str, Any]]:
+def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_content: str, response_model=None) -> Optional[Dict[str, Any]]:
     """Manual streaming + string-parse attempt against one provider. Raises on failure."""
     from openai import OpenAI
     import httpx
@@ -1500,7 +1698,19 @@ def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_c
         logger.warning(f"[{provider['name']}] returned empty or invalid JSON.")
         return None
 
-    logger.info(f"[{provider['name']}] Successfully parsed batch response (legacy path).")
+    if response_model:
+        try:
+            if hasattr(response_model, "model_validate"):
+                response_model.model_validate(data)
+            else:
+                response_model(**data)
+            logger.info(f"[{provider['name']}] Successfully parsed and validated batch response (legacy path).")
+        except Exception as e:
+            logger.error(f"[{provider['name']}] Legacy parse succeeded but failed Pydantic validation: {e}")
+            raise JSONParsingFallbackError(content, str(e))
+    else:
+        logger.info(f"[{provider['name']}] Successfully parsed batch response (legacy path).")
+        
     return data
 
 
@@ -1533,7 +1743,7 @@ def _repair_json_via_provider(provider: Dict[str, Any], raw_malformed_text: str,
 
     # Try legacy parse
     try:
-        data = _score_via_legacy_parse(provider, repair_system_prompt, repair_user_content)
+        data = _score_via_legacy_parse(provider, repair_system_prompt, repair_user_content, response_model)
         if data:
             logger.info(f"[{provider['name']}] Successfully repaired JSON using legacy manual-parse!")
             return data
@@ -1543,9 +1753,30 @@ def _repair_json_via_provider(provider: Dict[str, Any], raw_malformed_text: str,
     return None
 
 
-def _call_llm_with_fallback(system_prompt: str, user_content: str, response_model) -> Optional[Dict[str, Any]]:
-    """Tries all configured LLM providers in order with Instructor/legacy path and returns parsed response."""
-    providers = [p for p in _get_llm_providers() if p["name"] not in _RATE_LIMITED_PROVIDERS]
+def _call_llm_with_fallback(
+    system_prompt: str, user_content: str, response_model,
+    model_override: Optional[str] = None,
+    provider_priority: Optional[List[str]] = None,
+) -> Optional[Dict[str, Any]]:
+    """Tries all configured LLM providers in order with Instructor/legacy path and returns parsed response.
+
+    model_override: swaps the model on the OpenRouter provider entry only.
+    provider_priority: reorders providers for THIS call only (e.g. ["nvidia_nim", "openrouter"]
+    puts NVIDIA first for Stage 2, while the global default keeps OpenRouter first everywhere
+    else). Anything not named in provider_priority still gets appended after, in its normal
+    order, so fallback resilience is preserved either way.
+    """
+    all_providers = [p for p in _get_llm_providers() if p["name"] not in _RATE_LIMITED_PROVIDERS]
+    if provider_priority:
+        ordered = [p for name in provider_priority for p in all_providers if p["name"] == name]
+        remaining = [p for p in all_providers if p["name"] not in provider_priority]
+        providers = ordered + remaining
+    else:
+        providers = all_providers
+    if model_override:
+        for p in providers:
+            if p["name"] == "openrouter":
+                p["model"] = model_override
     if not providers:
         logger.warning("No LLM providers available (all are rate-limited or unconfigured).")
         return None
@@ -1576,18 +1807,32 @@ def _call_llm_with_fallback(system_prompt: str, user_content: str, response_mode
                 instructor_success = True
             except Exception as e:
                 import openai
+                try:
+                    from pydantic import ValidationError
+                except ImportError:
+                    ValidationError = type("ValidationError", (Exception,), {})
+                    
+                logger.error(f"[{provider['name']}] Instructor exception type: {type(e).__name__}")
+                    
                 # If rate-limited or quota exceeded, blacklist provider
                 if "rate limit" in str(e).lower() or "429" in str(e).lower() or "quota" in str(e).lower() or "credit" in str(e).lower():
                     logger.warning(f"Provider '{provider['name']}' hit rate-limit/quota: {e}. Blacklisting it.")
                     _RATE_LIMITED_PROVIDERS.add(provider["name"])
+                    continue
+                    
+                # If instructor exhausted retries due to schema validation failure, the provider cannot handle the schema.
+                if isinstance(e, ValidationError) or "validation" in str(e).lower() or "schema" in str(e).lower() or type(e).__name__ == "InstructorRetryException":
+                    logger.error(f"[{provider['name']}] Instructor failed validation after retries: {e}. Skipping legacy parse and advancing to next provider.")
+                    continue
                 
                 # If it's a network timeout, connection, or rate limit error, don't waste time on legacy parse
                 if isinstance(e, (openai.APITimeoutError, openai.APIConnectionError, openai.RateLimitError)) or provider["name"] in _RATE_LIMITED_PROVIDERS:
                     logger.error(f"[{provider['name']}] Instructor path failed with connection/timeout/rate-limit ({e}). Skipping legacy parse for this provider.")
+                    continue
                 else:
                     logger.error(f"[{provider['name']}] Instructor path failed ({e}). Trying legacy parse on same provider...")
                     try:
-                        data = _score_via_legacy_parse(provider, system_prompt, user_content)
+                        data = _score_via_legacy_parse(provider, system_prompt, user_content, response_model)
                         if data:
                             return data
                     except JSONParsingFallbackError as json_err:
@@ -1599,7 +1844,7 @@ def _call_llm_with_fallback(system_prompt: str, user_content: str, response_mode
         # --- Legacy Fallback Path (only if instructor was not attempted) ---
         if not instructor_success and not (_INSTRUCTOR_AVAILABLE and _PYDANTIC_AVAILABLE) and provider["name"] not in _RATE_LIMITED_PROVIDERS:
             try:
-                data = _score_via_legacy_parse(provider, system_prompt, user_content)
+                data = _score_via_legacy_parse(provider, system_prompt, user_content, response_model)
                 if data:
                     return data
             except JSONParsingFallbackError as json_err:
@@ -1613,6 +1858,7 @@ def _call_llm_with_fallback(system_prompt: str, user_content: str, response_mode
 
         logger.warning(f"Provider '{provider['name']}' exhausted. Trying next provider...")
 
+    logger.error("ALL CONFIGRURED LLM PROVIDERS FAILED OR RETURNED INVALID SCHEMA! Returning None to trigger heuristic fallback/abandonment.")
     return None
 
 
@@ -1874,7 +2120,11 @@ def rank_candidates(
         )
 
         system_prompt_finder = build_moment_finder_prompt(category)
-        finder_result = _call_llm_with_fallback(system_prompt_finder, user_content_finder, MomentFinderResponse)
+        finder_result = _call_llm_with_fallback(
+            system_prompt_finder, user_content_finder, MomentFinderResponse,
+            model_override=getattr(settings, "OPENROUTER_MODEL_DISCOVERY", None),
+            provider_priority=["openrouter", "nvidia_nim", "ollama"],
+        )
 
         raw_moments = []
         if isinstance(finder_result, list):
@@ -1894,6 +2144,8 @@ def rank_candidates(
                     "end_segment_id": end_id,
                     "opportunity_type": m.get("opportunity_type") or m.get("type") or "standalone_insight",
                     "key_idea": m.get("key_idea") or m.get("reasoning") or "Viral opportunity",
+                    "mandatory_anchor_line": m.get("mandatory_anchor_line", ""),
+                    "mandatory_context_lines": m.get("mandatory_context_lines", []),
                     "why_viral": m.get("why_viral") or m.get("reasoning") or "Viral moment",
                 })
                 chunk_moments_count += 1
@@ -1957,6 +2209,8 @@ def rank_candidates(
                 f"Opportunity Type: {m.get('opportunity_type')}\n"
                 f"Proposed Segment Range: Segment {m.get('start_segment_id')} to Segment {m.get('end_segment_id')}\n"
                 f"Key Idea: {m.get('key_idea')}\n"
+                f"Mandatory Anchor Line (DO NOT DROP): {m.get('mandatory_anchor_line')}\n"
+                f"Mandatory Context Lines (DO NOT DROP — these make the anchor line make sense): {m.get('mandatory_context_lines') or '(none — anchor is self-contained)'}\n"
                 f"Why Viral: {m.get('why_viral')}\n\n"
             )
 
@@ -1992,10 +2246,32 @@ def rank_candidates(
         )
 
         system_prompt_editor = build_moment_editor_prompt(category)
-        editor_result = _call_llm_with_fallback(system_prompt_editor, user_content_editor, EditedClipsResponse)
+        editor_result = _call_llm_with_fallback(
+            system_prompt_editor, user_content_editor, EditedClipsResponse,
+            provider_priority=["nvidia_nim", "openrouter", "ollama"],
+        )
         
         if editor_result and "clips" in editor_result:
-            raw_clips.extend(editor_result["clips"])
+            batch_clips = editor_result["clips"]
+            # Carry the originating moment's mandatory anchor/context lines forward onto
+            # each edited clip. The editor's own output schema doesn't echo these back, so
+            # without this, nothing downstream could ever check whether the editor actually
+            # kept them — the "mandatory" rule was prompt-only. Match by position when the
+            # counts line up (the common case, one clip per moment); otherwise fall back to
+            # whichever moment's segment range the edited clip overlaps most.
+            for c_idx, c in enumerate(batch_clips):
+                if len(batch_clips) == len(batch_moments):
+                    source_moment = batch_moments[c_idx]
+                else:
+                    c_start = c.get("start_segment_id", 0)
+                    c_end = c.get("end_segment_id", 0)
+                    source_moment = max(
+                        batch_moments,
+                        key=lambda mm: max(0, min(c_end, mm["end_segment_id"]) - max(c_start, mm["start_segment_id"]))
+                    )
+                c["mandatory_anchor_line"] = source_moment.get("mandatory_anchor_line", "")
+                c["mandatory_context_lines"] = source_moment.get("mandatory_context_lines", [])
+            raw_clips.extend(batch_clips)
 
     logger.info(f"Moment Editor output {len(raw_clips)} edited clips in total:\n{json.dumps(raw_clips, indent=2)}")
 
@@ -2041,6 +2317,8 @@ def rank_candidates(
                 "emotion_score": 5,
                 "reaction_score": 5,
                 "standalone_score": 5,
+                "mandatory_anchor_line": "",
+                "mandatory_context_lines": [],
             })
 
     # Prepare for enrichment
@@ -2049,7 +2327,36 @@ def rank_candidates(
         try:
             start_seg = clip.get("start_segment_id") or clip.get("edited_start_segment_id") or clip.get("edited_start_segment") or 0
             end_seg = clip.get("end_segment_id") or clip.get("edited_end_segment_id") or clip.get("edited_end_segment") or 0
-            
+
+            question_reanchored = False
+            if category == "interview_discussion":
+                question_idx = find_nearest_setup_question(start_seg, formatted_segments, max_lookback=10)
+                if question_idx is not None:
+                    candidate_duration = formatted_segments[end_seg]["end_time"] - formatted_segments[question_idx]["start_time"]
+                    cfg_bounds_check = CATEGORY_CONFIG.get(category) or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+                    if candidate_duration <= float(cfg_bounds_check.get("max_duration_sec", 60.0)) * 1.5:
+                        start_seg = question_idx
+                        question_reanchored = True
+
+            # --- ANCHOR / CONTEXT LINE ENFORCEMENT ---
+            # Skipped for mandatory_context_lines when the Q&A re-anchor above already
+            # fixed the setup problem more cheaply — no need to also drag in a distant
+            # named context line once the question itself re-establishes context.
+            # The anchor line itself is still checked either way as a safety net.
+            # Code-level check that the editor didn't cut out the sentence(s) Stage 1
+            # flagged as mandatory (e.g. dropping "Netflix" from a "97% rejected" clip).
+            cfg_bounds_for_clip = CATEGORY_CONFIG.get(category) or CATEGORY_CONFIG[DEFAULT_CATEGORY]
+            line_enforcement = enforce_mandatory_lines(
+                start_seg=start_seg,
+                end_seg=end_seg,
+                mandatory_anchor_line=clip.get("mandatory_anchor_line", ""),
+                mandatory_context_lines=[] if question_reanchored else clip.get("mandatory_context_lines", []),
+                formatted_segments=formatted_segments,
+                max_duration_sec=float(cfg_bounds_for_clip.get("max_duration_sec", 60.0)),
+            )
+            start_seg, end_seg = line_enforcement["start_seg"], line_enforcement["end_seg"]
+            dropped_mandatory_lines = line_enforcement["dropped_lines"]
+
             # Check for silent gaps (> 3.0s) between consecutive segments and truncate the clip before the gap
             for idx in range(start_seg, end_seg):
                 curr_end = formatted_segments[idx]["end_time"]
@@ -2087,6 +2394,13 @@ def rank_candidates(
             raw_clip_format["heuristic_score"] = heuristic_pre_filter_score(excerpt)
 
             enriched = enrich_clip(raw_clip_format, candidates, category, video_id, audio_path=audio_path)
+
+            if dropped_mandatory_lines:
+                preview = "; ".join(l[:60] for l in dropped_mandatory_lines)
+                logger.warning(f"Clip [{clip_start}-{clip_end}] could not fit mandatory line(s) within duration budget: {preview}")
+                enriched["needs_manual_review"] = True
+                enriched["reason"] = (enriched.get("reason", "") + f" [FLAGGED: Dropped mandatory anchor/context line: {preview}]").strip()
+
 
             if category == "interview_discussion":
                 is_valid, invalid_reason = validate_exchange_completeness(
