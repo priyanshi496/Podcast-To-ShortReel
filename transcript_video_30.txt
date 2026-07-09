@@ -1,0 +1,640 @@
+[00:00.08 - 00:05.59] Speaker 1: Do you feel कि जो students अब twenties में उन्हें MBA करना चाहिए कि it's very subjective?
+[00:05.59 - 00:16.30] Speaker 2: देखिए यार जो first आता है ना उसके ऊपर ना सबसे ज़्यादा pressure होता है perform करने का क्योंकि वह ज़िंदगी भर first आया होता है और उसको ना आदत हो जाती है फोड़ने की पर जो last tie होता ना उसको nothing to lose
+[00:16.30 - 00:17.01] Speaker 1: होता है.
+[00:19.89 - 00:25.41] Speaker 2: जो हम लोग होते हैं ना थोड़े से backbencher type के लोग तो हमें पता है कि boss पढ़ाई तो हमने करी नहीं.
+[00:25.41 - 00:26.85] Speaker 2: अच्छी नौकरी भी नहीं लगी हमें.
+[00:26.85 - 00:28.37] Speaker 2: तो हमें तो कुछ फोड़ना पड़ेगा.
+[00:28.14 - 00:30.05] Speaker 1: तो हमारे अंदर ना अलग type का कीड़ा होता है कि
+[00:30.05 - 00:31.89] Speaker 2: boss हमें तो करना ही पड़ेगा.
+[00:31.89 - 00:35.02] Speaker 2: तो there is no fallback option for people like me.
+[00:35.65 - 00:37.25] Speaker 2: Startups were not in fashion.
+[00:37.34 - 00:38.78] Speaker 2: Startups were not being celebrated.
+[00:38.78 - 00:40.61] Speaker 2: In fact मेरी mother in law को paper जो
+[00:52.61 - 00:57.97] Speaker 2: and this guy is not doing anything कि यार मेरी बेटी कमाती है और यह निकंबा निकल रहा है मेरा दामान.
+[00:57.97 - 00:59.34] Speaker 2: तो उन्हें इतना stress होता था
+[00:59.34 - 01:02.53] Speaker 1: कि कि मेरा अब अब क्या कहती है?
+[01:02.53 - 01:03.50] Speaker 2: अब तो
+[01:04.70 - 01:06.62] Speaker 2: flaunt करती है मतलब proud feeling होती
+[01:06.62 - 01:06.93] Speaker 1: है ना तो.
+[01:06.93 - 01:08.03] Speaker 1: और अमन हां मेरा
+[01:07.87 - 01:08.28] Speaker 2: आपको दामाद
+[01:09.46 - 01:14.28] Speaker 2: topic भी नहीं होता तो मेरी तारीफ़ करना शुरू कर देती हूं ताकि दूसरे को पता लग जाए कि यार यह मेरा दामाद है.
+[01:16.28 - 01:20.59] Speaker 1: एक और शाख़ के साथ एक बढ़िया TRS हिंदी episode आ चुका है.
+[01:20.59 - 01:25.56] Speaker 1: आज अमन गुप्ता, boat के अमन गुप्ता आ चुके हैं TRS पर.
+[01:25.71 - 01:27.87] Speaker 1: बहुत ही ज़्यादा enjoyable episode है.
+[01:27.87 - 01:36.12] Speaker 1: Especially अगर आप एक entrepreneur हो और अगर आपको इनकी अनकही कहानियों के बारे में ज़्यादा जानना है तो आज का episode आपको बहुत ज़्यादा अच्छा लगेगा.
+[01:36.12 - 01:41.70] Speaker 1: हमारी ख़ुद की meditation app यानी कि BeerBiceps team की meditation app level super mind अब live हो चुकी है.
+[01:41.70 - 01:43.31] Speaker 1: Definitely download कीजिए.
+[01:43.31 - 01:50.18] Speaker 1: उसके download links दिए गए हैं नीचे and without further ado, this is अमन गुप्ता on TRS.
+[02:07.62 - 02:09.15] Speaker 1: अमन गुप्ता जी.
+[02:09.15 - 02:09.87] Speaker 1: हां?
+[02:10.43 - 02:11.87] Speaker 1: आप कैसे हो?
+[02:11.96 - 02:13.46] Speaker 1: Sexiness के देवता अमन गुप्ता.
+[02:13.46 - 02:17.40] Speaker 2: किसी आपके
+[02:17.40 - 02:20.50] Speaker 1: साथ बहुत सारी बातें करनी है, थोड़ी सी बक्चोदी करनी है.
+[02:20.40 - 02:22.96] Speaker 1: Actually, आप बहुत ज़्यादा layered हो actually.
+[02:22.96 - 02:23.68] Speaker 2: मैं हां
+[02:23.68 - 02:28.31] Speaker 1: I mean, हर किसी को पता कि आप ambitious हो but I don't think people understand your actual ambition.
+[02:28.31 - 02:28.87] Speaker 2: Okay.
+[02:29.28 - 02:30.63] Speaker 2: Am I right in saying that?
+[02:31.12 - 02:33.28] Speaker 2: Depends on who the audience is.
+[02:33.28 - 02:41.06] Speaker 2: मतलब जैसे अगर आप मेरी team से पूछोगे तो उन्हें पता है कि मैं कितना ambitious हूं, कितना crazy हूं, कितना paranoid हूं.
+[02:41.06 - 02:43.06] Speaker 2: हमेरे investor से पूछोगे तो उन्हें पता लगेगा.
+[02:43.06 - 02:48.43] Speaker 2: अगर आप हमारी company की history देखोगे, growth देखोगे तो आपको दिखेगा कितना हमने जल्दी कितनी growth करी है.
+[02:48.59 - 03:00.00] Speaker 2: और अगर आप general लोगों से पूछोगे जो मुझे TV पर देखते हैं या फिर जो लोग normal हैं उनको पता लगेगा कि भाई यह तो, uh, you know, they they have they I have got a lot of personalities.
+[03:00.00 - 03:03.91] Speaker 2: So they might see one side of me, which maybe they don't know the other side of me.
+[03:03.91 - 03:08.00] Speaker 2: So I don't say that, uh, so I'm very ambitious, bro.
+[03:08.06 - 03:09.12] Speaker 2: I'm very ambitious.
+[03:09.12 - 03:10.15] Speaker 2: I'll answer that question.
+[03:10.15 - 03:11.68] Speaker 1: End ambition क्या है?
+[03:12.06 - 03:12.96] Speaker 2: किसका मेरा?
+[03:12.96 - 03:14.63] Speaker 1: हां, end में क्या करना है?
+[03:14.87 - 03:16.46] Speaker 2: यार यह ना change होता रहता है.
+[03:16.46 - 03:17.43] Speaker 2: मैंने सही बताता हूं.
+[03:17.43 - 03:18.71] Speaker 1: Absolute end में.
+[03:18.71 - 03:20.46] Speaker 1: मैं death bed की बातें कर रहा हूं.
+[03:21.08 - 03:21.87] Speaker 1: मतलब?
+[03:21.96 - 03:23.63] Speaker 1: मतलब जब आप
+[03:25.15 - 03:28.19] Speaker 1: deathbed पर होंगे वह थोड़ी बार like to have done in life.
+[03:28.59 - 03:32.75] Speaker 2: I would have led a life where I would have had people around me happy.
+[03:33.43 - 03:34.49] Speaker 2: Uh, family.
+[03:34.96 - 03:37.68] Speaker 2: Family, friends, people who know me.
+[03:38.00 - 03:39.61] Speaker 2: यार बंदा सही था.
+[03:39.68 - 03:41.12] Speaker 2: काली नहीं देंगे.
+[03:41.28 - 03:46.16] Speaker 2: वह मेरी, uh, teeth pat अगर तो mission पुछा जो आजकल किसी ने नहीं पुछी.
+[03:46.16 - 03:47.84] Speaker 1: Sorry, आपके मौत के बारे में बात
+[03:47.84 - 03:48.16] Speaker 2: कर रहे
+[03:48.16 - 03:48.49] Speaker 1: हैं sir.
+[03:49.06 - 03:49.13] Speaker 2: Shit.
+[03:49.13 - 03:50.02] Speaker 2: But man is mad.
+[03:50.02 - 03:53.93] Speaker 1: इन इन सवालों से लोगों के character के बारे में पता चलता है.
+[03:53.93 - 03:58.02] Speaker 2: नहीं but मैं as a personality, I want मतलब अच्छे लगते हैं लोग.
+[03:58.02 - 04:01.30] Speaker 2: I like people around me and I want people to be happy around me.
+[04:01.68 - 04:04.96] Speaker 2: That is what my, uh, my happiness is.
+[04:04.96 - 04:05.36] Speaker 2: Okay.
+[04:05.36 - 04:06.71] Speaker 2: That people around me should be happy.
+[04:06.71 - 04:15.03] Speaker 1: तो आपकी life में एक कोई event के बारे में बताइए जिसकी वजह से आपमें थोड़ी सी motivation, uh, आ गई.
+[04:15.03 - 04:15.59] Speaker 1: मतलब?
+[04:15.59 - 04:22.47] Speaker 1: मतलब कभी कभी life के events की वजह से आपके दिमाग़ में कभी कोई गुस्सा भर जाता है, motivation भर जाती उस event के बारे में बताइए.
+[04:22.47 - 04:24.47] Speaker 1: कुछ तो हुआ होगा आपकी life में.
+[04:24.47 - 04:25.26] Speaker 1: Personal?
+[04:25.26 - 04:25.99] Speaker 1: हां.
+[04:26.06 - 04:30.56] Speaker 1: या जो भी मतलब I don't know maybe professional, maybe some childhood thing.
+[04:30.56 - 04:32.00] Speaker 2: यार मुझे जो चाहिए वह चाहिए.
+[04:32.00 - 04:34.42] Speaker 2: मैं ना थोड़ा cheap type का आदमी, ठीक है?
+[04:34.64 - 04:41.62] Speaker 2: तो my wife प्रिया she, uh, she was actually, uh,
+[04:42.74 - 04:46.93] Speaker 2: know, she, uh, so she was not too interested in me initially.
+[04:46.93 - 04:50.62] Speaker 2: But, uh, you know, so I I chased her.
+[04:50.69 - 04:54.93] Speaker 2: Like, you know, I think a lot of men and boys, uh, also have that.
+[04:55.01 - 04:56.13] Speaker 2: You know, you have to...
+[04:56.13 - 05:02.54] Speaker 2: So I was, like, persuasive, and I was, like, cheap हो गया था that, you know, she's good and she's for me.
+[05:02.54 - 05:10.86] Speaker 2: And, you know, I never thought that in, you know, I I actually, uh, it's a small story.
+[05:11.48 - 05:12.83] Speaker 2: Actually chased her.
+[05:12.83 - 05:15.31] Speaker 2: So she was like, uh, she was studying in पुणे.
+[05:15.31 - 05:22.83] Speaker 2: पुणे में पढ़ रही थी और उसने एकदम से ना, uh, she said कि यार यह बंदा shape type हो रहा है मेरे लिए.
+[05:23.25 - 05:25.02] Speaker 2: उसने SMS किया मुझे.
+[05:25.02 - 05:26.14] Speaker 2: उस time पर SMS चलते थे.
+[05:26.14 - 05:28.62] Speaker 2: WhatsApp was not, I think, was not even born.
+[05:28.70 - 05:35.35] Speaker 2: तो SMS किया कि I am, uh, you know, we had, uh, we had good time together.
+[05:35.67 - 05:38.87] Speaker 2: But now, uh, I like you.
+[05:39.31 - 05:43.63] Speaker 2: But I don't want to continue this relationship further करके वह चली गई.
+[05:43.63 - 05:45.31] Speaker 2: So she went on a train.
+[05:45.39 - 05:47.07] Speaker 2: She was going to पुणे, ठीक है?
+[05:47.07 - 05:50.43] Speaker 2: So she said this and put her mobile off, right?
+[05:50.83 - 05:52.12] Speaker 2: Uh, mobile off कर दिया.
+[05:52.12 - 05:59.00] Speaker 2: Now I don't have, uh, and उस time पर mobile was the only way, uh, to communicate, right?
+[05:59.00 - 06:07.18] Speaker 2: मुझे यह नहीं पता था वह कहां रहती थी because, uh, she was staying, her family was in somewhere in Greater नौरा but her नानी was staying in Delhi.
+[06:07.18 - 06:10.06] Speaker 2: So she used to stay with her नानी but work, studying in Amity.
+[06:10.06 - 06:12.06] Speaker 2: But now she was going to पुणा, ठीक है?
+[06:12.22 - 06:15.18] Speaker 2: And she was like कि phone off करके, बंद करके that I'm going.
+[06:15.57 - 06:17.66] Speaker 2: Uh, that we are done types, right?
+[06:18.57 - 06:22.89] Speaker 2: And, uh, so I, uh, and
+[06:24.10 - 06:26.01] Speaker 2: I I loved her, right?
+[06:26.43 - 06:29.69] Speaker 2: And I was like, dude, why is this happening?
+[06:29.69 - 06:31.45] Speaker 2: I was not able to get an answer.
+[06:31.69 - 06:33.45] Speaker 2: Closure नहीं मिला था कि यह हुआ क्या?
+[06:33.45 - 06:41.50] Speaker 2: ऐसे abrupt message करके कोई train में चढ़कर she's going and she's like, bye, it's over, right?
+[06:41.50 - 06:45.89] Speaker 2: And I was messaging but messages deliver नहीं हो रहे थे because she had put her phone off.
+[06:45.89 - 06:47.66] Speaker 2: Now probably she'll take a new number or something.
+[06:48.05 - 06:55.81] Speaker 2: But मैं इतना ऐसा वह नहीं था पागल की चेप type लगी कि भाई मतलब we were good friends and suddenly she's like done.
+[06:55.81 - 06:56.29] Speaker 2: Mhmm.
+[06:56.52 - 06:57.49] Speaker 2: ठीक है?
+[06:58.37 - 07:08.18] Speaker 2: So I didn't know what was happening but I, uh, I knew she was going to पुणे तो मैं रात को, uh, बहुत परेशान हुआ उस रात को कि यार यह हुआ क्या मेरे साथ?
+[07:08.18 - 07:09.62] Speaker 2: यह ऐसे कैसे कर सकती मेरे साथ?
+[07:09.62 - 07:10.43] Speaker 2: You know?
+[07:10.75 - 07:16.95] Speaker 2: तो मैंने अपने, uh, नींद आई रात को but मैं सोचा फिर मैं मेरे dad थे, हम लोग business में साथ थे.
+[07:16.95 - 07:18.62] Speaker 2: तो मेरे dad ने भी देखा कि यार इसको क्या हो गया?
+[07:18.62 - 07:19.75] Speaker 2: पागल साल लग रहा है थोड़ा सा.
+[07:19.75 - 07:20.87] Speaker 2: मैं हवाया वाला बंदा है.
+[07:20.87 - 07:21.68] Speaker 2: क्यों क्यों क्या रहा है?
+[07:21.68 - 07:22.80] Speaker 2: मुझे क्या हुआ?
+[07:22.80 - 07:27.12] Speaker 2: फिर I started, uh, I was like, uh, she's, uh,
+[07:28.18 - 07:30.74] Speaker 2: I loved her but she doesn't love me anymore.
+[07:30.74 - 07:35.37] Speaker 2: तो उनके अंदर ना वह दिलवाले का अनुपम खेर आ गया उनके अंदर, ठीक है?
+[07:35.62 - 07:38.10] Speaker 2: कि जा बेटा जा लिया अपनी सिमरन को.
+[07:38.10 - 07:40.89] Speaker 2: तो उसने बोला तो जाकर बात कर ले.
+[07:40.89 - 07:42.50] Speaker 2: तो मैंने बोला but वह गई.
+[07:42.50 - 07:44.10] Speaker 2: Uh, she's going.
+[07:44.42 - 07:46.50] Speaker 2: बोला अच्छा तो चले जा तू भी?
+[07:46.81 - 07:47.76] Speaker 2: सही है यार.
+[07:47.76 - 07:51.22] Speaker 2: है ना तो मैं सुबह उठा, सुबह सोया ही नहीं मतलब रात भर.
+[07:51.68 - 07:55.45] Speaker 2: छह बजे एक train जाती थी पुणे, uh, पुणा express और something.
+[07:55.45 - 07:57.54] Speaker 2: गोवा express जो पुणे से होते हुए जाती थी छह बजे.
+[08:13.25 - 08:17.50] Speaker 2: फिर मैं ऊपर चले गया platform पर खड़ा होकर देख रहा था तो मुझे दिखी नहीं.
+[08:17.50 - 08:18.93] Speaker 2: तो I knew that she's not in this train.
+[08:18.93 - 08:22.23] Speaker 2: There was a second train which used to go from a different platform at 2PM.
+[08:22.23 - 08:22.62] Speaker 2: Mhmm.
+[08:22.62 - 08:24.23] Speaker 2: मैंने चल अब वहां चलते हैं.
+[08:24.23 - 08:25.67] Speaker 2: तो मेरे हाथ में कुछ नहीं.
+[08:25.67 - 08:32.20] Speaker 2: मैं normal jeans, T shirt पहनकर दूसरे session पहुंच गया और वहां मैं platform पर ऊपर खड़ा हो गया, ठीक है?
+[08:32.20 - 08:34.27] Speaker 2: और मैंने chart में देखा उसका नाम था.
+[08:34.27 - 08:35.08] Speaker 2: She's going.
+[08:35.39 - 08:40.36] Speaker 2: और मैं platform पर खड़ा हो गया ऊपर और मैंने देखा कि I saw her.
+[08:40.84 - 08:46.22] Speaker 2: तब ना मेरे पास ticket ना कुछ, uh, Train चल रही थी और मैं भी चढ़ गया.
+[08:47.16 - 08:56.62] Speaker 2: चलो I I just चढ़ out in that train and मैं बड़ा वह and she was sitting in the first class में वह two tire AC में बैठी हुई थी.
+[08:56.87 - 08:58.63] Speaker 2: तो मैं यहां से चलता हुआ आया.
+[08:58.63 - 09:03.51] Speaker 2: मैंने side में देखा उसकी तरफ वहां hero की तरह hi, चला जाए.
+[09:03.60 - 09:08.48] Speaker 2: तो उसकी भी मतलब she was also like, told यह हुआ क्या है?
+[09:08.79 - 09:10.87] Speaker 2: यह कैसे इस train में आ गया?
+[09:10.58 - 09:11.29] Speaker 2: Right?
+[09:11.46 - 09:14.25] Speaker 2: Just sitting with a friend and like मैं ऐसा ही मतलब hero के बाद.
+[09:14.25 - 09:17.46] Speaker 2: और वहां
+[09:17.46 - 09:19.28] Speaker 1: से आपकी actual love story की शुरुआत हुई?
+[09:19.28 - 09:20.50] Speaker 2: वहां से भी love story की.
+[09:20.50 - 09:21.62] Speaker 2: वहां love story थी.
+[09:21.62 - 09:23.12] Speaker 2: पता नहीं क्या हो गया था beach में.
+[09:23.12 - 09:23.62] Speaker 1: Ok.
+[09:23.62 - 09:37.12] Speaker 2: और love story कि फिर मैं then फिर मैं वापस आया and then, you know, like for ten, uh, for few hours we were talking and I tried to convince her and we spoke and she spoke and we kept talking to each other.
+[09:37.69 - 09:39.85] Speaker 2: And, uh, मेरे पास ticket भी नहीं थी.
+[09:39.85 - 09:42.38] Speaker 2: फिर मैं, uh, चढ़ गया बस.
+[09:42.38 - 09:44.32] Speaker 2: वह TTWD से बात करते हैं ना, हो जाता है.
+[09:44.32 - 09:46.00] Speaker 2: Ticket दे देते वह लोग.
+[09:47.02 - 09:50.38] Speaker 2: तो करके फिर I took a flight back home.
+[09:50.71 - 09:55.66] Speaker 2: But after that प्रिया and I have been together for last fifteen, eighteen years.
+[09:55.66 - 09:55.90] Speaker 2: Ok.
+[09:56.66 - 09:57.95] Speaker 1: एक सवाल पूछना आपसे.
+[09:57.95 - 09:58.50] Speaker 1: हां.
+[09:58.66 - 10:06.26] Speaker 1: क्योंकि आप अपनी wife को इतना ज़्यादा highlight करो कि आपको यह पता है कि अमन गुप्ता wife एक बहुत hot search term है Google पर?
+[10:06.26 - 10:07.38] Speaker 2: हां, हमने मुझे नहीं पता.
+[10:07.38 - 10:07.87] Speaker 2: सही में?
+[10:07.87 - 10:09.23] Speaker 1: हम search terms पर research करते
+[10:09.23 - 10:09.78] Speaker 2: हैं before podcast.
+[10:09.78 - 10:10.42] Speaker 2: Oh wow.
+[10:10.50 - 10:11.14] Speaker 2: क्या बात कर रहे हो?
+[10:11.14 - 10:11.71] Speaker 2: She'll be happy.
+[10:11.76 - 10:12.58] Speaker 2: I'll tell her.
+[10:12.58 - 10:19.86] Speaker 1: उनका कितना बड़ा role रहा है आपकी entrepreneurial journey में और क्या generally entrepreneurs के partners matter करते हैं?
+[10:21.22 - 10:25.76] Speaker 1: Journey में जो भी आपने observe किया based on है because मैंने यह बहुत observe किया आपके बारे में मनीष भाई के बारे में.
+[10:25.76 - 10:26.34] Speaker 2: अच्छा.
+[10:26.63 - 10:28.32] Speaker 1: Your partners matter a lot.
+[10:28.55 - 10:29.03] Speaker 1: अच्छा.
+[10:29.03 - 10:30.24] Speaker 1: आप यह मानते हो?
+[10:30.39 - 10:32.72] Speaker 2: यार each has a different story.
+[10:33.03 - 10:33.91] Speaker 2: अभी जैसे हम
+[10:34.32 - 10:35.27] Speaker 1: आप किस तो?
+[10:35.27 - 10:38.72] Speaker 2: मेरे इसमें तो बहुत matter करता है because अगर,
+[10:39.83 - 10:47.50] Speaker 2: uh, you know, uh, if you ask me कि मैं थोड़ा सा ना crazy type का इंसान.
+[10:47.99 - 10:53.50] Speaker 2: So for me, uh, if I go home I used to when boat was starting also ना,
+[11:08.99 - 11:12.50] Speaker 2: मैं loss होकर कुछ दिमाग़ चल रहा था company में, काम में.
+[11:12.50 - 11:18.65] Speaker 2: होकर भी ना होना, you know और छुट्टियों पर जा रहे हैं और सोच रहा हूं company के बारे में.
+[11:18.65 - 11:21.53] Speaker 2: I'm very, I was, uh, you know when I was,
+[11:22.62 - 11:27.98] Speaker 2: when I was, uh, when boat was starting, everything for my mind, uh, was boat.
+[11:27.98 - 11:29.50] Speaker 1: तो आपकी age क्या थी?
+[11:29.58 - 11:32.05] Speaker 2: 34.
+[11:33.01 - 11:35.65] Speaker 2: तो I also had a daughter that time.
+[11:35.65 - 11:43.72] Speaker 2: So so, you know, I always say कि, uh, अदा has been brought up by, uh, प्रिया because I was taking care of the other child, which was motor.
+[11:44.36 - 11:49.38] Speaker 2: So so for me, handling a person like me is tough, right?
+[11:49.48 - 11:51.38] Speaker 2: So you need a lot of patience, which she has.
+[11:51.76 - 11:54.57] Speaker 2: And she balances me out a lot.
+[11:54.73 - 12:15.83] Speaker 2: So I think for me it is मेरा नहीं होता अगर कुछ और specially मैं बता रहा हूं कि before जब मैं अपने dad के बाद business कर रहा था उस time पर भी ना I was 27, 28 and business started feeling क्या होता है जब तो, uh, when you're married into a a house where it's a family business sort of a feeling,
+[12:16.96 - 12:22.79] Speaker 2: The dynamics change after marriages also and the business also was going through some changes, right?
+[12:22.79 - 12:24.72] Speaker 1: The dynamics change after marriage?
+[12:25.12 - 12:29.12] Speaker 2: Yeah, because you know you, uh, I'll come to that also.
+[12:29.37 - 12:33.45] Speaker 2: But जब प्रिया ने उस time पर बोला था कि तू जाकर MBA कर.
+[12:33.45 - 12:35.76] Speaker 2: You know, you're young, you can still do an MBA.
+[12:35.76 - 12:38.58] Speaker 2: I never even thought about कि let me do an MBA, right?
+[12:38.58 - 12:40.58] Speaker 2: So she pushed me to do an MBA.
+[12:40.74 - 12:46.80] Speaker 2: And I was 29 when I went for my, I was 27 when I got married and 29 I went for an MBA.
+[12:46.80 - 12:54.25] Speaker 2: So going to an MBA, restarting your life, uh, at, uh, 29 is also tough, right?
+[12:54.33 - 12:58.16] Speaker 2: So she's pushed me and then marketing में ना when we were doing board,
+[13:12.11 - 13:13.23] Speaker 2: मैं YouTube गया.
+[13:13.23 - 13:21.07] Speaker 2: पंद्रह बीस दिन मैंने YouTube में research किया how to do marketing, how to do performance marketing, how to do AMS.
+[13:21.14 - 13:29.21] Speaker 2: So for me she's, you know, she's she's like a, you know, when we used to when when I started boat also ना it is like we do it together.
+[13:29.21 - 13:31.85] Speaker 2: Like, घर आकर मेरे से पूछती है अभी भी कि क्या चल रहा है business में?
+[13:31.85 - 13:34.09] Speaker 2: कितना, क्या इस साल की sale कितनी हुई?
+[13:34.09 - 13:35.28] Speaker 2: तो मुझे बहुत stress भी होता है.
+[13:35.28 - 13:38.00] Speaker 2: She's like an official unofficial board member in our company.
+[13:38.00 - 13:39.12] Speaker 2: Unofficial business coach?
+[13:39.12 - 13:39.67] Speaker 2: Yeah yeah.
+[13:39.67 - 13:40.87] Speaker 2: So so it's like ours.
+[13:41.32 - 13:44.44] Speaker 2: It's not my business, it's our business.
+[13:44.44 - 13:45.79] Speaker 2: प्रिया and I are together in that.
+[13:45.79 - 13:47.15] Speaker 2: So it's her business more than me.
+[13:47.15 - 13:49.72] Speaker 2: I'm just, it sometimes feels like she's running the show.
+[13:49.72 - 13:52.60] Speaker 2: I'm just a puppet who's just doing what she's asked me to do.
+[13:52.60 - 13:53.87] Speaker 1: यह बहुत बंदों के लिए dream होती है.
+[13:53.87 - 13:54.75] Speaker 1: Just by the way.
+[13:54.75 - 13:55.39] Speaker 2: मैं जी,
+[14:09.76 - 14:13.37] Speaker 2: But मेहनत थोड़ा अगर मैं थोड़ा distract भी होता हूं.
+[14:13.45 - 14:14.16] Speaker 2: क्या कर रहा है?
+[14:14.16 - 14:15.04] Speaker 2: Company को संभाल.
+[14:15.04 - 14:15.45] Speaker 2: आप
+[14:16.40 - 14:17.52] Speaker 1: distract होते हो?
+[14:17.52 - 14:20.64] Speaker 2: कभी कभी distraction तो part of life, right?
+[14:20.64 - 14:22.80] Speaker 1: क्या कैसे आप कैसे distract होते हो?
+[14:22.80 - 14:32.75] Speaker 1: मतलब I would assume कि at this stage of where you're at, uh, आपने focus और इन सब चीज़ों के बारे में अभी आप आप sort हो चुके हो.
+[14:32.75 - 14:34.59] Speaker 2: I I यार लोगों को लगता है.
+[14:34.59 - 14:35.53] Speaker 2: मैं तो सही बता रहा हूं.
+[14:35.53 - 14:36.83] Speaker 2: हम लोग normal इंसान हैं.
+[14:36.83 - 14:47.79] Speaker 2: लोगों को लगता है कि आप you know आपने सब कर चुके हो आप आप ग़लतियां नहीं करते होगे, आप distract नहीं होते होगे, आप यह बोलते नहीं होगे, आप बहुत ऐसे होगे.
+[14:47.79 - 14:55.07] Speaker 2: भाई मैं normal इंसान हूं धंधा start किया, अच्छा चल गया, ऐसे कमा लिए, फिर shark tank की opportunity है, shark tank कर लिया.
+[14:55.13 - 15:00.50] Speaker 2: Normal लोगों की तरफ़ और ग़लतियां करता हूं, आज भी कर रहा हूं, distract होता हूं, आज भी होता हूं.
+[15:00.50 - 15:07.54] Speaker 2: तो it is part of human nature and then that is how you you have people around you who bring you back.
+[15:07.62 - 15:08.02] Speaker 1: Mhmm.
+[15:08.02 - 15:10.02] Speaker 1: पर किन चीज़ों की वजह से distract होता है?
+[15:10.02 - 15:13.14] Speaker 2: Business से distract होता आप दस चीज़ें और करने लगते हो जो आपको नहीं करनी.
+[15:13.14 - 15:15.95] Speaker 2: Then you go back to basics कि boss business में यह करना है.
+[15:15.95 - 15:17.38] Speaker 2: पैसा जाता तो आप दस चीज़ें कर दो.
+[15:17.38 - 15:21.25] Speaker 2: यार एक company ख़रीद लेता मैं हूं, यहां invest कर देता हूं, मैं यह कर देता but then you'd go back.
+[15:21.41 - 15:26.77] Speaker 2: So distractions is part of life but you have to keep coming back to what you where you belong to.
+[15:26.77 - 15:27.99] Speaker 2: दो चीज़ें कहना चाहूंगा.
+[15:27.99 - 15:31.41] Speaker 2: पहली, uh, it's about time that entrepreneurs are celebrated in
+[15:31.41 - 15:31.82] Speaker 1: the country.
+[15:32.12 - 15:33.32] Speaker 1: Uh, so it's great.
+[15:33.32 - 15:37.48] Speaker 1: I feel for the other especially जो young entrepreneurs हैं, बहुत अच्छी बात है.
+[15:37.55 - 15:41.72] Speaker 1: Uh, second thing, I feel कि यह बहुत cricket fame की तरह वन चुका है.
+[15:41.72 - 15:45.55] Speaker 1: In terms of cricket fame is an outcome of results on on the field.
+[15:45.55 - 15:45.87] Speaker 1: Yeah.
+[15:46.16 - 15:50.50] Speaker 1: And अभी I feel now entrepreneurial fame will be an outcome of results in entrepreneurship.
+[15:50.57 - 15:51.04] Speaker 2: Am I right?
+[15:51.04 - 15:51.92] Speaker 2: Which is good or bad?
+[15:51.92 - 15:52.74] Speaker 2: It's very good.
+[15:52.74 - 15:53.21] Speaker 2: Yeah.
+[15:53.28 - 15:54.80] Speaker 2: Meritocracy जो कहते हैं ना.
+[15:54.80 - 15:56.64] Speaker 1: Based on your merit you get results.
+[15:56.64 - 15:56.88] Speaker 1: Yeah.
+[15:56.88 - 15:57.52] Speaker 1: अच्छी बात है.
+[15:57.52 - 15:58.10] Speaker 1: Yeah.
+[15:58.10 - 16:01.04] Speaker 1: Uh, so that's what you're saying कि you want to focus more on boat?
+[16:01.46 - 16:03.13] Speaker 1: It's like scoring more runs.
+[16:03.62 - 16:07.86] Speaker 2: It's like boat is my baby and I love, I love boat and you love your babies.
+[16:07.86 - 16:13.22] Speaker 2: And if you want to and you don't leave your baby in between, you want to grow your baby.
+[16:13.22 - 16:17.22] Speaker 2: So boat के साथ जो कुछ problem होती है तो, you know, दिल दुखता है.
+[16:16.97 - 16:20.09] Speaker 2: क्योंकि हमने अपने बच्चे को बड़ा किया, हमने पैदा किया है.
+[16:20.09 - 16:23.85] Speaker 2: On boat अगर beach में कहीं problem होती है तो we jump back, solve it.
+[16:24.09 - 16:27.75] Speaker 2: And then, you know, sometimes you feel you want that baby to do well.
+[16:27.75 - 16:29.12] Speaker 2: And that is what boat is to me.
+[16:29.12 - 16:32.00] Speaker 2: So it's like, you know, we have I have three kids.
+[16:32.00 - 16:34.80] Speaker 2: Two with प्रिया and one with समीर, which is boat.
+[16:36.33 - 16:39.76] Speaker 1: Uh, will you ever leave ShakTank to just focus on boat again?
+[16:40.00 - 16:43.45] Speaker 1: And I also feel कि आपको बहुत तगड़ी personal branding, I mean, you know this.
+[16:43.87 - 16:45.48] Speaker 1: बहुत तगड़ी personal branding मिल चुकी है.
+[16:45.48 - 16:51.08] Speaker 1: In fact I feel like boat as a brand got its biggest boost because of you becoming a personal brand.
+[16:51.08 - 16:52.12] Speaker 1: Correct in saying this?
+[16:52.12 - 16:53.08] Speaker 2: Yes and no.
+[16:53.14 - 16:53.72] Speaker 2: Ok.
+[16:54.42 - 16:56.42] Speaker 2: यार Shark Tank ना बड़ा सही चीज़ है.
+[16:56.42 - 17:00.33] Speaker 2: मैं बताता हूं Shark Tank का अगर तू पूछेगा ना बहुत सही बहुत सारी चीज़ें होइए Shark Tank से.
+[17:00.40 - 17:01.85] Speaker 2: Personal branding, yes.
+[17:01.85 - 17:05.84] Speaker 2: It has, you know, it has eventually people now know कि अमन क्या चीज़ है.
+[17:06.17 - 17:07.69] Speaker 2: But company को बहुत फ़ायदा हुआ है.
+[17:07.69 - 17:08.89] Speaker 2: मैं देखो बताता हूं कैसे?
+[17:08.89 - 17:21.21] Speaker 2: Uh, अब जगह जगह पर लोगों को vote का It's like awareness level is at all time high and people know about it और जितने लोग देख रहे उन्हें boat पता है and they are able to relate that कि यार यह बंदा है boat के पीछे अमन गुप्ता.
+[17:21.21 - 17:26.00] Speaker 2: तो उनको वह भी समझ आ रहा है कि there is a person behind, uh, company which is अमन गुप्ता.
+[17:26.18 - 17:33.70] Speaker 2: And now समीर also, you know, I keep talking about समीर and समीर is otherwise a very, you know, he doesn't like to be on the limelight also that much.
+[17:33.70 - 17:36.42] Speaker 2: तो समीर और मेरा पता लग रहा है कि there are people behind a brand.
+[17:36.42 - 17:36.81] Speaker 2: Third,
+[17:38.09 - 17:40.78] Speaker 2: भाई entrepreneurial कितना अच्छा है, पता है?
+[17:40.78 - 17:43.83] Speaker 2: जो आता है उसकी sale बढ़ जाती है overnight brand वन जाता है.
+[17:43.99 - 17:51.51] Speaker 2: जिसकी तू, uh, जिस बंदे को पंद्रह minute में add करना TV में दस second का add लेने में ना पंद्रह पंद्रह लाख रुपए लग जाते हैं.
+[18:07.44 - 18:10.79] Speaker 2: Revamp motors क्या है, flat heads क्या है?
+[18:10.96 - 18:13.36] Speaker 2: Overnight brand sensations वन जाता है.
+[18:13.36 - 18:16.88] Speaker 2: So you spend it's like दस करोड़ की branding तो तुम्हें free मिल रही है.
+[18:16.88 - 18:17.20] Speaker 2: Mhmm.
+[18:17.20 - 18:17.84] Speaker 2: Correct?
+[18:19.04 - 18:24.98] Speaker 2: Second, अगर शाख़ मिल जाए तो और फ़ायदा है क्योंकि then you help because ना अपनी life में कभी mentors नहीं मिले जा रहा.
+[18:24.98 - 18:34.50] Speaker 2: तो अगर मैं किसी की help करूं मुझे अच्छा लगता है तो as as founders अगर तुम्हें ShakTank में शाख़ मिल जाए तो तुम्हारी life अच्छा shark मिल जाए मतलब depends, right?
+[18:35.95 - 18:38.43] Speaker 1: इस thought को expand कीजिए अमन भाई.
+[18:38.43 - 18:43.71] Speaker 2: तो अगर उन्हें अच्छा shark मिल जाए, uh, मेरे जैसा तो उनके लिए और फ़ायदा है because I'll be able to help them too.
+[18:44.11 - 18:45.95] Speaker 2: और country के लिए बहुत अच्छा है boss.
+[18:46.43 - 18:46.82] Speaker 2: Mhmm.
+[18:46.82 - 18:48.43] Speaker 2: Country के लिए बहुत सही है.
+[18:48.43 - 18:53.47] Speaker 2: Entrepreneurship के बारे में लोग जब मैं जब start किया था ना तो लोग पूछते थे यह धंधा कर रहा है, business करता है.
+[18:53.47 - 18:55.63] Speaker 2: Business बोलते थे business business कर रहा है.
+[18:55.63 - 19:00.88] Speaker 2: अब entrepreneurship बोलते हैं and moms are able to talk about it and you know, I'll tell you a small story later.
+[19:00.88 - 19:04.56] Speaker 2: But there are people who talk about entrepreneurship जैसे आपने भी बोला.
+[19:04.56 - 19:07.20] Speaker 2: Celebrating entrepreneurship is becoming a norm.
+[19:07.20 - 19:08.24] Speaker 1: और यह शुरुआत है?
+[19:08.24 - 19:08.56] Speaker 1: हां?
+[19:08.56 - 19:09.11] Speaker 1: यह शुरुआत है.
+[19:09.11 - 19:10.08] Speaker 2: अभी तो start हुआ है.
+[19:10.08 - 19:12.48] Speaker 2: Start ups were not in fashion.
+[19:12.75 - 19:14.34] Speaker 2: Start ups were not being celebrated.
+[19:14.34 - 19:28.54] Speaker 2: In fact, मेरी mother in law को भी ऊपर stress हुआ था कि बेटा यह अच्छा भला, like, you know, my my daughter went into a good house and she's married into and this guy was, uh, बड़ा लिखा आदमी है और इसने you know because they've all been service class, right?
+[19:28.54 - 19:37.34] Speaker 2: They've all worked in, uh, worked, uh, as employees and suddenly she's like कि यार इसने नौकरी छोड़ दिया अब यह business करेगा और उसका भी कुछ पता नहीं क्या होगा.
+[19:37.34 - 19:38.61] Speaker 2: So she got tensed.
+[19:38.61 - 19:40.86] Speaker 2: मतलब जब वह मिलती थी ना
+[20:08.58 - 20:10.10] Speaker 2: आप तो उनका favorite बेटा हूं मैं.
+[20:10.10 - 20:11.15] Speaker 1: Perks of fame.
+[20:11.15 - 20:12.26] Speaker 2: Perks of fame, right.
+[20:12.26 - 20:15.47] Speaker 2: But it is what it is.
+[20:15.71 - 20:18.43] Speaker 1: पता है मैं आपको इस phase के बारे में क्यों ज़्यादा पुछ रहा
+[20:18.43 - 20:18.50] Speaker 2: हूं?
+[20:18.50 - 20:18.91] Speaker 2: क्यों?
+[20:18.91 - 20:24.74] Speaker 1: क्योंकि हर कोई Shark Tank को एक बहुत glam perspective से देखता है, especially judges को.
+[20:24.74 - 20:25.46] Speaker 2: मतलब?
+[20:25.77 - 20:32.26] Speaker 1: It's a little bit unreachable और सबसे reachable जो आपकी relatability की वजह से आप हो.
+[20:32.26 - 20:37.08] Speaker 1: And I feel it's important to talk about beginnings and it's important to talk about struggling phases.
+[20:37.08 - 20:39.25] Speaker 1: यह आपका struggling phase था.
+[20:39.25 - 20:40.21] Speaker 1: यार एक pitch आई
+[20:40.21 - 20:42.13] Speaker 2: थी, uh, flat heads.
+[20:42.13 - 20:42.76] Speaker 2: देखी है तूने?
+[20:42.76 - 20:43.41] Speaker 2: नहीं.
+[20:43.41 - 20:44.93] Speaker 2: ठीक है, तू देखी हो एक pitch.
+[20:45.00 - 20:45.41] Speaker 2: ठीक है?
+[20:45.41 - 20:47.25] Speaker 2: Second season में अच्छी pitch थी.
+[20:47.25 - 20:50.84] Speaker 2: उस बंदे के साथ क्या आपने देखी है ना तो उसमें क्या हुआ था ना उस बंदे के साथ
+[21:16.89 - 21:21.69] Speaker 2: 60% of my money goes into 60 or 50 into performance mark.
+[21:21.69 - 21:22.81] Speaker 2: मान लाजिए बात भी है.
+[21:22.81 - 21:23.28] Speaker 2: हां.
+[21:23.28 - 21:26.81] Speaker 2: ठीक से marketing भी ठीक से नहीं कर रहा, promotion भी ठीक नहीं कर रहा.
+[21:26.81 - 21:30.57] Speaker 2: कहां बेचता है online में बेचता हूं अपनी sites है और यह मेरा वह चला.
+[21:30.57 - 21:31.85] Speaker 2: यह भी ख़राब है.
+[21:34.05 - 21:38.77] Speaker 2: तो मैंने वहां पर बोला कि भाई तेरे तो चारों P marketing में होते हैं four Ps.
+[21:39.01 - 21:42.29] Speaker 2: You know बहुत पुराने business studies में पढ़ा था eleventh में.
+[21:42.29 - 21:44.14] Speaker 1: बोल दो like audience के लिए.
+[21:44.14 - 21:44.85] Speaker 2: हां बता देता हूं.
+[21:44.85 - 21:46.38] Speaker 2: मैंने बोला भी था show में बोलता
+[22:29.44 - 22:32.48] Speaker 2: Board start करने से पहले ना मेरे पांच failures हुए थे.
+[22:32.48 - 22:35.51] Speaker 2: But board एक चीज़ है जो success हुई है.
+[22:35.51 - 22:38.88] Speaker 2: People don't remember, people don't know about the failures we go through.
+[22:38.88 - 22:40.96] Speaker 2: People only know the success, right?
+[22:40.96 - 22:47.96] Speaker 2: But it's very important to talk about the failures because you don't need five success, you need one success and I'm here.
+[22:47.96 - 22:49.00] Speaker 2: You know what I mean?
+[22:49.24 - 22:54.68] Speaker 2: एक success चाहिए और उस बंदे में मैंने अपने आप को देखा कि भाई इसको तो अभी मेरे साथ हुआ था.
+[22:54.68 - 22:58.36] Speaker 2: मैंने business start किया था, बंद करना पड़ा और सारा बहुत loss हुआ हमारा मेरा.
+[22:58.50 - 23:04.01] Speaker 2: मैं सारे अपने पैसे मतलब जैसे होता है ना हमने मेरे पास तीस लाख रुपए save हुए थे और वह
+[23:04.09 - 23:05.05] Speaker 1: Corporate career से.
+[23:05.05 - 23:07.53] Speaker 2: हां और वह मैंने सारे लगा दिए और सारे बंद हो गए.
+[23:07.53 - 23:08.66] Speaker 2: खत्म, पैसे खत्म.
+[23:09.85 - 23:10.25] Speaker 2: और
+[23:25.85 - 23:29.61] Speaker 2: देख भाई बंद कर, company बंद कर दें.
+[23:30.09 - 23:34.25] Speaker 2: मैं अनुपम ने भी देखा कि हां भाई यह सही कह रहा है this cannot sustain.
+[23:34.42 - 23:35.85] Speaker 2: पीयूष और उन्होंने offer दिए हैं.
+[23:35.85 - 23:38.98] Speaker 2: मैंने बोला यह तेरा product में दमनी है, तेरे business में दमनी है.
+[23:39.31 - 23:47.23] Speaker 2: नौकरी कर पैसे कमा थोड़ा सीख किसी brand में, uh, you know और smart बंदा यार IIT IAM का बंदा.
+[23:47.23 - 23:50.50] Speaker 2: मैंने बोला सीख वापस आ restart कर अपनी life.
+[23:50.91 - 23:51.78] Speaker 2: You can come back strong.
+[23:52.36 - 23:54.21] Speaker 2: मैंने बोला you are down but not out.
+[23:54.21 - 23:58.69] Speaker 2: That was a statement which I told him कि boss in life you can be down but you're not out, right?
+[23:58.69 - 23:59.56] Speaker 2: You can come back.
+[24:00.45 - 24:02.84] Speaker 2: You know अच्छा नहीं चल रहा score, out नहीं हुए हो.
+[24:02.84 - 24:05.89] Speaker 2: जब तक नहीं हुए हो तब तक आप last में भी छक्ता मारकर जीत सकते हो, right?
+[24:05.89 - 24:07.17] Speaker 2: अगर एक ball पर चेहरन भी चाहिए.
+[24:07.28 - 24:10.33] Speaker 2: मतलब जा restart कर वापस आ start करके.
+[24:10.33 - 24:11.76] Speaker 2: And he took that advice.
+[24:11.77 - 24:17.38] Speaker 2: He did not take that offer but, uh, he took my advice and he said I don't want your offer.
+[24:17.38 - 24:18.49] Speaker 2: I will close out this business.
+[24:20.79 - 24:31.92] Speaker 2: So for me, uh, I feel that it's human to be and I'm just a human being who's just done decently well and sitting here at a as a sharp.
+[24:31.92 - 24:34.48] Speaker 2: When you say ना कि हम लोगों को अलग level से देखते हैं.
+[24:34.48 - 24:35.51] Speaker 2: मैं ना मत देखो भाई.
+[24:35.51 - 24:41.51] Speaker 2: हम I was on that side of the table, like, one year back and you can be here after one year.
+[24:41.67 - 24:44.55] Speaker 2: So if I can be here, anybody can be here is what I say.
+[24:44.63 - 24:46.72] Speaker 2: I was never a super intelligent guy.
+[24:46.72 - 24:58.03] Speaker 2: I was never, जैसे बाकी लोग IIT, सब यह वश्नीर IIT, IIM, विनीता IIT, uh IIM और यह अमित जैन IIM, IIT or something IIM अहमदाबाद.
+[24:58.03 - 25:02.11] Speaker 2: सब intelligent लोग हैं यार, इतने intelligent लोग बैठे हैं और मैं एक हस्लर,
+[25:29.64 - 25:31.40] Speaker 2: सामने बैठा हुआ first row.
+[25:31.40 - 25:36.11] Speaker 2: I was never I was like more of a बकचोत पीछे last row में बैठा हुआ इंसान होता था.
+[25:36.36 - 25:39.64] Speaker 2: Fight मारता था but enjoy करता था ज़िंदगी.
+[25:39.64 - 25:40.68] Speaker 2: अब shutdown चले गए.
+[25:40.68 - 25:41.79] Speaker 2: मन नहीं करता था पढ़ने का.
+[26:12.56 - 26:13.60] Speaker 2: फोड़ने की.
+[26:13.60 - 26:16.41] Speaker 2: पर जो last tie होता ना उसको nothing to lose होता है.
+[26:19.28 - 26:24.80] Speaker 2: जब हम लोग होते हैं ना थोड़े से backbencher type के लोग तो हमें पता है कि boss पढ़ाई तो हमने करी नहीं.
+[26:24.80 - 26:26.65] Speaker 2: अच्छी नौकरी भी नहीं लगी हमें.
+[26:26.31 - 26:27.59] Speaker 2: तो हमें तो कुछ छोड़ना पड़ेगा.
+[26:27.59 - 26:29.43] Speaker 1: तो हमारे अंदर ना अलग type का कीड़ा होता है
+[26:29.43 - 26:31.35] Speaker 2: कि boss हमें तो करना ही पड़ेगा.
+[26:31.35 - 26:34.39] Speaker 2: तो there is no fallback option for people like me.
+[26:34.39 - 26:39.51] Speaker 2: For a person who's done well and he's gone into, who's got like that crazy degrees,
+[27:11.04 - 27:16.41] Speaker 2: मुझे तो निकाल भी निकाल भी देते थे companies अगर ज़्यादा ऐसा type का इंसान था मैं.
+[27:16.41 - 27:16.80] Speaker 2: Ok.
+[27:16.80 - 27:20.49] Speaker 2: कि अगर मैं ज़्यादा देर मेरे को मेरा अंदर कीड़ा था मुझे तो उतना ही करना था.
+[27:20.49 - 27:23.60] Speaker 1: Failures के बारे में बताइए वह जो five companies fail हुई थी.
+[27:24.02 - 27:24.98] Speaker 1: Failures.
+[27:25.14 - 27:26.34] Speaker 1: मतलब कौन सी company थी
+[27:26.34 - 27:27.53] Speaker 2: और क्यों fail हुआ है?
+[27:28.34 - 27:29.86] Speaker 2: यार पता है कई
+[27:32.26 - 27:43.31] Speaker 2: लोग होते हैं बहुत सोचकर start करते हैं, बहुत business में लगाने से पहले तो यह करना चाहिए, इतना analysis करो, strength क्या है, weakness क्या है, opportunities क्या हैं, threats क्या हैं, short analysis जो होती है.
+[27:43.31 - 27:44.59] Speaker 2: लोग सोचकर करते हैं.
+[27:44.59 - 27:46.75] Speaker 2: मेरा ऐसा बंदा ना बहुत गठ से चलता है.
+[27:46.75 - 27:53.57] Speaker 2: तो मैंने ना company start करी और उससे मैंने मैंने बस start कर दी और मैंने सोचा कि चल इसमें भी करते हैं.
+[27:53.57 - 27:56.85] Speaker 2: Sometimes that confidence and overconfidence में ना फ़र्क आ जाता है.
+[27:56.85 - 27:58.77] Speaker 2: You don't know the realities, right?
+[27:58.77 - 28:05.17] Speaker 2: And what I learned is that you have to start a company, think about different aspects of doing things.
+[28:05.32 - 28:16.21] Speaker 2: So मतलब जैसे मैंने सोचा नहीं था, मैंने सोचा था कि यार एक जैसे हमने यह start थी, uh, company का नाम था eRampage Marketing, ठीक है?
+[28:16.21 - 28:19.97] Speaker 2: एक हमने start करी, मैंने start करी थी, uh, Cutie Pie Lane.
+[28:19.97 - 28:23.33] Speaker 2: वह होता है कि बच्चों का सामान, uh, online बेचेंगे.
+[28:23.33 - 28:24.21] Speaker 2: जैसे first cry.
+[28:24.21 - 28:25.33] Speaker 2: First cry वगैरह.
+[28:25.33 - 28:25.65] Speaker 2: Ok.
+[28:25.65 - 28:26.53] Speaker 2: तो मैं क्या करता था?
+[28:26.53 - 28:30.38] Speaker 2: मैं ख़रीदकर बेचता था सौ रुपए की चीज़, एक सौ दस में बेचा था e commerce.
+[29:00.47 - 29:05.26] Speaker 2: Product market fit की तरफ़ जाओ, पहले product अच्छा बनाओ, market अच्छी करो, बाकी चीज़ें solve हो जाएंगी.
+[29:05.26 - 29:11.10] Speaker 2: तो then then I worked out of social, you at least I learned that I will not spend too much on other things.
+[29:11.10 - 29:13.91] Speaker 2: जब तक company बड़ी नहीं होती बाकी चीज़ें बाद में देखेंगे.
+[29:43.13 - 29:44.49] Speaker 2: Frugality I learned.
+[29:44.49 - 29:46.49] Speaker 2: Emotional decisions होते हैं यह.
+[29:46.89 - 29:47.77] Speaker 2: Emotional decisions.
+[29:47.77 - 29:49.53] Speaker 2: ऐसे काम करना वहां हां, ऐसे होता है.
+[29:49.53 - 29:51.21] Speaker 2: क्योंकि बड़ी companyयों से आए थे हम.
+[29:51.38 - 29:53.04] Speaker 2: हमने सोचा था ऐसे ही होते हैं काम.
+[29:53.04 - 29:53.69] Speaker 2: Mhmm.
+[29:54.17 - 29:54.57] Speaker 2: तो.
+[29:54.57 - 29:56.81] Speaker 2: But five companies fail हुए थे.
+[29:56.81 - 29:57.04] Speaker 1: Yeah.
+[29:57.51 - 29:59.11] Speaker 1: You want to talk about the others?
+[29:59.11 - 30:00.00] Speaker 2: I can.
+[30:00.00 - 30:01.27] Speaker 1: Sure, बताइए.
+[30:01.92 - 30:05.59] Speaker 1: यह genuinely मुझे भी जानना है because all this happened in your thirties.
+[30:05.59 - 30:05.75] Speaker 1: Yeah.
+[30:05.75 - 30:12.34] Speaker 1: And I'm asking you a perspective क्योंकि बहुत सारे लोग जो twenties में अभी Gen Zs, मेरे age के लोग भी.
+[30:12.34 - 30:13.46] Speaker 1: I'm 93 born.
+[30:13.46 - 30:13.70] Speaker 1: Yeah.
+[30:13.70 - 30:14.90] Speaker 1: I'm going to turn 30 but
+[30:14.98 - 30:15.94] Speaker 2: Similar age, yeah.
+[30:15.94 - 30:16.50] Speaker 1: Yeah.
+[30:16.98 - 30:18.42] Speaker 1: '92, '93.
+[30:18.66 - 30:20.98] Speaker 1: So, uh
+[30:21.14 - 30:22.25] Speaker 2: Feel, you should feel young.
+[30:23.16 - 30:26.83] Speaker 1: I'm I'm very chill with Anyway, that's a whole I'm
+[30:28.75 - 30:30.59] Speaker 1: probably chill with age also because of circumstances.
+[30:30.59 - 30:31.55] Speaker 1: I've gotten lucky.
+[30:31.55 - 30:33.31] Speaker 1: बहुत लोग कहते कि there's no such thing as luck.
+[30:33.31 - 30:33.88] Speaker 1: Feel it.
+[30:33.96 - 30:34.68] Speaker 2: Also feel it, yeah.
+[30:35.27 - 30:36.40] Speaker 1: Feel there is a big thing.
+[30:36.40 - 30:36.88] Speaker 1: Yeah yeah.
+[30:36.88 - 30:37.60] Speaker 1: Call luck.
+[30:37.60 - 30:37.76] Speaker 1: Yeah.
+[30:37.76 - 30:38.56] Speaker 1: And circumstance.
+[30:38.56 - 30:40.08] Speaker 1: Circumstances lead you up to success.
+[30:41.27 - 30:42.16] Speaker 2: Go ahead agree.
+[30:42.24 - 30:47.84] Speaker 1: Anyway my point is मैं खुद के दोस्तों को देख रहा हूं, twenties में जो लोग हैं उनको देख रहा हूं.
+[30:47.75 - 30:52.55] Speaker 1: सब लोग खुद पर बहुत pressure डाल रहे हैं कि उनकी age बहुत rapidly
+[30:53.59 - 30:57.03] Speaker 1: grow हो रही है and they are not thinking that they are successful yet.
+[30:57.03 - 31:01.27] Speaker 1: But it's important to know stories like this कि आप thirties में थे और तब आपने failures देखे.
+[31:01.57 - 31:03.17] Speaker 1: And board की शुरुआत हुई when you
+[31:03.17 - 31:04.13] Speaker 2: were 34.
+[31:04.13 - 31:04.52] Speaker 2: I am
+[31:04.52 - 31:07.25] Speaker 1: assuming between thirty and thirty four ये failures हुए थे.
+[31:07.25 - 31:09.97] Speaker 2: 36 में जाकर board establish हुई थी.
+[31:09.97 - 31:11.73] Speaker 1: तो ok, छह साल still.
+[31:12.93 - 31:16.21] Speaker 1: हर साल मतलब एक company start करी और हर साल एक company fail
+[31:17.16 - 31:17.96] Speaker 1: हुई.
+[31:18.27 - 31:18.51] Speaker 2: हां.
+[31:18.51 - 31:20.03] Speaker 2: नहीं नहीं ऐसा नहीं था हर साल हुई.
+[31:20.03 - 31:22.75] Speaker 2: मैंने सबसे पहले start करी थी मैं 22, 23 का था.
+[31:22.75 - 31:23.40] Speaker 1: Oh, ok.
+[31:23.55 - 31:28.27] Speaker 2: हां, dad के साथ start करी थी और मैं नहीं किया था वह fail हुई थी.
+[31:28.27 - 31:33.52] Speaker 2: मैं बता रहा हूं कोई भी company मेरी fail नहीं हुई थी क्योंकि जो वहां सीखा था ना वह कहीं किसी MBA school में नहीं सिखाया.
+[31:33.52 - 31:37.11] Speaker 2: What they don't teach you at Indian School of Business एक वह book बनानी चाहिए, है ना?
+[31:37.11 - 31:39.21] Speaker 2: What they don't teach you at our business school.
+[31:39.21 - 31:42.49] Speaker 2: I think I should write a book called what they don't teach you at Indian School of Business.
+[31:42.56 - 31:44.89] Speaker 2: They don't teach all this at business schools.
+[31:44.89 - 31:46.25] Speaker 1: Generally Indian business schools.
+[31:46.25 - 31:47.36] Speaker 2: On any business school.
+[31:47.36 - 31:50.65] Speaker 2: Not Indian School of Business, Indian business schools.
+[31:52.32 - 31:53.84] Speaker 1: Payers के बारे में whatever.
+[31:53.84 - 31:57.49] Speaker 2: So what life teaches you ना, you know, nothing else can teach you.
+[31:57.49 - 31:59.73] Speaker 2: What entrepreneurship as as a whole teaches you?
+[31:59.73 - 31:59.89] Speaker 2: What?
+[31:59.89 - 32:03.01] Speaker 2: When you go and work, you can teach people in companies.
+[32:03.01 - 32:04.69] Speaker 2: You can teach them administration.
+[32:04.69 - 32:06.28] Speaker 2: You can teach them politics.
+[32:06.28 - 32:09.17] Speaker 2: But what happens when real life politics happen in companies?
+[32:09.17 - 32:12.47] Speaker 2: Nobody can teach you unless you experience politics in your companies.
+[32:12.47 - 32:13.99] Speaker 2: You know what I mean?
+[32:14.30 - 32:17.34] Speaker 2: You can you can teach they can teach you mark strat करके course होता है.
+[32:17.34 - 32:20.15] Speaker 2: You know, एक simulation game होता है mark strat.
+[32:20.15 - 32:26.84] Speaker 2: आप सब खेलते हो पढ़ते हो लेकिन जब आप real life में competition, strategies और marketing use करते हो ना वह बहुत different होती है.
+[32:26.84 - 32:30.11] Speaker 2: जब आप marketing सीखकर आते हो और जो marketing use करनी पड़ती है बहुत अलग है.
+[32:30.11 - 32:37.52] Speaker 2: तो जितना आप घिसकर सीख सकते हो ना, जितना आप hard work से सीख सकते हो, जितना आप गिरकर सीख सकते हो ना, उतना आप किसी चीज़ से नहीं सीख सकते.
+[32:37.52 - 32:43.76] Speaker 2: तो मैं बहुत सीखाऊं अपनी पुरानी failure से और मेरी सबसे बड़ी learning मेरे failures रहे हैं.
+[32:44.17 - 32:49.80] Speaker 1: एक learning the frugality और product oriented thinking और कुछ था और कुछ ऐसे learning थे.
+[32:49.80 - 32:51.48] Speaker 2: ROI driven, uh, mindset.
+[32:51.48 - 32:52.03] Speaker 2: Ok.
+[32:52.04 - 32:54.84] Speaker 2: तो you know as a chartered accountant you start getting that also.
+[32:54.84 - 32:55.72] Speaker 1: अगर आप दस सौ रुपए
+[32:55.72 - 32:59.16] Speaker 2: ना हर चीज़ डाल रहे हो तो भाई उसका फ़ायदा देखो क्या है?
+[32:59.16 - 33:02.21] Speaker 2: आज भी मैं अपनी company में हम लोग बहुत पैसे कर सकते हैं marketing में.
+[33:02.21 - 33:09.32] Speaker 2: We are a profitable company for last since the time we began and now, you know, if you look at the market today, everybody is looking at profitability.
+[33:09.32 - 33:11.25] Speaker 2: मैं तो तब से कह रहा हूं पता है अभी क्या हुआ?
+[33:11.25 - 33:13.00] Speaker 2: एक ना बहुत बड़ा fund है.
+[33:13.00 - 33:15.17] Speaker 1: यह यह बनिया mindset भी है इस बारे में.
+[33:15.17 - 33:15.56] Speaker 1: हां हां,
+[33:15.56 - 33:16.52] Speaker 2: खून से बनी है.
+[33:16.52 - 33:17.00] Speaker 2: Mhmm.
+[33:17.25 - 33:22.70] Speaker 2: और cofounder गुजराती और chartered accountant by qualification, MBA finance.
+[33:22.86 - 33:26.86] Speaker 2: तो it's not about मंदिया mindset, it's just the way world works.
+[33:26.86 - 33:27.18] Speaker 2: Mhmm.
+[33:27.18 - 33:30.14] Speaker 2: इन इतने का ख़रीदा, इतने का बेचा, यह बुनाफ़ा beach में.
+[33:30.14 - 33:30.94] Speaker 2: ऐसे ही होता है ना?
+[33:30.94 - 33:31.18] Speaker 2: Mhmm.
+[33:31.18 - 33:33.74] Speaker 2: इतने का बनाया, इतने का बेचा, यह beach में बुनाफ़ा.
+[33:48.28 - 33:55.08] Speaker 2: कि people should not look at, uh, you know, look at profitability, look at cash flow management.
+[33:55.08 - 33:59.64] Speaker 2: मैंने मेरा इतना मन कर रहा था बोलने का अरे भाई बचपन से हम यही बोत आ रहे हैं तुम्हारे को, ऐसे ही होता है.
+[33:59.64 - 34:05.02] Speaker 2: So people are realizing now that profitability is important in India but there is a
+[34:06.23 - 34:11.82] Speaker 2: rat race of, uh, starting up, uh, which is which is changing thankfully.
+[34:12.15 - 34:12.55] Speaker 1: मैं profitable हूं.
+[34:12.55 - 34:14.46] Speaker 2: अभी सबसे बड़ी problem होता है क्या चल रही है अंडे में?
+[34:14.46 - 34:21.21] Speaker 2: मतलब अभी तो सबसे बड़ी जैसे पहले चल रही थी कि valuation के पीछे भाग रहे थे, वह change हुई है.
+[34:21.21 - 34:25.78] Speaker 2: That is very big problem in entrepreneurs today that they start feeling that they are the next.
+[34:25.78 - 34:27.53] Speaker 2: They have cracked it.
+[34:27.53 - 34:28.57] Speaker 2: They know it all.
+[34:28.65 - 34:30.17] Speaker 2: बस मैं आज तक सीख रहा हूं.
+[34:30.17 - 34:34.17] Speaker 2: मेरी मैंने इतनी ग़लतियां करता हूं और ग़लतियों से सीख रहा हूं, लोगों की ग़लतियों से सीख रहा हूं.
+[34:34.42 - 34:40.51] Speaker 2: I think lifelong learner is something which I have also learned that you cannot not learn.
+[34:40.59 - 34:42.59] Speaker 2: I learn a lot from my competition.
+[34:42.59 - 34:46.90] Speaker 2: I learn a lot from, uh, we came we saw we disrupted.
+[34:46.90 - 34:49.07] Speaker 2: Somebody else can come and see and disrupt us also.
+[34:49.46 - 34:53.15] Speaker 2: So I feel learn from people around you, learn from.
+[34:53.32 - 34:55.88] Speaker 2: I love learning from college students.
+[34:55.88 - 35:02.90] Speaker 2: I love learning from young people because बहुत जो energy उनमें होती है ना, जो नई चीज़ें होती हैं, वह नए मैं colleges जाता हूं ना.
+[35:02.90 - 35:05.59] Speaker 2: मैं लोगों से मैं लोग सोचते हैं वह मेरे से सीखेंगे.
+[35:05.59 - 35:06.71] Speaker 2: मैं उनसे सीखकर आ रहा होता हूं.
+[35:06.71 - 35:13.03] Speaker 2: So I use that platform to learn from people, the young minds because they are different यार.
+[35:13.03 - 35:16.30] Speaker 2: You know, every time every पहले होता था every ten years generation changes.
+[35:16.30 - 35:18.15] Speaker 2: I think every two years now the generation changes.
+[35:18.73 - 35:21.05] Speaker 1: In short, summarize करने की कोशिश करूंगा.
+[35:21.05 - 35:28.17] Speaker 1: Profitability, product driven mindset, ROI driven mindset, uh, humility और constant feedback loops.
+[35:28.17 - 35:28.48] Speaker 1: यह होता
+[35:28.48 - 35:29.44] Speaker 2: And hustle.
+[35:29.44 - 35:30.34] Speaker 1: And hustle.
+[35:30.40 - 35:35.05] Speaker 1: I feel कि वह बहुत basic, uh, requirement होनी चाहिए.
+[35:35.05 - 35:37.21] Speaker 2: Basics is what matters eventually.
+[35:37.61 - 35:38.57] Speaker 1: पैसे बनाओ.
+[35:38.57 - 35:38.90] Speaker 1: हां?
+[35:38.90 - 35:39.78] Speaker 1: पैसे बनाओ.
+[35:39.78 - 35:40.65] Speaker 2: पैसे बनाओ.
+[35:40.65 - 35:41.05] Speaker 2: Mhmm.
+[35:41.05 - 35:42.42] Speaker 2: सही काम करो.
+[35:42.42 - 35:44.01] Speaker 2: अपने ग्राहक को समझो.
+[35:45.01 - 35:46.36] Speaker 1: Ok, खैर.
+[35:46.61 - 35:50.92] Speaker 1: अब अमन भाई, views के लिए आपको ShakTank के बारे में पूछूंगा.
+[35:50.92 - 35:51.96] Speaker 2: Views मतलब?
+[35:53.15 - 35:53.88] Speaker 2: मेरे views?
+[35:53.88 - 35:55.40] Speaker 1: नहीं, मेरे यार, मेरे views.
+[35:55.40 - 35:57.01] Speaker 1: हमारे views.
+[35:57.01 - 35:59.40] Speaker 2: अपने views के लिए मेरे views पूछेंगे ShakTank.
+[35:59.40 - 36:00.36] Speaker 2: That is what you mean.
+[36:00.86 - 36:01.65] Speaker 2: Correct.
+[36:01.65 - 36:02.78] Speaker 1: चलो पूछो.
+[36:02.78 - 36:03.82] Speaker 1: कुछ बताइए?
+[36:03.98 - 36:06.13] Speaker 1: Shark Tank का future क्या है generally speaking?
+[36:06.13 - 36:08.13] Speaker 1: And do you think you'll be there in every season?
+[36:09.34 - 36:15.34] Speaker 2: भाई, जब तक, uh, मेरे ना uh, मेरी wife पता है क्या कहती है प्रिया.
+[36:15.34 - 36:16.13] Speaker 2: क्या कहती है?
+[36:16.09 - 36:18.01] Speaker 2: मैं सरोजन नगर में shopping कर रही हूं.
+[36:18.01 - 36:20.09] Speaker 2: तू यहां जाकर Shark में shopping कर रहा है companyओं
+[36:20.09 - 36:20.26] Speaker 1: की.
+[36:20.26 - 36:20.65] Speaker 1: So
+[36:20.96 - 36:31.30] Speaker 2: Shark Tank companies have to start giving results in the next two years for me to continue investing otherwise my wife will not let me invest more money.
+[36:31.30 - 36:40.75] Speaker 2: So another two year, three years they should start showing me the paper money is good that we are doing well but it has to, uh, उसको दिखना चाहिए कि उसका असली पैसे बने.
+[36:41.17 - 36:43.03] Speaker 2: Shark Tank का future बहुत bright है boss.
+[36:43.03 - 36:45.65] Speaker 2: India में जब तक entrepreneurship wave अभी तो start हुई है.
+[36:45.65 - 37:02.94] Speaker 2: If you look at हमारे प्रधानमंत्री जी ने भी बोला है startup India, stand up India, startup day celebrate हो रहा है तो startup तो India में अब तो बच्चा बच्चा entrepreneurship के बारे जानता है, EBITDA जानता है, ROI जानता है, मेरी दाई जानती है, मेरे ताऊ जी बात करते मेरे papa, mom सब लोग इसके बारे में बात करते हैं.
+[37:02.94 - 37:06.30] Speaker 2: उन्हें समझ आ रहा है कि basics of business क्या है?
+[37:06.11 - 37:10.65] Speaker 2: तो Shark Tank ने grassroot level पर entrepreneurship तो फैला दिया है.
+[37:10.65 - 37:12.17] Speaker 2: तो Shark Tank will survive.
+[37:12.34 - 37:16.11] Speaker 1: अमन गुप्ता, कैसा रहा आपका podcasting experience आज?
+[37:16.11 - 37:18.59] Speaker 2: यार, तेरे बताएंगे.
+[37:20.05 - 37:22.28] Speaker 1: वह आपके ऊपर dependent है not me.
+[37:22.28 - 37:22.92] Speaker 1: अच्छा.
+[37:22.92 - 37:23.96] Speaker 2: Oh shit यह तो बड़ा pressure.
+[37:23.96 - 37:25.17] Speaker 2: पहले बताता है यह pressure है.
+[37:25.17 - 37:28.84] Speaker 2: फिर मैं तेरे को controversial content दे देता हूं वह तो चलता ही है.
+[37:30.05 - 37:33.25] Speaker 1: No I think आप काफ़ी अच्छे conversationalist हो.
+[37:33.25 - 37:37.63] Speaker 1: आपने हमें बहुत अच्छा heartfelt podcast दिया है.
+[37:37.63 - 37:40.76] Speaker 1: तो I'm sure कि बहुत सारे motivational pages इसे pick up करने वाले हैं.
+[37:40.76 - 37:42.59] Speaker 1: Thank you for being on TRS.
+[37:42.59 - 37:45.46] Speaker 1: End में कुछ कहना चाहोगे listeners को, Shark Tank viewers को?
+[37:47.76 - 37:52.23] Speaker 2: देखते रहिए Shark Tank और ख़रीदते रहिए boat और,
+[37:53.19 - 38:01.92] Speaker 2: uh, मिलते हैं आगे TV पर और जब अगर आप Shark Tank देखो तो boat के headphone लगाकर देखो.
+[38:02.48 - 38:03.92] Speaker 2: Sorry, ज़्यादा pitching हो रही है क्या?
+[38:03.92 - 38:08.01] Speaker 2: ज़्यादा point board हो हो Marketing, मैंने सोचा थोड़ी marketing भी कर दूं free में.
+[38:08.09 - 38:10.48] Speaker 1: Personal branding का एक फ़ायदा होता है यह.
+[38:10.57 - 38:12.57] Speaker 1: So, uh, thank you for being on the show.
+[38:12.57 - 38:14.65] Speaker 1: मज़ा आया आपसे बात करके आपसे सीखकर
+[38:30.80 - 38:31.51] Speaker 2: podcast का.
+[38:31.51 - 38:34.32] Speaker 1: आइए आप season three of शाख प्रांक में.
+[38:35.51 - 38:36.94] Speaker 1: But thank you अमन भाई.
+[38:36.94 - 38:38.15] Speaker 1: Great talking to you बराबर.
+[38:38.15 - 38:38.71] Speaker 2: Thank you, man.
+[38:38.71 - 38:39.36] Speaker 2: Thanks.
+[38:39.51 - 38:41.28] Speaker 1: तो दोस्तों यह था आज का episode.
+[38:41.28 - 38:48.21] Speaker 1: हमें यह बताइए कि और कौन से businessmen, entrepreneurs और sharks को आप देखना चाहोगे TRS पर.
+[38:48.21 - 38:52.46] Speaker 1: हमें comment section में बताइए यह था हमारा अमन गुप्ता special TRS पर.
+[38:52.78 - 38:59.96] Speaker 1: हमें यह भी बताइए कि अगर अगली बार अमन भाई लौटकर TRS पर आऐंगे तो आप उनसे क्या जानना चाहोगे?
+[38:59.96 - 39:02.67] Speaker 1: And until next time guys level super mind को download कीजिए.
+[39:02.67 - 39:05.32] Speaker 1: TRS बहुत ही जल्द लौटकर आएगा.

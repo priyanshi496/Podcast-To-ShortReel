@@ -66,7 +66,7 @@ if __name__ == "__main__":
     
     # Run rank_candidates
     try:
-        results = rank_candidates(candidates=candidates, video_id="15", limit=5)
+        results = rank_candidates(candidates=candidates, video_id="15", limit=5, transcript_lines=parsed_lines)
         # Only print the requested fields
         output = []
         for r in results:

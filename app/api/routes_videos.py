@@ -171,24 +171,42 @@ def upload_video_with_transcript(
 
     # Fallback to text parsing if JSON didn't yield segments
     if not parsed_segments:
-        # Regex format: [0.00s - 1.84s] Speaker 1: text or similar
-        pattern = re.compile(
-            r"\[\s*(\d+(?:\.\d+)?)\s*s?\s*-\s*(\d+(?:\.\d+)?)\s*s?\s*\]\s*(?:([^:]+):)?\s*(.*)"
-        )
+        # Regex format: [00:00.16 - 00:03.77] Speaker 1: text or similar
+        time_pattern = re.compile(r"^\[\s*([^\]\-]+)\s*-\s*([^\]]+)\s*\]")
+        
+        def parse_time_str(time_str: str) -> float:
+            time_str = time_str.strip().replace("s", "").replace(",", ".")
+            parts = time_str.split(":")
+            if len(parts) == 3:
+                return float(parts[0]) * 3600 + float(parts[1]) * 60 + float(parts[2])
+            elif len(parts) == 2:
+                return float(parts[0]) * 60 + float(parts[1])
+            return float(time_str)
+            
         lines = content.splitlines()
-        has_timestamps = any(pattern.match(line.strip()) for line in lines)
+        has_timestamps = any(time_pattern.match(line.strip()) for line in lines)
         
         if has_timestamps:
             for line in lines:
                 line = line.strip()
                 if not line:
                     continue
-                match = pattern.match(line)
+                match = time_pattern.match(line)
                 if match:
-                    start_t = float(match.group(1))
-                    end_t = float(match.group(2))
-                    speaker = match.group(3).strip() if match.group(3) else "Speaker 1"
-                    text = match.group(4).strip()
+                    try:
+                        start_t = parse_time_str(match.group(1))
+                        end_t = parse_time_str(match.group(2))
+                    except Exception:
+                        continue
+                    rest = line[match.end():].strip()
+                    speaker_text_pattern = re.compile(r"^([^:]+):\s*(.*)$")
+                    spk_match = speaker_text_pattern.match(rest)
+                    if spk_match:
+                        speaker = spk_match.group(1).strip()
+                        text = spk_match.group(2).strip()
+                    else:
+                        speaker = "Speaker 1"
+                        text = rest
                     parsed_segments.append({
                         "start_time": start_t,
                         "end_time": end_t,

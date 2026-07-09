@@ -673,6 +673,32 @@
             </div>
         </section>
 
+        <!-- TRANSCRIPT GENERATED ALERT -->
+        <section class="glass-card hidden" id="section-transcript-ready" style="border: 1px solid rgba(0, 255, 127, 0.35); background: rgba(0, 255, 127, 0.04); padding: 1.25rem; margin-bottom: 1.5rem; text-align: left; animation: fadeIn 0.4s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.75rem;">📄</span>
+                    <div>
+                        <h3 style="margin: 0; color: #00ff7f; font-size: 1.1rem; font-weight: 600;">Transcript Ready!</h3>
+                        <p style="margin: 0.2rem 0 0 0; color: var(--text-muted); font-size: 0.85rem;">The podcast audio has been fully transcribed. AI Ranking is now running to extract viral clip opportunities.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.50rem;">
+                    <button class="btn btn-secondary" onclick="downloadTranscript()" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        <span>📥</span> Download Raw Transcript
+                    </button>
+                    <button class="btn" onclick="toggleTranscriptPreview()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
+                        👁️ Preview Transcript
+                    </button>
+                </div>
+            </div>
+            <!-- Collapsible Preview Area -->
+            <div id="transcript-preview-area" class="hidden" style="margin-top: 1rem; padding: 1.25rem; background: rgba(0,0,0,0.35); border-radius: 6px; max-height: 250px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.45; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.08); text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                <div id="transcript-preview-content" style="white-space: pre-wrap;">Loading preview...</div>
+            </div>
+        </section>
+
+
         <!-- CLIP CANDIDATES VIEW -->
         <section class="glass-card hidden" id="section-clips">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
@@ -755,6 +781,39 @@
             }
         }
 
+        async function toggleTranscriptPreview() {
+            if (!currentVideoId) return;
+            const previewArea = document.getElementById('transcript-preview-area');
+            const previewContent = document.getElementById('transcript-preview-content');
+            
+            if (previewArea.classList.contains('hidden')) {
+                previewArea.classList.remove('hidden');
+                previewContent.innerText = "Loading transcript preview...";
+                try {
+                    const res = await fetch(`/videos/${currentVideoId}/transcript`);
+                    if (!res.ok) throw new Error("Failed to fetch transcript");
+                    const segments = await res.json();
+                    
+                    if (segments.length === 0) {
+                        previewContent.innerText = "No segments found yet.";
+                        return;
+                    }
+                    
+                    let text = "";
+                    segments.forEach(s => {
+                        const speaker = s.speaker ? `${s.speaker}` : "Speaker 1";
+                        text += `[${formatTime(s.start_time)} - ${formatTime(s.end_time)}] ${speaker}: ${s.text}\n`;
+                    });
+                    previewContent.innerText = text;
+                } catch (err) {
+                    console.error(err);
+                    previewContent.innerText = "Error loading preview: " + err.message;
+                }
+            } else {
+                previewArea.classList.add('hidden');
+            }
+        }
+
         async function resetApp() {
             if (!confirm("Are you sure you want to clear all data and reset the app?")) return;
             
@@ -762,10 +821,14 @@
             currentVideoId = null;
             activeJobs = [];
             
+            // Hide preview area if open
+            document.getElementById('transcript-preview-area').classList.add('hidden');
+            
             try {
                 // Clear UI
                 document.getElementById('section-upload').classList.remove('hidden');
                 document.getElementById('section-jobs').classList.add('hidden');
+                document.getElementById('section-transcript-ready').classList.add('hidden');
                 document.getElementById('section-clips').classList.add('hidden');
                 document.getElementById('section-exports').classList.add('hidden');
                 document.getElementById('upload-status-text').innerText = 'Drag & Drop or Click to Select File';
@@ -937,6 +1000,15 @@
                 const renderJobs = jobs.filter(j => j.job_type === 'render');
 
                 // Update Step Wizard
+                const isTranscribeDone = transcribeJob && transcribeJob.status === 'done';
+                const isRankingActiveOrDone = rankJob; // if rank job exists, transcription is done
+
+                if (isTranscribeDone || isRankingActiveOrDone) {
+                    document.getElementById('section-transcript-ready').classList.remove('hidden');
+                } else {
+                    document.getElementById('section-transcript-ready').classList.add('hidden');
+                }
+
                 if (transcribeJob && transcribeJob.status === 'running') {
                     updateSteps(2);
                 } else if (rankJob && rankJob.status === 'running') {
@@ -1147,6 +1219,7 @@
 
         async function approveAndRender(clipId) {
             const actionsDiv = document.getElementById(`actions-${clipId}`);
+            const originalHTML = actionsDiv.innerHTML;
             actionsDiv.innerHTML = `<button class="btn btn-disabled btn-primary" style="opacity: 0.6;">⚙️ Submitting...</button>`;
 
             try {
@@ -1158,9 +1231,16 @@
                 if (renderRes.ok) {
                     actionsDiv.innerHTML = `<button class="btn btn-disabled btn-primary" style="opacity: 0.6;">⚙️ Rendering...</button>`;
                     startPollingJobs(); // Trigger poll
+                } else {
+                    const errData = await renderRes.json();
+                    const errMsg = errData.detail || "Failed to start rendering job.";
+                    alert("Render Error: " + errMsg);
+                    // Revert UI to allow retry or show error status
+                    actionsDiv.innerHTML = originalHTML;
                 }
             } catch (err) {
                 console.error(err);
+                alert("Error during submission: " + err.message);
                 actionsDiv.innerHTML = `<button class="btn btn-primary" onclick="approveAndRender(${clipId})">❌ Try again</button>`;
             }
         }

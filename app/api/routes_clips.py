@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
@@ -34,6 +35,14 @@ def render_clip(clip_id: int, db: Session = Depends(get_db)):
     clip = crud.get_clip(db, clip_id)
     if not clip:
         raise HTTPException(status_code=404, detail="Clip candidate not found")
+    
+    # Check if the source video file exists on disk
+    video = crud.get_video(db, clip.video_id)
+    if not video or not video.storage_path or not os.path.exists(video.storage_path):
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot render video formats: No video file was uploaded. Video rendering requires the original MP4 upload."
+        )
     
     # Update clip status
     crud.update_clip_status(db, clip_id, "rendering")

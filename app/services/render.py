@@ -93,8 +93,8 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
         # short 15-60s clips).
         cmd_landscape = [
             "ffmpeg", "-y",
-            "-i", video_path,
             "-ss", str(clip_start),
+            "-i", video_path,
             "-t", str(duration),
             "-vf", vf_landscape,
             "-c:v", "libx264",
@@ -118,15 +118,10 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
         # Input is vertical (9:16) -> Render Vertical only (no crop needed, just scale)
         vertical_output = os.path.join(settings.OUTPUT_DIR, f"{output_base_name}_vertical.mp4")
         vf_vertical = f"scale=1080:1920,subtitles='{escaped_srt_path}':force_style='Alignment=2,FontSize=16,PrimaryColour=&H00FFFF&'"
-        # --- Shared accurate-seek + encode settings ---
-        # NOTE: -ss placed AFTER -i for frame-accurate cuts (input seeking with -ss
-        # before -i uses keyframe-only seeking, which can drift the clip start by
-        # up to a few seconds depending on the source's GOP size — noticeable on
-        # short 15-60s clips).
         cmd_vertical = [
             "ffmpeg", "-y",
-            "-i", video_path,
             "-ss", str(clip_start),
+            "-i", video_path,
             "-t", str(duration),
             "-vf", vf_vertical,
             "-c:v", "libx264",

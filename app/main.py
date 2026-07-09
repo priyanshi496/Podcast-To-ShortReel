@@ -20,6 +20,10 @@ logging.basicConfig(
         logging.FileHandler("logs/app.log", encoding="utf-8")
     ]
 )
+# Mute external libraries that log heavily at INFO level
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 
