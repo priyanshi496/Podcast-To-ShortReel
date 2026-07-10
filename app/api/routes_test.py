@@ -91,11 +91,9 @@ async def upload_test_video(file: UploadFile = File(...)):
                     t = f["time"] - seg["start_time"]
                     if f["people"]:
                         px, py, pw, ph = f["people"][0]
-                        # Podcast inward-facing bias
-                        if (px + pw/2.0) > (width / 2.0):
-                            biased_cx = px + pw * 0.35
-                        else:
-                            biased_cx = px + pw * 0.65
+                        # Center the crop precisely on the detected person's bounding box
+                        # (Removed aggressive inward-facing bias that was cutting people off)
+                        biased_cx = px + pw * 0.5
                         keyframes.append((t, biased_cx))
                 if not keyframes:
                     keyframes = [(0.0, width / 2.0), (seg_dur, width / 2.0)]

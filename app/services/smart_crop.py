@@ -79,20 +79,41 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             x1, y1, x2, y2 = box.xyxy[0].tolist()
             w = x2 - x1
             h = y2 - y1
+            conf = float(box.conf[0])
             # Increase size threshold to filter out tiny background people/posters
             if w > width * 0.12 and h > height * 0.25:
-                people.append((x1, y1, w, h))
+                people.append((x1, y1, w, h, conf))
                 
         people.sort(key=lambda p: p[0])
         
         mode = "single"
+        final_people = []
+        
         if len(people) >= 2:
-            mode = "double"
+            p1 = people[0]
+            p2 = people[1]
+            center1 = p1[0] + p1[2] / 2.0
+            center2 = p2[0] + p2[2] / 2.0
+            distance = abs(center2 - center1)
+            
+            w_ratio = min(p1[2], p2[2]) / max(p1[2], p2[2])
+            
+            # True 2-shot: Centers are apart horizontally and subjects are comparable in size
+            if distance > width * 0.20 and w_ratio > 0.35:
+                mode = "double"
+                final_people = [p1, p2]
+            else:
+                # Over-the-shoulder shot: Pick the main subject (highest conf * area)
+                mode = "single"
+                main_person = max(people, key=lambda p: p[4] * (p[2] * p[3]))
+                final_people = [main_person]
+        elif len(people) == 1:
+            final_people = [people[0]]
             
         raw_frames_data.append({
             "time": relative_time,
             "mode": mode,
-            "people": people[:2]
+            "people": [p[:4] for p in final_people]  # strip conf to avoid unpack errors downstream
         })
         
         current_time += interval_sec

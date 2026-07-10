@@ -254,12 +254,9 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                         t = f["time"] - seg["start_time"]
                         if f["people"]:
                             px, py, pw, ph = f["people"][0]
-                            # Podcast inward-facing bias: speakers face towards the center of the room.
-                            # If they sit on the right, their face is on the left side of their bounding box.
-                            if (px + pw/2.0) > (width / 2.0):
-                                biased_cx = px + pw * 0.35
-                            else:
-                                biased_cx = px + pw * 0.65
+                            # Center the crop precisely on the detected person's bounding box
+                            # (Removed aggressive inward-facing bias that was cutting people off)
+                            biased_cx = px + pw * 0.5
                             keyframes.append((t, biased_cx))
                             
                     if not keyframes:
