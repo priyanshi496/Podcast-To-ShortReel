@@ -76,38 +76,39 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
         keypoints = results[0].keypoints if hasattr(results[0], 'keypoints') else None
         
         people = []
-        for i, box in enumerate(boxes):
-            x1, y1, x2, y2 = box.xyxy[0].tolist()
-            w = x2 - x1
-            h = y2 - y1
-            conf = float(box.conf[0])
-            
-            if w > width * 0.12 and h > height * 0.25:
-                if keypoints is not None and keypoints.conf is not None:
-                    kp_xy = keypoints.xy[i]
-                    kp_conf = keypoints.conf[i]
-                    
-                    # 0: Nose, 1: L Eye, 2: R Eye, 3: L Ear, 4: R Ear
-                    nose_c = float(kp_conf[0])
-                    l_eye_c = float(kp_conf[1])
-                    r_eye_c = float(kp_conf[2])
-                    l_ear_c = float(kp_conf[3])
-                    r_ear_c = float(kp_conf[4])
-                    
-                    l_shoulder_c = float(kp_conf[5])
-                    r_shoulder_c = float(kp_conf[6])
-                    
-                    upper_body_confs = [c for c in [nose_c, l_eye_c, r_eye_c, l_ear_c, r_ear_c, l_shoulder_c, r_shoulder_c] if c > 0.30]
-                    
-                    # Rule 1 (Relaxed): Must have at least 2 reliable upper-body keypoints (face or shoulders)
-                    if len(upper_body_confs) >= 2:
-                        # Determine stable anchor_x for cinematic tracking
-                        # Centering on the nose makes profile shots look unbalanced (body pushed to one side).
-                        # We use the bounding box center to ensure the body is perfectly centered.
-                        # The Dead Zone tracker in render.py will absorb any jitter from hand waving.
-                        anchor_x = x1 + w / 2.0
+        if boxes is not None:
+            for i, box in enumerate(boxes):  # type: ignore
+                x1, y1, x2, y2 = box.xyxy[0].tolist()
+                w = x2 - x1
+                h = y2 - y1
+                conf = float(box.conf[0])
+                
+                if w > width * 0.12 and h > height * 0.25:
+                    if keypoints is not None and keypoints.conf is not None:
+                        kp_xy = keypoints.xy[i]
+                        kp_conf = keypoints.conf[i]
                         
-                        people.append((x1, y1, w, h, conf, anchor_x))
+                        # 0: Nose, 1: L Eye, 2: R Eye, 3: L Ear, 4: R Ear
+                        nose_c = float(kp_conf[0])
+                        l_eye_c = float(kp_conf[1])
+                        r_eye_c = float(kp_conf[2])
+                        l_ear_c = float(kp_conf[3])
+                        r_ear_c = float(kp_conf[4])
+                        
+                        l_shoulder_c = float(kp_conf[5])
+                        r_shoulder_c = float(kp_conf[6])
+                        
+                        upper_body_confs = [c for c in [nose_c, l_eye_c, r_eye_c, l_ear_c, r_ear_c, l_shoulder_c, r_shoulder_c] if c > 0.30]
+                        
+                        # Rule 1 (Relaxed): Must have at least 2 reliable upper-body keypoints (face or shoulders)
+                        if len(upper_body_confs) >= 2:
+                            # Determine stable anchor_x for cinematic tracking
+                            # Centering on the nose makes profile shots look unbalanced (body pushed to one side).
+                            # We use the bounding box center to ensure the body is perfectly centered.
+                            # The Dead Zone tracker in render.py will absorb any jitter from hand waving.
+                            anchor_x = x1 + w / 2.0
+                            
+                            people.append((x1, y1, w, h, conf, anchor_x))
                 
         people.sort(key=lambda p: p[0])
         
@@ -178,13 +179,17 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                 box_left = None
                 box_right = None
         else:
+            box = None
+            box_left = None
+            box_right = None
+            
             # Vote on mode
             sc = sum(1 for f in scene_frames if f["mode"] == "single")
             dc = sum(1 for f in scene_frames if f["mode"] == "double")
             bc = sum(1 for f in scene_frames if f["mode"] == "blur_pad")
             
             mode_counts = {"single": sc, "double": dc, "blur_pad": bc}
-            mode = max(mode_counts, key=mode_counts.get)
+            mode = max(mode_counts, key=lambda k: mode_counts[k])
             
             if mode == "double":
                 left_xs, left_ys, left_ws, left_hs = [], [], [], []
