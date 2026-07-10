@@ -7,6 +7,40 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+class KalmanFilter1D:
+    def __init__(self, q=1e-3, r=1.0):
+        self.x = 0.0
+        self.v = 0.0
+        self.p_xx = 1.0
+        self.p_vv = 1.0
+        self.p_xv = 0.0
+        self.q = q
+        self.r = r
+        self.initialized = False
+
+    def update(self, measurement):
+        if not self.initialized:
+            self.x = measurement
+            self.initialized = True
+            return self.x
+        
+        self.x += self.v
+        self.p_xx += self.p_vv + 2 * self.p_xv + self.q
+        self.p_xv += self.p_vv
+        
+        k_x = self.p_xx / (self.p_xx + self.r)
+        k_v = self.p_xv / (self.p_xx + self.r)
+        
+        residual = measurement - self.x
+        self.x += k_x * residual
+        self.v += k_v * residual
+        
+        self.p_xx *= (1 - k_x)
+        self.p_xv *= (1 - k_x)
+        self.p_vv -= k_v * self.p_xv
+        
+        return self.x
+
 def format_seconds_to_srt_timestamp(seconds: float) -> str:
     """Converts a float number of seconds to SRT timestamp format: HH:MM:SS,mmm"""
     hours = int(seconds // 3600)
@@ -256,13 +290,14 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                     t_dense = [j * step for j in range(int(seg_dur * fps) + 1)]
                     
                     keyframes = []
+                    kf = KalmanFilter1D(q=1e-3, r=1.0)
                     for f in seg["frames"]:
                         t = f["time"] - seg["start_time"]
                         if f["people"]:
                             px, py, pw, ph, anchor_x = f["people"][0]
-                            # Center the crop perfectly on the stable skeletal anchor (e.g. Nose)
-                            biased_cx = anchor_x
-                            keyframes.append((t, biased_cx))
+                            # Run through Kalman Filter to stabilize YOLO jitter
+                            filtered_cx = kf.update(anchor_x)
+                            keyframes.append((t, filtered_cx))
                             
                     if not keyframes:
                         keyframes = [(0.0, width / 2.0), (seg_dur, width / 2.0)]
@@ -279,25 +314,30 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                         return width / 2.0
                         
                     current_cx = get_target_cx(0.0) # Start exactly on the person
-                    desired_cx = current_cx # The camera's intended destination
+                    raw_desired_cx = current_cx # The camera's intended destination pull
+                    smooth_desired_cx = current_cx # Smoothed destination
                     
-                    dead_zone = 50.0 # pixels
-                    alpha = 0.10 # Smoother tracking for inertia
+                    dead_zone = 30.0 # pixels
+                    alpha_desired = 0.05 # smooth desired position
+                    alpha_camera = 0.10 # Smoother tracking for inertia
                     max_speed = 15.0 # Max pixels the camera can move per frame (simulates camera weight)
                     
                     cmd_lines = []
                     for t in t_dense:
                         target_cx = get_target_cx(t)
                         
-                        # 1. Dead Zone Logic: Only pull the camera's desired destination if target escapes the dead zone
-                        if target_cx > desired_cx + dead_zone:
-                            desired_cx = target_cx - dead_zone
-                        elif target_cx < desired_cx - dead_zone:
-                            desired_cx = target_cx + dead_zone
+                        # 1. Dead Zone Logic: Only pull the camera's raw desired destination if target escapes the dead zone
+                        if target_cx > raw_desired_cx + dead_zone:
+                            raw_desired_cx = target_cx - dead_zone
+                        elif target_cx < raw_desired_cx - dead_zone:
+                            raw_desired_cx = target_cx + dead_zone
                             
-                        # 2. Camera Inertia & Speed Limit
-                        diff = desired_cx - current_cx
-                        step = alpha * diff
+                        # 2. Smooth Desired Position
+                        smooth_desired_cx += alpha_desired * (raw_desired_cx - smooth_desired_cx)
+                            
+                        # 3. Camera Inertia & Speed Limit
+                        diff = smooth_desired_cx - current_cx
+                        step = alpha_camera * diff
                         
                         if step > max_speed: step = max_speed
                         elif step < -max_speed: step = -max_speed

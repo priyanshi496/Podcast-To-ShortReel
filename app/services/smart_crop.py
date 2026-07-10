@@ -58,7 +58,7 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
         cap.release()
         return []
         
-    interval_sec = 0.25
+    interval_sec = 0.10
     current_time = clip_start
     
     raw_frames_data = []
@@ -102,11 +102,14 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                         
                         # Rule 1 (Relaxed): Must have at least 2 reliable upper-body keypoints (face or shoulders)
                         if len(upper_body_confs) >= 2:
-                            # Determine stable anchor_x for cinematic tracking
-                            # Centering on the nose makes profile shots look unbalanced (body pushed to one side).
-                            # We use the bounding box center to ensure the body is perfectly centered.
-                            # The Dead Zone tracker in render.py will absorb any jitter from hand waving.
-                            anchor_x = x1 + w / 2.0
+                            # Use the midpoint of the shoulders as the primary anchor.
+                            # The nose pushes the body off-center in profile shots, but shoulders represent the true center of mass.
+                            # This is completely stable and immune to hand-waving jitter.
+                            if l_shoulder_c > 0.30 and r_shoulder_c > 0.30:
+                                anchor_x = (float(kp_xy[5][0]) + float(kp_xy[6][0])) / 2.0
+                            else:
+                                # Fallback if shoulders are obscured
+                                anchor_x = x1 + w / 2.0
                             
                             people.append((x1, y1, w, h, conf, anchor_x))
                 
