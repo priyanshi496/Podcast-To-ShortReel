@@ -259,10 +259,9 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                     for f in seg["frames"]:
                         t = f["time"] - seg["start_time"]
                         if f["people"]:
-                            px, py, pw, ph = f["people"][0]
-                            # Center the crop precisely on the detected person's bounding box
-                            # (Removed aggressive inward-facing bias that was cutting people off)
-                            biased_cx = px + pw * 0.5
+                            px, py, pw, ph, anchor_x = f["people"][0]
+                            # Center the crop perfectly on the stable skeletal anchor (e.g. Nose)
+                            biased_cx = anchor_x
                             keyframes.append((t, biased_cx))
                             
                     if not keyframes:

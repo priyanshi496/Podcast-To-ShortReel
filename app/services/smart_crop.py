@@ -52,7 +52,7 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
     # 2. Run YOLO Tracking (at 4 fps)
     try:
         from ultralytics import YOLO
-        model = YOLO("yolov8n.pt") 
+        model = YOLO("yolov8n-pose.pt") 
     except Exception as e:
         logger.error(f"Failed to load YOLO model: {e}")
         cap.release()
@@ -70,19 +70,52 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             break
             
         relative_time = current_time - clip_start
-        # Increase confidence to 0.65 to avoid statues/paintings and POV hands
-        results = model.predict(source=frame, classes=[0], conf=0.65, verbose=False)
+        # Base conf 0.50, we use keypoints to filter out false positives robustly
+        results = model.predict(source=frame, classes=[0], conf=0.50, verbose=False)
         boxes = results[0].boxes
+        keypoints = results[0].keypoints if hasattr(results[0], 'keypoints') else None
         
         people = []
-        for box in boxes:
+        for i, box in enumerate(boxes):
             x1, y1, x2, y2 = box.xyxy[0].tolist()
             w = x2 - x1
             h = y2 - y1
             conf = float(box.conf[0])
-            # Increase size threshold to filter out tiny background people/posters
+            
             if w > width * 0.12 and h > height * 0.25:
-                people.append((x1, y1, w, h, conf))
+                if keypoints is not None and keypoints.conf is not None:
+                    kp_xy = keypoints.xy[i]
+                    kp_conf = keypoints.conf[i]
+                    
+                    # 0: Nose, 1: L Eye, 2: R Eye, 3: L Ear, 4: R Ear
+                    nose_c = float(kp_conf[0])
+                    l_eye_c = float(kp_conf[1])
+                    r_eye_c = float(kp_conf[2])
+                    l_ear_c = float(kp_conf[3])
+                    r_ear_c = float(kp_conf[4])
+                    
+                    face_confs = [c for c in [nose_c, l_eye_c, r_eye_c, l_ear_c, r_ear_c] if c > 0.50]
+                    
+                    # Rule 1: Must have at least 2 reliable face keypoints
+                    if len(face_confs) >= 2:
+                        # Determine stable anchor_x for cinematic tracking
+                        if nose_c > 0.50:
+                            anchor_x = float(kp_xy[0][0])
+                        elif l_eye_c > 0.50 and r_eye_c > 0.50:
+                            anchor_x = (float(kp_xy[1][0]) + float(kp_xy[2][0])) / 2.0
+                        elif l_eye_c > 0.50:
+                            anchor_x = float(kp_xy[1][0])
+                        elif r_eye_c > 0.50:
+                            anchor_x = float(kp_xy[2][0])
+                        else:
+                            l_shoulder_c = float(kp_conf[5])
+                            r_shoulder_c = float(kp_conf[6])
+                            if l_shoulder_c > 0.50 and r_shoulder_c > 0.50:
+                                anchor_x = (float(kp_xy[5][0]) + float(kp_xy[6][0])) / 2.0
+                            else:
+                                anchor_x = x1 + w / 2.0
+                                
+                        people.append((x1, y1, w, h, conf, anchor_x))
                 
         people.sort(key=lambda p: p[0])
         
@@ -115,7 +148,7 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
         raw_frames_data.append({
             "time": relative_time,
             "mode": mode,
-            "people": [p[:4] for p in final_people]  # strip conf to avoid unpack errors downstream
+            "people": [(p[0], p[1], p[2], p[3], p[5]) for p in final_people]  # extract x, y, w, h, anchor_x
         })
         
         current_time += interval_sec
