@@ -114,12 +114,31 @@ async def upload_test_video(file: UploadFile = File(...)):
                     return width / 2.0
                     
                 current_cx = get_target_cx(0.0) # Start exactly on the person
-                alpha = 0.15 # Faster tracking
+                desired_cx = current_cx # The camera's intended destination
+                
+                dead_zone = 50.0 # pixels
+                alpha = 0.10 # Smoother tracking for inertia
+                max_speed = 15.0 # Max pixels the camera can move per frame (simulates camera weight)
                 
                 cmd_lines = []
                 for t in t_dense:
                     target_cx = get_target_cx(t)
-                    current_cx = alpha * target_cx + (1 - alpha) * current_cx
+                    
+                    # 1. Dead Zone Logic: Only pull the camera's desired destination if target escapes the dead zone
+                    if target_cx > desired_cx + dead_zone:
+                        desired_cx = target_cx - dead_zone
+                    elif target_cx < desired_cx - dead_zone:
+                        desired_cx = target_cx + dead_zone
+                        
+                    # 2. Camera Inertia & Speed Limit
+                    diff = desired_cx - current_cx
+                    step = alpha * diff
+                    
+                    if step > max_speed: step = max_speed
+                    elif step < -max_speed: step = -max_speed
+                        
+                    current_cx += step
+                    
                     clamped_cx = max(crop_w/2.0, min(width - crop_w/2.0, current_cx))
                     crop_x = int(clamped_cx - crop_w/2.0)
                     cmd_lines.append(f"{t:.3f} crop@c{i} x {crop_x};")

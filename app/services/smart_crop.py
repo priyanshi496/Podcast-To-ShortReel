@@ -94,27 +94,19 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                     l_ear_c = float(kp_conf[3])
                     r_ear_c = float(kp_conf[4])
                     
-                    face_confs = [c for c in [nose_c, l_eye_c, r_eye_c, l_ear_c, r_ear_c] if c > 0.50]
+                    l_shoulder_c = float(kp_conf[5])
+                    r_shoulder_c = float(kp_conf[6])
                     
-                    # Rule 1: Must have at least 2 reliable face keypoints
-                    if len(face_confs) >= 2:
+                    upper_body_confs = [c for c in [nose_c, l_eye_c, r_eye_c, l_ear_c, r_ear_c, l_shoulder_c, r_shoulder_c] if c > 0.30]
+                    
+                    # Rule 1 (Relaxed): Must have at least 2 reliable upper-body keypoints (face or shoulders)
+                    if len(upper_body_confs) >= 2:
                         # Determine stable anchor_x for cinematic tracking
-                        if nose_c > 0.50:
-                            anchor_x = float(kp_xy[0][0])
-                        elif l_eye_c > 0.50 and r_eye_c > 0.50:
-                            anchor_x = (float(kp_xy[1][0]) + float(kp_xy[2][0])) / 2.0
-                        elif l_eye_c > 0.50:
-                            anchor_x = float(kp_xy[1][0])
-                        elif r_eye_c > 0.50:
-                            anchor_x = float(kp_xy[2][0])
-                        else:
-                            l_shoulder_c = float(kp_conf[5])
-                            r_shoulder_c = float(kp_conf[6])
-                            if l_shoulder_c > 0.50 and r_shoulder_c > 0.50:
-                                anchor_x = (float(kp_xy[5][0]) + float(kp_xy[6][0])) / 2.0
-                            else:
-                                anchor_x = x1 + w / 2.0
-                                
+                        # Centering on the nose makes profile shots look unbalanced (body pushed to one side).
+                        # We use the bounding box center to ensure the body is perfectly centered.
+                        # The Dead Zone tracker in render.py will absorb any jitter from hand waving.
+                        anchor_x = x1 + w / 2.0
+                        
                         people.append((x1, y1, w, h, conf, anchor_x))
                 
         people.sort(key=lambda p: p[0])
@@ -131,15 +123,18 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             
             w_ratio = min(p1[2], p2[2]) / max(p1[2], p2[2])
             
-            # True 2-shot: Centers are apart horizontally, subjects are comparable in size, AND high confidence
-            # False positives (like two hands) usually have lower confidence than clear human faces/bodies
-            if distance > width * 0.20 and w_ratio > 0.35 and p1[4] > 0.70 and p2[4] > 0.70:
+            # True 2-shot: Centers are apart horizontally, subjects are comparable in size, AND high bounding-box confidence
+            # (Statues/paintings can pass the keypoint check, but their bounding-box confidence is usually lower than real humans)
+            if distance > width * 0.20 and w_ratio > 0.35 and p1[4] > 0.65 and p2[4] > 0.65:
                 mode = "double"
                 final_people = [p1, p2]
             else:
-                # Over-the-shoulder shot or messy frame: Fallback to blurred padding to show full context safely
-                mode = "blur_pad"
-                final_people = []
+                # Failed 2-shot (e.g. statue in background, or messy over-the-shoulder)
+                # Immediately fall back to single person tracking mode and lock onto the Main Subject.
+                # Mathematically identify the Main Subject: Size (Area) * Detection Confidence.
+                mode = "single"
+                main_subject = max(people, key=lambda p: (p[2] * p[3]) * p[4])
+                final_people = [main_subject]
         elif len(people) == 1:
             final_people = [people[0]]
         else:
