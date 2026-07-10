@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Dynamic Crop</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #0f172a; color: white; }
+        .btn { background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn:hover { background: #4f46e5; }
+        #status { margin-top: 20px; color: #cbd5e1; }
+        #outputVideo { margin-top: 20px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); max-height: 600px; }
+        .container { background: #1e293b; padding: 30px; border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Test Dynamic Active Speaker Tracking</h2>
+        <p>Upload an existing 16:9 clip (e.g., from your output folder) to test the computer vision engine instantly.</p>
+        
+        <input type="file" id="videoFile" accept="video/mp4" style="display: block; margin-bottom: 20px;" />
+        <button class="btn" onclick="uploadVideo()">Test Render</button>
+        
+        <div id="status"></div>
+        <video id="outputVideo" controls style="display:none;"></video>
+    </div>
+
+    <script>
+        async function uploadVideo() {
+            const fileInput = document.getElementById('videoFile');
+            if (!fileInput.files[0]) return alert("Select a video");
+            
+            document.getElementById('status').innerText = "Processing video through YOLOv8 and FFmpeg... (This might take a few seconds)";
+            document.getElementById('outputVideo').style.display = 'none';
+            
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            
+            try {
+                const res = await fetch("/test-crop", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('status').innerText = "Done! Here is the auto-framed vertical result:";
+                    document.getElementById('outputVideo').src = data.url;
+                    document.getElementById('outputVideo').style.display = 'block';
+                } else {
+                    document.getElementById('status').innerText = "Error: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById('status').innerText = "Error: " + e;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -559,7 +559,8 @@ def build_moment_editor_prompt(category: str) -> str:
         "with 'I think' right before a genuinely bold claim).\n\n"
         "=== TASK ===\n"
         "For each of the proposed moments, you will receive the segment indices. Review the surrounding segments and define the new edited start and end segment IDs.\n"
-        "Determine the hook line (copy it verbatim from the transcript), editing strategy, editorial style, reasoning, and score the clip (0 to 10) on curiosity, hook, surprise, emotion, reaction, and standalone value using the calibrated anchors above — not a bare gut-feel number."
+        "Determine the hook line (copy it verbatim from the transcript), editing strategy, editorial style, reasoning, and score the clip (0 to 10) on curiosity, hook, surprise, emotion, reaction, and standalone value using the calibrated anchors above — not a bare gut-feel number.\n"
+        "CRITICAL REQUIREMENT: You MUST provide ALL SIX score fields (curiosity_score, hook_score, surprise_score, emotion_score, reaction_score, standalone_score) for EVERY SINGLE clip. Do NOT omit any score field, even for the last clip."
     )
 
 

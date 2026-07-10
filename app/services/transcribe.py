@@ -201,11 +201,13 @@ def _build_segments(
                 "end_time": w["end"],
                 "text": w["text"],
                 "speaker": speaker_label,
+                "words": [w],
                 "_confidences": [w["confidence"]],
             }
         else:
             current["end_time"] = w["end"]
             current["text"] += " " + w["text"]
+            current["words"].append(w)
             current["_confidences"].append(w["confidence"])
 
     if current is not None:
@@ -221,6 +223,7 @@ def _build_segments(
             "end_time": round(seg["end_time"], 2),
             "text": seg["text"].strip(),
             "speaker": seg["speaker"],
+            "words": seg.get("words", []),
             "confidence": min(max(avg_conf, 0.0), 1.0),
         })
     return results

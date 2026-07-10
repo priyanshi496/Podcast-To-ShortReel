@@ -1568,7 +1568,7 @@ def _score_via_instructor(provider: Dict[str, str], system_prompt: str, user_con
         # keeping the pre-auth cost check from tripping on very low balances.
         # If you still see 402s, top up OpenRouter credits rather than lowering
         # this back down — 1000 was the actual cause of the retry storm.
-        max_tokens = 4096
+        max_tokens = 16384
     else:
         max_tokens = 16384  # give NVIDIA NIM enough tokens to complete response
 
@@ -1623,7 +1623,7 @@ def _score_via_legacy_parse(provider: Dict[str, str], system_prompt: str, user_c
     if is_local:
         max_tokens = 6000
     elif provider["name"] == "openrouter":
-        max_tokens = 1000
+        max_tokens = 16384
     else:
         max_tokens = 16384
 
