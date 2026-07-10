@@ -75,6 +75,12 @@ async def upload_test_video(file: UploadFile = File(...)):
                 fc_nodes.append(f"[v{i}_top]crop={crop_w}:{crop_h}:{x1}:{y1}[top{i}];")
                 fc_nodes.append(f"[v{i}_bottom]crop={crop_w}:{crop_h}:{x2}:{y2}[bottom{i}];")
                 fc_nodes.append(f"[top{i}][bottom{i}]vstack=2,drawbox=x=0:y=(ih-10)/2:w=iw:h=10:color=white:t=fill,scale=1080:1920,setsar=1:1[outv{i}];")
+            elif seg["mode"] == "blur_pad":
+                fc_nodes.append(f"[0:v]trim=start={seg_start}:end={seg_end},setpts=PTS-STARTPTS[v{i}_base];")
+                fc_nodes.append(f"[v{i}_base]split=2[v{i}_orig][v{i}_blur];")
+                fc_nodes.append(f"[v{i}_blur]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=luma_radius=40:luma_power=2[blurred{i}];")
+                fc_nodes.append(f"[v{i}_orig]scale=1080:1920:force_original_aspect_ratio=decrease[scaled{i}];")
+                fc_nodes.append(f"[blurred{i}][scaled{i}]overlay=(W-w)/2:(H-h)/2,setsar=1:1[outv{i}];")
             else:
                 # Single person: Always use max vertical height to get maximum horizontal padding (607 pixels)
                 crop_h = height

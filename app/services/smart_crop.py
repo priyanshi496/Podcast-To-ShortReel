@@ -70,8 +70,8 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             break
             
         relative_time = current_time - clip_start
-        # Increase confidence to 0.55 to avoid statues/paintings
-        results = model.predict(source=frame, classes=[0], conf=0.55, verbose=False)
+        # Increase confidence to 0.65 to avoid statues/paintings and POV hands
+        results = model.predict(source=frame, classes=[0], conf=0.65, verbose=False)
         boxes = results[0].boxes
         
         people = []
@@ -98,17 +98,19 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             
             w_ratio = min(p1[2], p2[2]) / max(p1[2], p2[2])
             
-            # True 2-shot: Centers are apart horizontally and subjects are comparable in size
-            if distance > width * 0.20 and w_ratio > 0.35:
+            # True 2-shot: Centers are apart horizontally, subjects are comparable in size, AND high confidence
+            # False positives (like two hands) usually have lower confidence than clear human faces/bodies
+            if distance > width * 0.20 and w_ratio > 0.35 and p1[4] > 0.70 and p2[4] > 0.70:
                 mode = "double"
                 final_people = [p1, p2]
             else:
-                # Over-the-shoulder shot: Pick the main subject (highest conf * area)
-                mode = "single"
-                main_person = max(people, key=lambda p: p[4] * (p[2] * p[3]))
-                final_people = [main_person]
+                # Over-the-shoulder shot or messy frame: Fallback to blurred padding to show full context safely
+                mode = "blur_pad"
+                final_people = []
         elif len(people) == 1:
             final_people = [people[0]]
+        else:
+            mode = "blur_pad"
             
         raw_frames_data.append({
             "time": relative_time,
@@ -151,7 +153,10 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             # Vote on mode
             sc = sum(1 for f in scene_frames if f["mode"] == "single")
             dc = sum(1 for f in scene_frames if f["mode"] == "double")
-            mode = "double" if dc > sc else "single"
+            bc = sum(1 for f in scene_frames if f["mode"] == "blur_pad")
+            
+            mode_counts = {"single": sc, "double": dc, "blur_pad": bc}
+            mode = max(mode_counts, key=mode_counts.get)
             
             if mode == "double":
                 left_xs, left_ys, left_ws, left_hs = [], [], [], []
@@ -196,13 +201,19 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                 "box_left": box_left,
                 "box_right": box_right
             })
-        else:
+        elif mode == "single":
             final_layout.append({
                 "start_time": scene_start,
                 "end_time": scene_end,
                 "mode": mode,
                 "box": box,
                 "frames": scene_frames if scene_frames else [{"time": scene_start, "people": []}]
+            })
+        elif mode == "blur_pad":
+            final_layout.append({
+                "start_time": scene_start,
+                "end_time": scene_end,
+                "mode": mode
             })
             
     return final_layout
