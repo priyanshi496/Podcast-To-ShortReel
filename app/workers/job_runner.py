@@ -3,6 +3,7 @@ import threading
 import logging
 import os
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 from typing import cast
 from sqlalchemy.orm import Session
 from app.db import SessionLocal
@@ -315,29 +316,57 @@ def process_job(db: Session, job: models.Job):
                 except Exception as ce:
                     logger.warning(f"Failed to clean up job payload file {payload_path}: {ce}")
 
+def run_job(job_id: int):
+    db = SessionLocal()
+    try:
+        job = crud.get_job(db, job_id)
+        if job:
+            try:
+                process_job(db, job)
+            except Exception as ex:
+                error_msg = f"Error processing job: {str(ex)}\n{traceback.format_exc()}"
+                logger.error(error_msg)
+                crud.update_job(db, cast(int, job.id), status="failed", error_message=error_msg)
+                # Also update video or clip status to failed if applicable
+                if cast(str, job.job_type) in ["transcribe", "rank"]:
+                    crud.update_video_status(db, cast(int, job.video_id), status="failed")
+                elif cast(str, job.job_type) == "render" and cast(int, job.clip_candidate_id) is not None:
+                    crud.update_clip_status(db, cast(int, job.clip_candidate_id), status="failed")
+    except Exception as e:
+        logger.error(f"Worker exception in thread for job {job_id}: {e}")
+    finally:
+        db.close()
+
 def job_worker_loop():
-    logger.info("Job runner daemon worker loop starting...")
+    logger.info("Job runner daemon worker loop starting with ThreadPoolExecutor...")
+    executor = ThreadPoolExecutor(max_workers=3)
+    active_futures = set()
+
     while True:
         db = SessionLocal()
         try:
-            job = crud.get_next_queued_job(db)
-            if job:
-                try:
-                    process_job(db, job)
-                except Exception as ex:
-                    error_msg = f"Error processing job: {str(ex)}\n{traceback.format_exc()}"
-                    logger.error(error_msg)
-                    crud.update_job(db, cast(int, job.id), status="failed", error_message=error_msg)
-                    # Also update video or clip status to failed if applicable
-                    if cast(str, job.job_type) in ["transcribe", "rank"]:
-                        crud.update_video_status(db, cast(int, job.video_id), status="failed")
-                    elif cast(str, job.job_type) == "render" and cast(int, job.clip_candidate_id) is not None:
-                        crud.update_clip_status(db, cast(int, job.clip_candidate_id), status="failed")
+            # Clean up finished futures
+            done_futures = {f for f in active_futures if f.done()}
+            active_futures.difference_update(done_futures)
+
+            # If pool is not full, try to pick up a new queued job
+            if len(active_futures) < 3:
+                job = crud.get_next_queued_job(db)
+                if job:
+                    # Immediately mark as running to prevent picking it up again on the next tick
+                    crud.update_job(db, cast(int, job.id), status="running")
+                    
+                    # Submit to thread pool
+                    future = executor.submit(run_job, cast(int, job.id))
+                    active_futures.add(future)
+                else:
+                    # No job in queue, sleep
+                    time.sleep(settings.WORKER_POLL_INTERVAL)
             else:
-                # No job in queue, sleep
+                # Pool is full, sleep
                 time.sleep(settings.WORKER_POLL_INTERVAL)
         except Exception as e:
-            logger.error(f"Worker exception: {e}")
+            logger.error(f"Worker polling loop exception: {e}")
             time.sleep(settings.WORKER_POLL_INTERVAL)
         finally:
             db.close()
