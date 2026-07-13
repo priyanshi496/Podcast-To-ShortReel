@@ -7,6 +7,7 @@ from typing import List, Optional
 from app import crud, schemas, models
 from app.db import get_db
 from app.config import settings
+import yt_dlp
 
 router = APIRouter(prefix="/videos", tags=["Videos"])
 
@@ -44,6 +45,101 @@ def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
     crud.create_job(db, job_in)
     
     return db_video
+
+@router.post("/youtube/info", response_model=schemas.YouTubeInfoResponse)
+def get_youtube_info(req: schemas.YouTubeInfoRequest):
+    from typing import cast, Any
+    ydl_opts: Any = {
+        'quiet': True,
+        'no_warnings': True,
+        'extract_flat': False
+    }
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(req.url, download=False)
+            if not info:
+                raise HTTPException(status_code=400, detail="Could not extract video info")
+            
+            formats = []
+            # yt-dlp gives a list of formats. We want video formats that have audio or we can just list standard resolutions.
+            # Usually users want mp4. We'll filter for formats that have video.
+            raw_formats = cast(list, info.get('formats') or [])
+            for f in raw_formats:
+                if f.get('vcodec') != 'none' and f.get('ext') == 'mp4':
+                    # Sometimes resolution is formatted nicely, or we can use height
+                    h = f.get('height')
+                    if not h: continue
+                    formats.append(schemas.YouTubeFormat(
+                        format_id=f.get('format_id', ''),
+                        resolution=f"{h}p",
+                        ext=f.get('ext', ''),
+                        filesize_approx=f.get('filesize', f.get('filesize_approx')),
+                        format_note=f.get('format_note')
+                    ))
+            
+            # Sort by height descending
+            formats.sort(key=lambda x: int(x.resolution.replace('p', '')) if x.resolution.replace('p', '').isdigit() else 0, reverse=True)
+            
+            # Deduplicate by resolution (keep best format_id for each resolution)
+            seen_res = set()
+            unique_formats = []
+            for f in formats:
+                if f.resolution not in seen_res:
+                    seen_res.add(f.resolution)
+                    unique_formats.append(f)
+                    
+            return schemas.YouTubeInfoResponse(
+                url=req.url,
+                title=str(info.get('title') or 'Unknown Title'),
+                thumbnail=str(info.get('thumbnail')) if info.get('thumbnail') else None,
+                formats=unique_formats
+            )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/youtube/download", response_model=schemas.VideoResponse)
+def download_youtube_video(req: schemas.YouTubeDownloadRequest, db: Session = Depends(get_db)):
+    unique_filename = f"{uuid.uuid4()}.mp4"
+    file_path = os.path.join(settings.UPLOAD_DIR, unique_filename)
+    
+    from typing import cast, Any
+    # We want to download the selected video format PLUS the best audio format into a single mp4
+    # yt-dlp handles this nicely if we request 'format_id+bestaudio'
+    ydl_opts: Any = {
+        'format': f"{req.format_id}+bestaudio[ext=m4a]/best",
+        'outtmpl': file_path,
+        'quiet': True,
+        'merge_output_format': 'mp4'
+    }
+    
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(req.url, download=True)
+            title = str(info.get('title') or 'YouTube Video') if info else 'YouTube Video'
+            
+            raw_dur = info.get('duration') if info else None
+            duration_sec = float(raw_dur) if raw_dur is not None else None
+            
+            # 3. Create Video DB model
+            video_in = schemas.VideoCreate(
+                original_filename=f"{title}.mp4",
+                storage_path=file_path,
+                duration_sec=duration_sec,
+                status="uploaded"
+            )
+            db_video = crud.create_video(db, video_in)
+            
+            # 4. Create first job in pipeline (transcribe)
+            job_in = schemas.JobCreate(
+                video_id=int(db_video.id),  # type: ignore
+                job_type="transcribe",
+                status="queued"
+            )
+            crud.create_job(db, job_in)
+            
+            return db_video
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to download YouTube video: {e}")
 
 @router.post("/{video_id}/process", response_model=schemas.JobResponse)
 def process_video(video_id: int, db: Session = Depends(get_db)):
@@ -346,7 +442,9 @@ def compile_video_parts(
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
         
-    if not video.storage_path or not os.path.exists(str(video.storage_path)):
+    from typing import cast
+    v_path = cast(str, video.storage_path)
+    if not v_path or not os.path.exists(v_path):
         raise HTTPException(status_code=400, detail="Video file is missing or not fully processed.")
         
     if not request.parts:

@@ -658,6 +658,9 @@
                 <button class="btn" id="tab-direct-transcript" onclick="switchUploadTab('transcript')"
                     style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">📄
                     Upload Custom Transcript</button>
+                <button class="btn" id="tab-youtube-url" onclick="switchUploadTab('youtube')"
+                    style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">🌐
+                    Enter YouTube URL</button>
             </div>
 
             <!-- Tab 1: Auto-Transcribe -->
@@ -699,6 +702,43 @@
                         style="margin-top: 0.5rem; align-self: flex-start; padding: 0.75rem 2rem; font-weight: 600; font-size: 0.95rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s;">
                         <span>⚡</span> Run AI Ranking Pipeline
                     </button>
+                </div>
+            </div>
+
+            <!-- Tab 3: YouTube URL -->
+            <div id="tab-content-youtube" class="hidden" style="animation: fadeIn 0.3s ease;">
+                <div style="display: flex; flex-direction: column; gap: 1.25rem; background: rgba(0,0,0,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div id="youtube-input-section">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">
+                            Enter YouTube Video URL <span style="color: #ff4a4a;">*</span>
+                        </label>
+                        <div style="display: flex; gap: 0.5rem; align-items: stretch;">
+                            <input type="url" id="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..."
+                                style="flex-grow: 1; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none;">
+                            <button class="btn btn-primary" id="btn-fetch-youtube" onclick="fetchYouTubeFormats()"
+                                style="padding: 0 1.5rem; font-weight: 600; border-radius: 6px; cursor: pointer;">
+                                Fetch Formats
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="youtube-formats-section" class="hidden" style="margin-top: 1rem;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Select Download Resolution</h3>
+                        <div id="youtube-formats-table-container" style="background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                <thead>
+                                    <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <th style="padding: 1rem; font-weight: 600; color: var(--text-color);">File type</th>
+                                        <th style="padding: 1rem; font-weight: 600; color: var(--text-color);">Format</th>
+                                        <th style="padding: 1rem; font-weight: 600; color: var(--text-color);">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="youtube-formats-tbody">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -924,31 +964,162 @@
         function switchUploadTab(tab) {
             const btnAuto = document.getElementById('tab-auto-transcribe');
             const btnTrans = document.getElementById('tab-direct-transcript');
+            const btnYouTube = document.getElementById('tab-youtube-url');
             const contentAuto = document.getElementById('tab-content-auto');
             const contentTrans = document.getElementById('tab-content-transcript');
+            const contentYouTube = document.getElementById('tab-content-youtube');
             
+            // Reset all
+            [btnAuto, btnTrans, btnYouTube].forEach(btn => {
+                if (btn) {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--text-muted)';
+                    btn.style.borderColor = 'transparent';
+                }
+            });
+            [contentAuto, contentTrans, contentYouTube].forEach(content => {
+                if (content) content.classList.add('hidden');
+            });
+            
+            let activeBtn, activeContent;
             if (tab === 'auto') {
-                btnAuto.style.background = 'rgba(255,255,255,0.15)';
-                btnAuto.style.color = '#fff';
-                btnAuto.style.borderColor = 'rgba(255,255,255,0.1)';
+                activeBtn = btnAuto;
+                activeContent = contentAuto;
+            } else if (tab === 'transcript') {
+                activeBtn = btnTrans;
+                activeContent = contentTrans;
+            } else if (tab === 'youtube') {
+                activeBtn = btnYouTube;
+                activeContent = contentYouTube;
+            }
+            
+            if (activeBtn) {
+                activeBtn.style.background = 'rgba(255,255,255,0.15)';
+                activeBtn.style.color = '#fff';
+                activeBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            }
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+        }
+
+        async function fetchYouTubeFormats() {
+            const urlInput = document.getElementById('youtube-url-input');
+            const btnFetch = document.getElementById('btn-fetch-youtube');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert("Please enter a valid YouTube URL");
+                return;
+            }
+            
+            btnFetch.disabled = true;
+            btnFetch.innerHTML = `<span class="job-spinner" style="width:14px;height:14px;"></span> Fetching...`;
+            
+            try {
+                const res = await fetch('/videos/youtube/info', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ url: url })
+                });
                 
-                btnTrans.style.background = 'transparent';
-                btnTrans.style.color = 'var(--text-muted)';
-                btnTrans.style.borderColor = 'transparent';
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.detail || "Failed to fetch formats");
+                }
                 
-                contentAuto.classList.remove('hidden');
-                contentTrans.classList.add('hidden');
-            } else {
-                btnTrans.style.background = 'rgba(255,255,255,0.15)';
-                btnTrans.style.color = '#fff';
-                btnTrans.style.borderColor = 'rgba(255,255,255,0.1)';
+                const data = await res.json();
                 
-                btnAuto.style.background = 'transparent';
-                btnAuto.style.color = 'var(--text-muted)';
-                btnAuto.style.borderColor = 'transparent';
+                const tbody = document.getElementById('youtube-formats-tbody');
+                tbody.innerHTML = '';
                 
-                contentTrans.classList.remove('hidden');
-                contentAuto.classList.add('hidden');
+                if (!data.formats || data.formats.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding: 1rem; text-align: center; color: var(--text-muted);">No mp4 formats found.</td></tr>';
+                } else {
+                    data.formats.forEach(f => {
+                        const tr = document.createElement('tr');
+                        tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                        
+                        const size = f.filesize_approx ? ` (${(f.filesize_approx / (1024*1024)).toFixed(1)} MB)` : '';
+                        
+                        tr.innerHTML = `
+                            <td style="padding: 1rem; color: var(--text-color);">${f.resolution} (.${f.ext})</td>
+                            <td style="padding: 1rem; color: var(--text-muted);">${f.format_note || 'Auto'} ${size}</td>
+                            <td style="padding: 0.5rem 1rem;">
+                                <button class="btn btn-primary" onclick="downloadYouTubeFormat('${data.url}', '${f.format_id}')" 
+                                    style="background: #4caf50; padding: 0.4rem 1rem; font-size: 0.85rem; border-radius: 4px;">
+                                    📥 Download
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                
+                document.getElementById('youtube-formats-section').classList.remove('hidden');
+                
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btnFetch.disabled = false;
+                btnFetch.innerHTML = 'Fetch Formats';
+            }
+        }
+        
+        async function downloadYouTubeFormat(url, formatId) {
+            const formatsSection = document.getElementById('youtube-formats-section');
+            const inputSection = document.getElementById('youtube-input-section');
+            
+            formatsSection.classList.add('hidden');
+            inputSection.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;">
+                    <div class="job-spinner" style="width: 32px; height: 32px; border-width: 4px; margin-bottom: 1rem;"></div>
+                    <h3 style="margin: 0; color: #fff;">Downloading YouTube Video...</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">This may take a minute depending on video length and resolution.</p>
+                </div>
+            `;
+            
+            try {
+                const res = await fetch('/videos/youtube/download', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ url: url, format_id: formatId })
+                });
+                
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.detail || "Failed to download video");
+                }
+                
+                const videoData = await res.json();
+                currentVideoId = videoData.id;
+                
+                updateSteps(2);
+                
+                // Hide upload section & show jobs section
+                document.getElementById('section-upload').classList.add('hidden');
+                document.getElementById('section-jobs').classList.remove('hidden');
+                
+                // Start status polling loop
+                startPollingJobs();
+                
+            } catch (err) {
+                alert("Error during download: " + err.message);
+                // Reset UI state
+                document.getElementById('section-upload').classList.remove('hidden');
+                inputSection.innerHTML = `
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">
+                            Enter YouTube Video URL <span style="color: #ff4a4a;">*</span>
+                        </label>
+                        <div style="display: flex; gap: 0.5rem; align-items: stretch;">
+                            <input type="url" id="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..."
+                                style="flex-grow: 1; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none;">
+                            <button class="btn btn-primary" id="btn-fetch-youtube" onclick="fetchYouTubeFormats()"
+                                style="padding: 0 1.5rem; font-weight: 600; border-radius: 6px; cursor: pointer;">
+                                Fetch Formats
+                            </button>
+                        </div>
+                `;
             }
         }
 
@@ -1204,6 +1375,7 @@
             });
         }
 
+        window.lastClipsStr = "";
         async function loadClipCandidates() {
             if (!currentVideoId) return;
 
@@ -1212,6 +1384,10 @@
                 if (!response.ok) return;
 
                 const clips = await response.json();
+                const clipsStr = JSON.stringify(clips);
+                if (clipsStr === window.lastClipsStr) return;
+                window.lastClipsStr = clipsStr;
+
                 renderClipsGrid(clips);
             } catch (err) {
                 console.error(err);
@@ -1371,6 +1547,7 @@
             }
         }
 
+        window.lastExportsStr = "";
         async function loadRenderedExports() {
             if (!currentVideoId) return;
 
@@ -1379,11 +1556,8 @@
                 if (!response.ok) return;
 
                 const clips = await response.json();
-                const container = document.getElementById('exports-container');
-                container.innerHTML = "";
-
-                let hasExports = false;
-
+                
+                let exportsData = [];
                 for (const clip of clips) {
                     if (clip.status !== 'rendered') continue;
 
@@ -1392,8 +1566,23 @@
                     
                     const exportsList = await exportRes.json();
                     if (exportsList.length === 0) continue;
+                    
+                    exportsData.push({clip, exports: exportsList});
+                }
+                
+                const currentExportsStr = JSON.stringify(exportsData);
+                if (currentExportsStr === window.lastExportsStr) return;
+                window.lastExportsStr = currentExportsStr;
 
-                    hasExports = true;
+                const container = document.getElementById('exports-container');
+                container.innerHTML = "";
+
+                let hasExports = exportsData.length > 0;
+
+                for (const data of exportsData) {
+                    const clip = data.clip;
+                    const exportsList = data.exports;
+
                     const verticalExport = exportsList.find(e => e.format === 'vertical');
                     const landscapeExport = exportsList.find(e => e.format === 'landscape');
 
