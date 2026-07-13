@@ -99,19 +99,34 @@ def generate_srt_file(segments: List[Dict[str, Any]], clip_start: float, clip_en
                 })
         else:
             # Fallback for older transcripts that lack word-level data
-            # Mathematically estimate the timing of each word by splitting the duration
+            # Mathematically estimate the timing of each word by splitting the full segment duration,
+            # and then filter out words that fall outside the clip_start to clip_end window.
             raw_text = seg["text"]
             clean_text = re.sub(r"^\[.*?\]\s*", "", raw_text)
             clean_text = re.sub(r"^Speaker\s*\d+:\s*", "", clean_text, flags=re.IGNORECASE)
             
             raw_word_list = clean_text.split()
             if raw_word_list:
-                word_duration = (relative_end - relative_start) / len(raw_word_list)
+                seg_dur = seg_end - seg_start
+                word_duration = seg_dur / len(raw_word_list) if seg_dur > 0 else 0.1
                 for k, w_text in enumerate(raw_word_list):
+                    w_start = seg_start + k * word_duration
+                    w_end = seg_start + (k + 1) * word_duration
+                    
+                    # Filter out words that are fully outside the clip window
+                    if w_end <= clip_start or w_start >= clip_end:
+                        continue
+                        
+                    w_rel_start = max(0.0, w_start - clip_start)
+                    w_rel_end = min(clip_end - clip_start, w_end - clip_start)
+                    
+                    if w_rel_end <= w_rel_start:
+                        w_rel_end = w_rel_start + 0.1
+                        
                     clip_words.append({
                         "text": w_text,
-                        "start": relative_start + k * word_duration,
-                        "end": relative_start + (k + 1) * word_duration
+                        "start": w_rel_start,
+                        "end": w_rel_end
                     })
                     
         if not clip_words:
@@ -422,3 +437,109 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
             
     return results
 
+def compile_parts(
+    video_path: str,
+    parts: List[Dict[str, float]],
+    segments_dict: List[Dict[str, Any]],
+    output_base_name: str
+) -> str:
+    """
+    Compiles multiple disjoint timestamps of a video into a single continuous vertical clip.
+    Cleans up temporary SRT files and intermediate clips after concatenation.
+    """
+    import uuid
+    part_outputs = []
+    temp_srts = []
+    concat_txt_path = None
+    
+    try:
+        for i, part in enumerate(parts):
+            start_time = part["start_time"]
+            end_time = part["end_time"]
+            
+            logger.info(f"Rendering part {i+1}/{len(parts)} ({start_time}s - {end_time}s)...")
+            
+            # 1. Filter segments for this part
+            part_segments = []
+            for s in segments_dict:
+                if s["end_time"] > start_time and s["start_time"] < end_time:
+                    part_segments.append(s)
+                    
+            # 2. Generate local SRT for this part
+            srt_name = f"{output_base_name}_part_{i}_{uuid.uuid4().hex[:8]}.srt"
+            srt_path = os.path.join(settings.TEMP_DIR, srt_name)
+            temp_srts.append(srt_path)
+            
+            generate_srt_file(part_segments, start_time, end_time, srt_path)
+            
+            # 3. Render the clip (we only care about vertical for compilation)
+            part_base_name = f"{output_base_name}_part_{i}_{uuid.uuid4().hex[:8]}"
+            render_results = render_clip(
+                video_path=video_path,
+                clip_start=start_time,
+                clip_end=end_time,
+                srt_path=srt_path,
+                output_base_name=part_base_name
+            )
+            
+            if "vertical" not in render_results or not os.path.exists(render_results["vertical"]):
+                raise ValueError(f"Failed to render vertical clip for part {i} ({start_time}-{end_time})")
+                
+            part_outputs.append(render_results["vertical"])
+            
+            # Clean up landscape output if any
+            if "landscape" in render_results and os.path.exists(render_results["landscape"]):
+                try:
+                    os.remove(render_results["landscape"])
+                except Exception:
+                    pass
+                    
+        if not part_outputs:
+            raise ValueError("No parts were successfully rendered.")
+            
+        # 4. Create concat.txt
+        concat_txt_path = os.path.abspath(os.path.join(settings.TEMP_DIR, f"{output_base_name}_concat_{uuid.uuid4().hex[:8]}.txt"))
+        with open(concat_txt_path, "w", encoding="utf-8") as f:
+            for p in part_outputs:
+                abs_p = os.path.abspath(p)
+                f.write(f"file '{abs_p}'\n")
+                
+        final_output = os.path.abspath(os.path.join(settings.OUTPUT_DIR, f"{output_base_name}_compiled.mp4"))
+        
+        cmd_concat = [
+            "ffmpeg", "-y",
+            "-f", "concat",
+            "-safe", "0",
+            "-i", concat_txt_path,
+            "-c", "copy",
+            final_output
+        ]
+        
+        logger.info(f"Concatenating parts: {' '.join(cmd_concat)}")
+        res = subprocess.run(cmd_concat, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if res.returncode != 0:
+            logger.error(f"FFmpeg concat failed: {res.stderr.decode('utf-8', errors='ignore')}")
+            raise RuntimeError(f"FFmpeg concat failed: {res.stderr.decode('utf-8', errors='ignore')}")
+            
+        logger.info(f"Compilation complete: {final_output}")
+        return final_output
+        
+    finally:
+        # Clean up temp clips and SRTs
+        for clip in part_outputs:
+            if os.path.exists(clip):
+                try:
+                    os.remove(clip)
+                except Exception as e:
+                    logger.warning(f"Could not clean up temp clip {clip}: {e}")
+        for srt in temp_srts:
+            if os.path.exists(srt):
+                try:
+                    os.remove(srt)
+                except Exception as e:
+                    logger.warning(f"Could not clean up temp srt {srt}: {e}")
+        if concat_txt_path and os.path.exists(concat_txt_path):
+            try:
+                os.remove(concat_txt_path)
+            except Exception as e:
+                logger.warning(f"Could not clean up concat file {concat_txt_path}: {e}")

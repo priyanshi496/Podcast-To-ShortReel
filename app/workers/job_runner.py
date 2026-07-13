@@ -238,6 +238,85 @@ def process_job(db: Session, job: models.Job):
         crud.update_job(db, job.id, status="done", progress=1.0)
         logger.info(f"Render job {job.id} done for clip {clip.id}.")
 
+    elif job.job_type == "compile":
+        if not job.clip_candidate_id:
+            raise ValueError("Compile job missing clip_candidate_id relation.")
+            
+        clip = crud.get_clip(db, job.clip_candidate_id)
+        if not clip:
+            raise ValueError(f"Placeholder clip candidate {job.clip_candidate_id} not found.")
+            
+        if not video.storage_path or not os.path.exists(video.storage_path):
+            crud.update_clip_status(db, clip.id, "failed")
+            crud.update_job(db, job.id, status="failed", error_message="No source video file found. Video rendering requires the original MP4 upload.")
+            logger.warning(f"Compile job {job.id} failed: No source video file found for video {video.id}.")
+            return
+
+        # 1. Update status
+        crud.update_clip_status(db, clip.id, "rendering")
+        crud.update_job(db, job.id, status="running", progress=0.2)
+        
+        # 2. Read the request parts from the temporary JSON payload file
+        import json
+        payload_path = os.path.join(settings.TEMP_DIR, f"compile_request_{job.id}.json")
+        if not os.path.exists(payload_path):
+            crud.update_clip_status(db, clip.id, "failed")
+            crud.update_job(db, job.id, status="failed", error_message=f"Job payload not found at {payload_path}")
+            logger.error(f"Compile job {job.id} failed: payload file {payload_path} does not exist.")
+            return
+            
+        try:
+            with open(payload_path, "r", encoding="utf-8") as f:
+                parts = json.load(f)
+        except Exception as je:
+            crud.update_clip_status(db, clip.id, "failed")
+            crud.update_job(db, job.id, status="failed", error_message=f"Failed to parse job payload: {je}")
+            logger.error(f"Compile job {job.id} failed: could not parse payload file. Error: {je}")
+            return
+            
+        crud.update_job(db, job.id, status="running", progress=0.4)
+        
+        # 3. Get segments for SRT subtitles
+        segments = crud.get_segments_by_video(db, video.id)
+        segments_dict = [
+            {
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "text": s.text
+            }
+            for s in segments
+        ]
+        
+        # 4. Compile the parts
+        logger.info(f"Compiling {len(parts)} parts for job {job.id}...")
+        output_base = f"compile_{video.id}_{job.id}"
+        
+        try:
+            compiled_video_path = render.compile_parts(
+                video_path=video.storage_path,
+                parts=parts,
+                segments_dict=segments_dict,
+                output_base_name=output_base
+            )
+            crud.update_job(db, job.id, status="running", progress=0.8)
+            
+            # 5. Create ClipExport record
+            crud.create_clip_export(db, clip.id, compiled_video_path, None, "vertical")
+            
+            # 6. Mark done
+            crud.update_clip_status(db, clip.id, "rendered")
+            crud.update_job(db, job.id, status="done", progress=1.0)
+            logger.info(f"Compile job {job.id} done successfully. Output: {compiled_video_path}")
+            
+        finally:
+            # Clean up the payload file
+            if os.path.exists(payload_path):
+                try:
+                    os.remove(payload_path)
+                    logger.info(f"Removed temp job payload file {payload_path}")
+                except Exception as ce:
+                    logger.warning(f"Failed to clean up job payload file {payload_path}: {ce}")
+
 def job_worker_loop():
     logger.info("Job runner daemon worker loop starting...")
     while True:

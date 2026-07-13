@@ -99,6 +99,14 @@ class ClipCandidateTrim(BaseModel):
     start_time: float
     end_time: float
 
+# Compile Schemas
+class CompilePart(BaseModel):
+    start_time: float
+    end_time: float
+
+class CompileRequest(BaseModel):
+    parts: List[CompilePart]
+
 class ClipExportResponse(BaseModel):
     id: int
     clip_candidate_id: int

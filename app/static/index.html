@@ -714,6 +714,21 @@
             </div>
         </section>
 
+        <!-- MULTI-PART COMPILATION SECTION -->
+        <section class="glass-card hidden" id="section-compile" style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 0.5rem;">Multi-Part Compilation</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Select multiple disjoint time ranges of this video to compile them into a single continuous vertical short reel.</p>
+            
+            <div id="compile-parts-list" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Part entries will be added here -->
+            </div>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="addCompilePartRow()">➕ Add Part</button>
+                <button class="btn btn-primary" onclick="submitCompileRequest()" id="btn-submit-compile">🚀 Stitch & Compile Parts</button>
+            </div>
+        </section>
+
         <!-- RENDERED OUTPUTS GALLERY -->
         <section class="glass-card hidden" id="section-exports">
             <h2 style="margin-bottom: 0.5rem;">Exported Reels & Shorts</h2>
@@ -830,6 +845,7 @@
                 document.getElementById('section-jobs').classList.add('hidden');
                 document.getElementById('section-transcript-ready').classList.add('hidden');
                 document.getElementById('section-clips').classList.add('hidden');
+                document.getElementById('section-compile').classList.add('hidden');
                 document.getElementById('section-exports').classList.add('hidden');
                 document.getElementById('upload-status-text').innerText = 'Drag & Drop or Click to Select File';
                 document.getElementById('upload-filename-text').innerText = 'Supports .mp4 format';
@@ -997,7 +1013,7 @@
                 // Analyze current pipeline step
                 const transcribeJob = jobs.find(j => j.job_type === 'transcribe');
                 const rankJob = jobs.find(j => j.job_type === 'rank');
-                const renderJobs = jobs.filter(j => j.job_type === 'render');
+                const renderJobs = jobs.filter(j => j.job_type === 'render' || j.job_type === 'compile');
 
                 // Update Step Wizard
                 const isTranscribeDone = transcribeJob && transcribeJob.status === 'done';
@@ -1018,6 +1034,10 @@
                     // Show clips candidate selection
                     document.getElementById('section-clips').classList.remove('hidden');
                     loadClipCandidates();
+                }
+
+                if (isTranscribeDone) {
+                    document.getElementById('section-compile').classList.remove('hidden');
                 }
 
                 // If rendering is happening
@@ -1340,6 +1360,130 @@
                 console.error("Error auto-restoring state:", err);
             }
         };
+
+        function parseTimeToSeconds(timeStr) {
+            timeStr = timeStr.trim();
+            if (!timeStr) return NaN;
+            
+            // If it's a raw float or integer, return it
+            if (/^\d+(\.\d+)?$/.test(timeStr)) {
+                return parseFloat(timeStr);
+            }
+            
+            // Parse MM:SS or HH:MM:SS format
+            const parts = timeStr.split(':');
+            if (parts.length === 2) {
+                const mins = parseInt(parts[0], 10);
+                const secs = parseFloat(parts[1]);
+                if (isNaN(mins) || isNaN(secs)) return NaN;
+                return mins * 60 + secs;
+            } else if (parts.length === 3) {
+                const hrs = parseInt(parts[0], 10);
+                const mins = parseInt(parts[1], 10);
+                const secs = parseFloat(parts[2]);
+                if (isNaN(hrs) || isNaN(mins) || isNaN(secs)) return NaN;
+                return hrs * 3600 + mins * 60 + secs;
+            }
+            
+            return NaN;
+        }
+
+        function addCompilePartRow(startVal = "", endVal = "") {
+            const container = document.getElementById('compile-parts-list');
+            const rowCount = container.children.length;
+            
+            const row = document.createElement('div');
+            row.className = 'compile-part-row';
+            row.style.display = 'flex';
+            row.style.alignItems = 'center';
+            row.style.gap = '1rem';
+            row.style.background = 'rgba(255, 255, 255, 0.03)';
+            row.style.padding = '0.75rem 1rem';
+            row.style.borderRadius = '8px';
+            row.style.border = '1px solid var(--border-color)';
+            
+            row.innerHTML = `
+                <span style="font-weight: 600; min-width: 70px;">Part #${rowCount + 1}:</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted);">Start Time:</label>
+                    <input type="text" class="input-start" placeholder="e.g. 5:09 or 309" value="${startVal}" style="width: 130px; padding: 0.35rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 4px; color: white;" required />
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted);">End Time:</label>
+                    <input type="text" class="input-end" placeholder="e.g. 5:35 or 335" value="${endVal}" style="width: 130px; padding: 0.35rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 4px; color: white;" required />
+                </div>
+                <button class="btn btn-secondary" onclick="this.parentElement.remove(); reindexCompilePartRows();" style="padding: 0.35rem 0.75rem; background: #ef4444; border: none; font-size: 0.85rem;">🗑️ Remove</button>
+            `;
+            
+            container.appendChild(row);
+        }
+        
+        function reindexCompilePartRows() {
+            const container = document.getElementById('compile-parts-list');
+            Array.from(container.children).forEach((row, idx) => {
+                row.querySelector('span').innerText = `Part #${idx + 1}:`;
+            });
+        }
+
+        async function submitCompileRequest() {
+            if (!currentVideoId) return alert("No active video loaded.");
+            
+            const container = document.getElementById('compile-parts-list');
+            const rows = container.children;
+            if (rows.length === 0) return alert("Please add at least one part to compile.");
+            
+            const parts = [];
+            for (const row of rows) {
+                const startStr = row.querySelector('.input-start').value;
+                const endStr = row.querySelector('.input-end').value;
+                
+                const startVal = parseTimeToSeconds(startStr);
+                const endVal = parseTimeToSeconds(endStr);
+                
+                if (isNaN(startVal) || isNaN(endVal)) {
+                    return alert("Please enter valid start and end times (e.g. 5:09 or 309) for all parts.");
+                }
+                if (startVal >= endVal) {
+                    return alert("Start time must be less than end time.");
+                }
+                parts.push({ start_time: startVal, end_time: endVal });
+            }
+            
+            const btn = document.getElementById('btn-submit-compile');
+            btn.disabled = true;
+            btn.innerText = "Queuing compilation...";
+            
+            try {
+                const res = await fetch(`/videos/${currentVideoId}/compile`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ parts })
+                });
+                
+                if (res.ok) {
+                    const job = await res.json();
+                    alert(`Compilation job #${job.id} queued successfully! You can track its progress in the status list above.`);
+                    
+                    // Reset inputs
+                    container.innerHTML = "";
+                    addCompilePartRow();
+                    
+                    // Start polling/refresh jobs list
+                    startPollingJobs();
+                } else {
+                    const err = await res.json();
+                    alert("Error queuing compilation: " + (err.detail || "Server error"));
+                }
+            } catch (e) {
+                alert("Network error: " + e);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🚀 Stitch & Compile Parts";
+            }
+        }
+
+        // Initialize with one empty row
+        addCompilePartRow();
     </script>
 </body>
 </html>

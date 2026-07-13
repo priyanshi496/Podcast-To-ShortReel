@@ -301,4 +301,55 @@ def upload_video_with_transcript(
 
     return db_video
 
+from app.services import render
+from fastapi.responses import FileResponse
 
+@router.post("/{video_id}/compile", response_model=schemas.JobResponse)
+def compile_video_parts(
+    video_id: int,
+    request: schemas.CompileRequest,
+    db: Session = Depends(get_db)
+):
+    import json
+    video = crud.get_video(db, video_id)
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+        
+    if not video.storage_path or not os.path.exists(video.storage_path):
+        raise HTTPException(status_code=400, detail="Video file is missing or not fully processed.")
+        
+    if not request.parts:
+        raise HTTPException(status_code=400, detail="At least one video part must be specified.")
+        
+    # 1. Create a placeholder ClipCandidate to link the compiled output exports
+    clip_in = schemas.ClipCandidateCreate(
+        video_id=video.id,
+        start_time=request.parts[0].start_time,
+        end_time=request.parts[-1].end_time,
+        duration_sec=sum(p.end_time - p.start_time for p in request.parts),
+        suggested_title="Custom Compilation",
+        status="rendering"
+    )
+    db_clip = crud.create_clip_candidate(db, clip_in)
+    
+    # 2. Create the compile job in the database
+    job_in = schemas.JobCreate(
+        video_id=video.id,
+        clip_candidate_id=db_clip.id,
+        job_type="compile",
+        status="queued"
+    )
+    db_job = crud.create_job(db, job_in)
+    
+    # 3. Write requested parts to a temp JSON file for the worker thread
+    parts_list = [{"start_time": p.start_time, "end_time": p.end_time} for p in request.parts]
+    payload_path = os.path.join(settings.TEMP_DIR, f"compile_request_{db_job.id}.json")
+    try:
+        with open(payload_path, "w", encoding="utf-8") as f:
+            json.dump(parts_list, f, indent=2)
+    except Exception as e:
+        crud.update_clip_status(db, db_clip.id, "failed")
+        crud.update_job(db, db_job.id, status="failed", error_message=f"Failed to save job payload: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to queue compilation job: {e}")
+        
+    return db_job
