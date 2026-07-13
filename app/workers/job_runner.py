@@ -13,6 +13,41 @@ from app.services import audio, transcribe, segment, rank, render
 
 logger = logging.getLogger(__name__)
 
+class ProgressSimulator:
+    def __init__(self, job_id: int, start_prog: float, end_prog: float, duration_sec: int):
+        self.job_id = job_id
+        self.start_prog = start_prog
+        self.end_prog = end_prog
+        self.duration_sec = duration_sec
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self._run)
+
+    def _run(self):
+        db_local = SessionLocal()
+        try:
+            steps = int(self.duration_sec / 2.0)
+            if steps <= 0: steps = 1
+            step_size = (self.end_prog - self.start_prog) / steps
+            
+            prog = self.start_prog
+            while not self.stop_event.wait(2.0) and prog < self.end_prog:
+                prog += step_size
+                if prog > self.end_prog:
+                    prog = self.end_prog
+                try:
+                    crud.update_job(db_local, self.job_id, status="running", progress=round(prog, 2))
+                except Exception:
+                    pass
+        finally:
+            db_local.close()
+            
+    def start(self):
+        self.thread.start()
+        
+    def stop(self):
+        self.stop_event.set()
+        self.thread.join()
+
 def process_job(db: Session, job: models.Job):
     logger.info(f"Processing job {job.id} (type: {job.job_type}) for video {job.video_id}")
     
@@ -41,8 +76,14 @@ def process_job(db: Session, job: models.Job):
         
         # 4. Transcribe using Whisper local
         logger.info("Transcribing audio...")
-        transcripts_data = transcribe.transcribe_audio(audio_path)
-        crud.update_job(db, cast(int, job.id), status="running", progress=0.7)
+        sim = ProgressSimulator(cast(int, job.id), 0.5, 0.85, 60)
+        sim.start()
+        try:
+            transcripts_data = transcribe.transcribe_audio(audio_path)
+        finally:
+            sim.stop()
+        
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.9)
         
         # Clean up audio WAV file to save space
         try:
@@ -117,6 +158,8 @@ def process_job(db: Session, job: models.Job):
                 logger.info("No source video file found (uploaded transcript only). Skipping audio signal features.")
                 wav_path = None
             
+        sim = ProgressSimulator(cast(int, job.id), 0.5, 0.95, 60)
+        sim.start()
         try:
             ranked_candidates = rank.rank_candidates(
                 candidates,
@@ -126,6 +169,7 @@ def process_job(db: Session, job: models.Job):
                 transcript_lines=segments_dict
             )
         finally:
+            sim.stop()
             if audio_re_extracted:
                 try:
                     if wav_path and os.path.exists(wav_path):
@@ -217,14 +261,21 @@ def process_job(db: Session, job: models.Job):
         # 4. Render vertical and landscape
         logger.info(f"Rendering formats for clip {clip.id}...")
         output_base = f"clip_{clip.id}"
-        render_results = render.render_clip(
-            video_path=cast(str, video.storage_path),
-            clip_start=cast(float, clip.start_time),
-            clip_end=cast(float, clip.end_time),
-            srt_path=srt_path,
-            output_base_name=output_base
-        )
-        crud.update_job(db, cast(int, job.id), status="running", progress=0.8)
+        
+        sim = ProgressSimulator(cast(int, job.id), 0.4, 0.95, 60)
+        sim.start()
+        try:
+            render_results = render.render_clip(
+                video_path=cast(str, video.storage_path),
+                clip_start=cast(float, clip.start_time),
+                clip_end=cast(float, clip.end_time),
+                srt_path=srt_path,
+                output_base_name=output_base
+            )
+        finally:
+            sim.stop()
+        
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.98)
         
         # 5. Save clip exports
         logger.info("Saving exports paths to database...")
@@ -291,13 +342,19 @@ def process_job(db: Session, job: models.Job):
         output_base = f"compile_{video.id}_{job.id}"
         
         try:
-            compiled_video_path = render.compile_parts(
-                video_path=cast(str, video.storage_path),
-                parts=parts,
-                segments_dict=segments_dict,
-                output_base_name=output_base
-            )
-            crud.update_job(db, cast(int, job.id), status="running", progress=0.8)
+            sim = ProgressSimulator(cast(int, job.id), 0.4, 0.95, 60)
+            sim.start()
+            try:
+                compiled_video_path = render.compile_parts(
+                    video_path=cast(str, video.storage_path),
+                    parts=parts,
+                    segments_dict=segments_dict,
+                    output_base_name=output_base
+                )
+            finally:
+                sim.stop()
+            
+            crud.update_job(db, cast(int, job.id), status="running", progress=0.98)
             
             # 5. Create ClipExport record
             crud.create_clip_export(db, cast(int, clip.id), compiled_video_path, None, "vertical")
