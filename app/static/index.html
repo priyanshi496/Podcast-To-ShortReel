@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Podcast to Short Reel Converter</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-base: #0b0f19;
@@ -33,7 +36,7 @@
 
         body {
             background-color: var(--bg-base);
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
             color: var(--text-main);
@@ -43,7 +46,10 @@
             padding-bottom: 5rem;
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: var(--font-display);
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -148,7 +154,7 @@
             font-size: 1.1rem;
             color: var(--text-muted);
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .step-item.active .step-bubble {
@@ -283,7 +289,7 @@
         .job-spinner {
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-top: 2px solid var(--color-secondary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -331,7 +337,7 @@
         .progress-bar-container {
             width: 100px;
             height: 6px;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 99px;
             overflow: hidden;
         }
@@ -452,7 +458,7 @@
 
         .score-bar {
             height: 4px;
-            background-color: rgba(255,255,255,0.08);
+            background-color: rgba(255, 255, 255, 0.08);
             border-radius: 2px;
             overflow: hidden;
         }
@@ -495,7 +501,7 @@
         }
 
         .clip-input-group input {
-            background-color: rgba(0,0,0,0.3);
+            background-color: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 0.4rem 0.6rem;
@@ -568,8 +574,13 @@
 
         /* ANIMATIONS */
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .pulse {
@@ -577,9 +588,17 @@
         }
 
         @keyframes pulse-animation {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
 
         .hidden {
@@ -587,6 +606,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="logo">
@@ -600,7 +620,7 @@
         <div class="steps-container">
             <div class="steps-line"></div>
             <div class="steps-line-fill" id="steps-line-fill"></div>
-            
+
             <div class="step-item active" id="step1">
                 <div class="step-bubble">1</div>
                 <div class="step-label">Upload Video</div>
@@ -626,37 +646,57 @@
         <!-- UPLOAD SECTION -->
         <section class="glass-card" id="section-upload">
             <h2 style="margin-bottom: 0.5rem;">Upload Podcast Content</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Upload your MP4 video podcast for automatic transcription, or upload a pre-made transcript file directly to start ranking immediately.</p>
-            
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Upload your MP4 video podcast for automatic
+                transcription, or upload a pre-made transcript file directly to start ranking immediately.</p>
+
             <!-- Upload tabs -->
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
-                <button class="btn" id="tab-auto-transcribe" onclick="switchUploadTab('auto')" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">🎥 Auto-Transcribe Video</button>
-                <button class="btn" id="tab-direct-transcript" onclick="switchUploadTab('transcript')" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">📄 Upload Custom Transcript</button>
+            <div
+                style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                <button class="btn" id="tab-auto-transcribe" onclick="switchUploadTab('auto')"
+                    style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">🎥
+                    Auto-Transcribe Video</button>
+                <button class="btn" id="tab-direct-transcript" onclick="switchUploadTab('transcript')"
+                    style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">📄
+                    Upload Custom Transcript</button>
             </div>
-            
+
             <!-- Tab 1: Auto-Transcribe -->
             <div id="tab-content-auto">
                 <div class="upload-zone" onclick="document.getElementById('file-input').click()" id="upload-zone">
                     <span class="upload-icon">📁</span>
                     <h3 id="upload-status-text">Drag & Drop or Click to Select File</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;" id="upload-filename-text">Supports .mp4 format</p>
-                    <input type="file" id="file-input" class="file-input" accept="video/mp4" onchange="handleFileSelect(event)">
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;"
+                        id="upload-filename-text">Supports .mp4 format</p>
+                    <input type="file" id="file-input" class="file-input" accept="video/mp4"
+                        onchange="handleFileSelect(event)">
                 </div>
             </div>
-            
+
             <!-- Tab 2: Upload Custom Transcript -->
             <div id="tab-content-transcript" class="hidden" style="animation: fadeIn 0.3s ease;">
-                <div style="display: flex; flex-direction: column; gap: 1.25rem; background: rgba(0,0,0,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                <div
+                    style="display: flex; flex-direction: column; gap: 1.25rem; background: rgba(0,0,0,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">1. Select Transcript File <span style="color: #ff4a4a;">*</span></label>
-                        <input type="file" id="transcript-input" accept=".txt,.json" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
-                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.3;">Supports JSON or text with line format: <code>[0.00s - 1.84s] Speaker: transcript text</code></p>
+                        <label
+                            style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">1.
+                            Select Transcript File <span style="color: #ff4a4a;">*</span></label>
+                        <input type="file" id="transcript-input" accept=".txt,.json"
+                            style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
+                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.3;">
+                            Supports JSON or text with line format:
+                            <code>[0.00s - 1.84s] Speaker: transcript text</code></p>
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">2. Select Video File <span style="color: var(--text-muted); font-weight: normal; font-size: 0.85rem;">(Optional - Required for clip video cropping/rendering)</span></label>
-                        <input type="file" id="transcript-video-input" accept="video/mp4" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
+                        <label
+                            style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">2.
+                            Select Video File <span
+                                style="color: var(--text-muted); font-weight: normal; font-size: 0.85rem;">(Optional -
+                                Required for clip video cropping/rendering)</span></label>
+                        <input type="file" id="transcript-video-input" accept="video/mp4"
+                            style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
                     </div>
-                    <button class="btn btn-primary" id="btn-submit-transcript" onclick="handleTranscriptUpload()" style="margin-top: 0.5rem; align-self: flex-start; padding: 0.75rem 2rem; font-weight: 600; font-size: 0.95rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s;">
+                    <button class="btn btn-primary" id="btn-submit-transcript" onclick="handleTranscriptUpload()"
+                        style="margin-top: 0.5rem; align-self: flex-start; padding: 0.75rem 2rem; font-weight: 600; font-size: 0.95rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s;">
                         <span>⚡</span> Run AI Ranking Pipeline
                     </button>
                 </div>
@@ -674,26 +714,37 @@
         </section>
 
         <!-- TRANSCRIPT GENERATED ALERT -->
-        <section class="glass-card hidden" id="section-transcript-ready" style="border: 1px solid rgba(0, 255, 127, 0.35); background: rgba(0, 255, 127, 0.04); padding: 1.25rem; margin-bottom: 1.5rem; text-align: left; animation: fadeIn 0.4s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <section class="glass-card hidden" id="section-transcript-ready"
+            style="border: 1px solid rgba(0, 255, 127, 0.35); background: rgba(0, 255, 127, 0.04); padding: 1.25rem; margin-bottom: 1.5rem; text-align: left; animation: fadeIn 0.4s ease;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="font-size: 1.75rem;">📄</span>
                     <div>
-                        <h3 style="margin: 0; color: #00ff7f; font-size: 1.1rem; font-weight: 600;">Transcript Ready!</h3>
-                        <p style="margin: 0.2rem 0 0 0; color: var(--text-muted); font-size: 0.85rem;">The podcast audio has been fully transcribed. AI Ranking is now running to extract viral clip opportunities.</p>
+                        <h3 style="margin: 0; color: #00ff7f; font-size: 1.1rem; font-weight: 600;">Transcript Ready!
+                        </h3>
+                        <p style="margin: 0.2rem 0 0 0; color: var(--text-muted); font-size: 0.85rem;" id="transcript-ready-text">The podcast audio has been fully transcribed. You can now use the manual multi-part compiler below, or let AI find viral clips for you.
+                        </p>
                     </div>
                 </div>
-                <div style="display: flex; gap: 0.50rem;">
-                    <button class="btn btn-secondary" onclick="downloadTranscript()" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;">
+                <div style="display: flex; gap: 0.50rem; flex-wrap: wrap;" id="transcript-action-buttons">
+                    <button class="btn btn-primary" onclick="startAiRanking()" id="btn-start-ranking"
+                        style="background: linear-gradient(135deg, #6e45e2, #88d3ce); border: none; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 15px rgba(110, 69, 226, 0.4);">
+                        ✨ Find Viral Clips with AI
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadTranscript()"
+                        style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;">
                         <span>📥</span> Download Raw Transcript
                     </button>
-                    <button class="btn" onclick="toggleTranscriptPreview()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
+                    <button class="btn" onclick="toggleTranscriptPreview()"
+                        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
                         👁️ Preview Transcript
                     </button>
                 </div>
             </div>
             <!-- Collapsible Preview Area -->
-            <div id="transcript-preview-area" class="hidden" style="margin-top: 1rem; padding: 1.25rem; background: rgba(0,0,0,0.35); border-radius: 6px; max-height: 250px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.45; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.08); text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+            <div id="transcript-preview-area" class="hidden"
+                style="margin-top: 1rem; padding: 1.25rem; background: rgba(0,0,0,0.35); border-radius: 6px; max-height: 250px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.45; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.08); text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
                 <div id="transcript-preview-content" style="white-space: pre-wrap;">Loading preview...</div>
             </div>
         </section>
@@ -701,14 +752,17 @@
 
         <!-- CLIP CANDIDATES VIEW -->
         <section class="glass-card hidden" id="section-clips">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
                 <h2 style="margin: 0;">AI Suggested Clip Candidates</h2>
-                <button class="btn btn-secondary" onclick="downloadTranscript()" id="btn-download-transcript" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                <button class="btn btn-secondary" onclick="downloadTranscript()" id="btn-download-transcript"
+                    style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
                     <span>📄</span> Get Transcript
                 </button>
             </div>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Edit time boundaries or titles, and render the final reels.</p>
-            
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Edit time boundaries or titles, and render the
+                final reels.</p>
+
             <div class="clips-grid" id="clips-container">
                 <!-- Dynamically populated -->
             </div>
@@ -717,23 +771,27 @@
         <!-- MULTI-PART COMPILATION SECTION -->
         <section class="glass-card hidden" id="section-compile" style="margin-top: 2rem;">
             <h2 style="margin-bottom: 0.5rem;">Multi-Part Compilation</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Select multiple disjoint time ranges of this video to compile them into a single continuous vertical short reel.</p>
-            
-            <div id="compile-parts-list" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Select multiple disjoint time ranges of this
+                video to compile them into a single continuous vertical short reel.</p>
+
+            <div id="compile-parts-list"
+                style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
                 <!-- Part entries will be added here -->
             </div>
-            
+
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                 <button class="btn btn-secondary" onclick="addCompilePartRow()">➕ Add Part</button>
-                <button class="btn btn-primary" onclick="submitCompileRequest()" id="btn-submit-compile">🚀 Stitch & Compile Parts</button>
+                <button class="btn btn-primary" onclick="submitCompileRequest()" id="btn-submit-compile">🚀 Stitch &
+                    Compile Parts</button>
             </div>
         </section>
 
         <!-- RENDERED OUTPUTS GALLERY -->
         <section class="glass-card hidden" id="section-exports">
             <h2 style="margin-bottom: 0.5rem;">Exported Reels & Shorts</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Your landscape and vertical cropped clips with embedded subtitles.</p>
-            
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Your landscape and vertical cropped clips with
+                embedded subtitles.</p>
+
             <div class="exports-gallery" id="exports-container">
                 <!-- Dynamically populated -->
             </div>
@@ -946,6 +1004,39 @@
             }
         }
 
+        async function startAiRanking() {
+            if (!currentVideoId) return;
+            const btn = document.getElementById('btn-start-ranking');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="job-spinner"></span> Starting AI...`;
+
+            try {
+                const response = await fetch(`/videos/${currentVideoId}/rank`, {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to start AI Ranking");
+                }
+                
+                // Hide button so user knows it's running
+                btn.style.display = 'none';
+                
+                // Update descriptive text
+                document.getElementById('transcript-ready-text').innerText = "AI Ranking is now running to extract viral clip opportunities. Please wait...";
+                
+                // Jump to step 3 and make sure jobs section is visible and polling
+                updateSteps(3);
+                document.getElementById('section-jobs').classList.remove('hidden');
+                pollJobsState();
+            } catch (err) {
+                console.error(err);
+                alert("Error starting AI Ranking: " + err.message);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
         async function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1021,6 +1112,21 @@
 
                 if (isTranscribeDone || isRankingActiveOrDone) {
                     document.getElementById('section-transcript-ready').classList.remove('hidden');
+                    
+                    // If rank job is active or done, hide the 'Find Viral Clips' button and update text
+                    const btnRank = document.getElementById('btn-start-ranking');
+                    const readyText = document.getElementById('transcript-ready-text');
+                    if (isRankingActiveOrDone && btnRank && readyText) {
+                        btnRank.style.display = 'none';
+                        if (rankJob.status === 'running') {
+                            readyText.innerText = "AI Ranking is now running to extract viral clip opportunities. Please wait...";
+                        } else if (rankJob.status === 'done') {
+                            readyText.innerText = "AI Ranking is complete! Review the suggested clips below.";
+                        }
+                    } else if (!isRankingActiveOrDone && btnRank && readyText) {
+                        btnRank.style.display = 'inline-flex';
+                        readyText.innerText = "The podcast audio has been fully transcribed. You can now use the manual multi-part compiler below, or let AI find viral clips for you.";
+                    }
                 } else {
                     document.getElementById('section-transcript-ready').classList.add('hidden');
                 }
@@ -1486,5 +1592,5 @@
         addCompilePartRow();
     </script>
 </body>
-</html>
 
+</html>

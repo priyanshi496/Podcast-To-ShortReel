@@ -1192,15 +1192,31 @@ def apply_narrative_grammar_trimming(
     elif strategy == "payoff":
         trim_idx = None
         n = len(analyzed_with_times)
-        
+
+        # NOTE: EVIDENCE and EXAMPLE were previously included in the trim-worthy
+        # role list below, alongside genuine throat-clearing roles like SETUP/
+        # CONTEXT/JUSTIFICATION. That was wrong for payoff clips specifically —
+        # checked against real output, this was the exact mechanism cutting off
+        # the strongest part of several clips: a "give me an example" follow-up
+        # answered with concrete specifics (credit/lending/insurance), a lesson
+        # delivered via a concrete illustration ("gamble away life earnings...
+        # should be investing in diversified stuff"), and a named real-world
+        # example (Elon Musk/EVs) — all tagged EXAMPLE or EVIDENCE by the LLM's
+        # own sentence analysis, and all trimmed off as "trailing fluff" even
+        # though a concrete example is usually THE payoff for a viewer, not
+        # disposable setup before it. Only genuine preamble/throat-clearing
+        # roles get trimmed now — SETUP, CONTEXT, JUSTIFICATION. EXAMPLE and
+        # EVIDENCE are left alone; they're kept in the clip on purpose.
+        TRIM_WORTHY_TRAILING_ROLES = ["SETUP", "CONTEXT", "JUSTIFICATION"]
+
         # Scan backward from the end to remove trailing explanation/fluff
         for idx in range(n - 1, -1, -1):
             sent, s_start, s_end = analyzed_with_times[idx]
             role = str(sent.get("role", "")).upper()
             resolves = sent.get("resolves_curiosity", False) or sent.get("resolves_tension", False)
             
-            # If the trailing sentence is just evidence/example/setup and doesn't resolve anything:
-            if role in ["EVIDENCE", "EXAMPLE", "SETUP", "CONTEXT", "JUSTIFICATION"] and not resolves:
+            # If the trailing sentence is genuine preamble/setup and doesn't resolve anything:
+            if role in TRIM_WORTHY_TRAILING_ROLES and not resolves:
                 # Ensure we have a resolving or payoff sentence earlier in the clip
                 has_earlier_payoff = any(
                     (s.get("resolves_curiosity", False) or s.get("resolves_tension", False) or str(s.get("role", "")).upper() in ["REACTION", "CONCLUSION", "REVEAL", "ANSWER", "PUNCHLINE", "LESSON", "RESOLUTION"])

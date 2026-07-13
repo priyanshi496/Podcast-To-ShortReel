@@ -56,7 +56,7 @@ def parse_transcript(file_path):
     return candidates
 
 if __name__ == "__main__":
-    transcript_path = "transcript_video_15.txt"
+    transcript_path = "transcript_video_53.txt"
     parsed_lines = parse_transcript(transcript_path)
     print(f"Parsed {len(parsed_lines)} lines from transcript.")
     

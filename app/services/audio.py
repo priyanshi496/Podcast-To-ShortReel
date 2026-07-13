@@ -88,5 +88,23 @@ def extract_and_normalize_audio(video_path: str, output_wav_name: str) -> str:
             "-ac", "1",
             output_path
         ]
-        subprocess.run(cmd_fallback, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-        return output_path
+        try:
+            subprocess.run(cmd_fallback, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            return output_path
+        except subprocess.CalledProcessError as e2:
+            logger.error(f"FFmpeg fallback error: {e2.stderr.decode('utf-8', errors='ignore')}")
+            # If standard downmix fails (e.g., corrupted AAC claiming 44 channels), use robust pan filter
+            logger.info("Retrying audio extraction with robust channel mapping...")
+            cmd_robust = [
+                "ffmpeg",
+                "-y",
+                "-err_detect", "ignore_err",
+                "-i", video_path,
+                "-vn",
+                "-acodec", "pcm_s16le",
+                "-ar", "16000",
+                "-filter:a", "pan=mono|c0=c0",
+                output_path
+            ]
+            subprocess.run(cmd_robust, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            return output_path

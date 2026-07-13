@@ -13,7 +13,8 @@ router = APIRouter(prefix="/videos", tags=["Videos"])
 @router.post("/upload", response_model=schemas.VideoResponse)
 def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
     # 1. Create a safe filename and path
-    ext = os.path.splitext(file.filename)[1]
+    filename = file.filename or "unknown"
+    ext = os.path.splitext(filename)[1]
     # Keep original filename but use UUID for storage file to avoid duplicate name collisions
     unique_filename = f"{uuid.uuid4()}{ext}"
     file_path = os.path.join(settings.UPLOAD_DIR, unique_filename)
@@ -27,7 +28,7 @@ def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
         
     # 3. Create Video DB model
     video_in = schemas.VideoCreate(
-        original_filename=file.filename,
+        original_filename=filename,
         storage_path=file_path,
         duration_sec=None,
         status="uploaded"
@@ -36,7 +37,7 @@ def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
     
     # 4. Create first job in pipeline (transcribe)
     job_in = schemas.JobCreate(
-        video_id=db_video.id,
+        video_id=int(db_video.id),  # type: ignore
         job_type="transcribe",
         status="queued"
     )
@@ -67,11 +68,40 @@ def process_video(video_id: int, db: Session = Depends(get_db)):
 
 
     # Reset video status and enqueue fresh transcribe job
-    crud.update_video_status(db, video.id, status="uploaded")
+    crud.update_video_status(db, video_id, status="uploaded")
 
     job_in = schemas.JobCreate(
-        video_id=video.id,
+        video_id=video_id,
         job_type="transcribe",
+        status="queued"
+    )
+    db_job = crud.create_job(db, job_in)
+    return db_job
+
+@router.post("/{video_id}/rank", response_model=schemas.JobResponse)
+def rank_video(video_id: int, db: Session = Depends(get_db)):
+    video = crud.get_video(db, video_id)
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    # Guard: if a rank job is already queued/running, return it
+    from app import models as _models
+    active_job = (
+        db.query(_models.Job)
+        .filter(
+            _models.Job.video_id == video_id,
+            _models.Job.job_type == "rank",
+            _models.Job.status.in_(["queued", "running"]),
+        )
+        .order_by(_models.Job.id.desc())
+        .first()
+    )
+    if active_job:
+        return active_job
+
+    job_in = schemas.JobCreate(
+        video_id=video_id,
+        job_type="rank",
         status="queued"
     )
     db_job = crud.create_job(db, job_in)
@@ -253,17 +283,17 @@ def upload_video_with_transcript(
     video_path = ""
     original_filename = "Transcript-only Podcast"
     if video_file:
-        ext = os.path.splitext(video_file.filename)[1]
+        ext = os.path.splitext(video_file.filename or "")[1]
         unique_filename = f"{uuid.uuid4()}{ext}"
         video_path = os.path.join(settings.UPLOAD_DIR, unique_filename)
         try:
             with open(video_path, "wb") as buffer:
                 shutil.copyfileobj(video_file.file, buffer)
-            original_filename = video_file.filename
+            original_filename = video_file.filename or "unknown_video"
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Could not save video file: {e}")
     else:
-        original_filename = f"Transcript: {transcript_file.filename}"
+        original_filename = f"Transcript: {transcript_file.filename or 'unknown_transcript'}"
 
     # Determine duration based on transcript end time
     duration_sec = parsed_segments[-1]["end_time"] if parsed_segments else 0.0
@@ -280,7 +310,7 @@ def upload_video_with_transcript(
     # 4. Save segments to DB
     db_segments = [
         schemas.TranscriptSegmentCreate(
-            video_id=db_video.id,
+            video_id=int(db_video.id),  # type: ignore
             speaker=item["speaker"],
             start_time=item["start_time"],
             end_time=item["end_time"],
@@ -293,7 +323,7 @@ def upload_video_with_transcript(
 
     # 5. Create ranking job directly in queue (bypassing transcribe stage)
     job_in = schemas.JobCreate(
-        video_id=db_video.id,
+        video_id=int(db_video.id),  # type: ignore
         job_type="rank",
         status="queued"
     )
@@ -311,11 +341,12 @@ def compile_video_parts(
     db: Session = Depends(get_db)
 ):
     import json
+    from app.config import settings
     video = crud.get_video(db, video_id)
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
         
-    if not video.storage_path or not os.path.exists(video.storage_path):
+    if not video.storage_path or not os.path.exists(str(video.storage_path)):
         raise HTTPException(status_code=400, detail="Video file is missing or not fully processed.")
         
     if not request.parts:
@@ -323,7 +354,7 @@ def compile_video_parts(
         
     # 1. Create a placeholder ClipCandidate to link the compiled output exports
     clip_in = schemas.ClipCandidateCreate(
-        video_id=video.id,
+        video_id=video_id,
         start_time=request.parts[0].start_time,
         end_time=request.parts[-1].end_time,
         duration_sec=sum(p.end_time - p.start_time for p in request.parts),
@@ -334,8 +365,8 @@ def compile_video_parts(
     
     # 2. Create the compile job in the database
     job_in = schemas.JobCreate(
-        video_id=video.id,
-        clip_candidate_id=db_clip.id,
+        video_id=video_id,
+        clip_candidate_id=db_clip.id,  # type: ignore
         job_type="compile",
         status="queued"
     )
@@ -348,8 +379,8 @@ def compile_video_parts(
         with open(payload_path, "w", encoding="utf-8") as f:
             json.dump(parts_list, f, indent=2)
     except Exception as e:
-        crud.update_clip_status(db, db_clip.id, "failed")
-        crud.update_job(db, db_job.id, status="failed", error_message=f"Failed to save job payload: {e}")
+        crud.update_clip_status(db, int(db_clip.id), "failed") # type: ignore
+        crud.update_job(db, int(db_job.id), status="failed", error_message=f"Failed to save job payload: {e}") # type: ignore
         raise HTTPException(status_code=500, detail=f"Failed to queue compilation job: {e}")
         
     return db_job
