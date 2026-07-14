@@ -212,83 +212,156 @@
         /* STEPS */
         .steps-container {
             position: relative;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 0.5rem;
-            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 32px 48px 18px;
             background: linear-gradient(180deg, var(--bg-elev-2), var(--bg-elev-1));
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
+            --total-steps: 5;
         }
+
+        /* Background line */
         .steps-line {
             position: absolute;
-            top: 46px;
-            left: calc(10% + 1.25rem);
-            right: calc(10% + 1.25rem);
-            height: 2px;
+            left: calc(100% / var(--total-steps) / 2);
+            right: calc(100% / var(--total-steps) / 2);
+            top: 60px;              /* EXACT center of circle (32px padding + 28px center of 56px container) */
+            height: 3px;
+            background: rgba(255,255,255,.08);
             border-radius: 999px;
-            background: var(--border-strong);
             z-index: 0;
         }
+
+        /* Active progress */
         .steps-line-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
             height: 100%;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--accent), var(--color-secondary));
             width: 0%;
-            transition: width 400ms var(--ease);
-            box-shadow: 0 0 12px -2px var(--accent-glow);
+            border-radius: inherit;
+            background: linear-gradient(
+                90deg,
+                var(--accent),
+                var(--color-secondary)
+            );
+            transition: width .35s ease;
         }
+
+        /* Each step */
         .step-item {
+            flex: 1;
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.55rem;
-            position: relative;
-            z-index: 1;
+            z-index: 2;
         }
+
+        /* Circle */
         .step-bubble {
-            width: 34px; height: 34px;
+            width: 48px;
+            height: 48px;
+            margin-top: 4px;
+            margin-bottom: 4px;
             border-radius: 50%;
-            display: grid; place-items: center;
-            background: var(--bg-elev-3);
-            border: 1px solid var(--border-strong);
-            font-size: 0.85rem;
-            font-weight: 600;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--bg-elev-2);
+            border: 2px solid rgba(255,255,255,.12);
+
+            font-weight: 700;
+            font-size: 16px;
             color: var(--text-muted);
-            transition: all 220ms var(--ease);
+
+            transition: .25s;
         }
-        .step-item.active .step-bubble {
-            background: linear-gradient(180deg, var(--accent), var(--accent-2));
-            color: #0a0a0c;
-            border-color: transparent;
-            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15), 0 0 20px -4px var(--accent-glow);
-        }
+
+        /* Completed */
         .step-item.completed .step-bubble {
-            background: linear-gradient(rgba(74, 222, 128, 0.12), rgba(74, 222, 128, 0.12)), var(--bg-elev-3);
-            color: var(--success);
-            border-color: rgba(74, 222, 128, 0.3);
+            background: #1d3528;
+            border-color: #3ddc84;
+            color: #3ddc84;
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
+
         .step-item.completed .step-bubble::after {
             content: "✓";
+            font-size: 18px;
             font-weight: 700;
         }
-        .step-item.completed .step-bubble { font-size: 0; }
-        .step-item.completed .step-bubble::after { font-size: 0.85rem; }
-        .step-label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-align: center;
+
+        .step-item.completed .step-bubble {
+            font-size: 0;
         }
-        .step-item.active .step-label { color: var(--text); }
+
+        /* Active */
+        .step-item.active .step-bubble {
+            width: 56px;
+            height: 56px;
+            margin-top: 0;
+            margin-bottom: 0;
+
+            background: linear-gradient(
+                180deg,
+                var(--accent),
+                var(--accent-2)
+            );
+
+            color: #111;
+            border: none;
+
+            box-shadow:
+                0 0 0 6px rgba(167,139,250,.12),
+                0 10px 30px rgba(167,139,250,.35);
+        }
+
+        /* Labels */
+        .step-label {
+            margin-top: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 120px;
+        }
+
+        .step-item.active .step-label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .step-item.completed .step-label {
+            color: var(--text);
+        }
+
         @media (max-width: 640px) {
-            .steps-container { padding: 1rem 0.75rem; }
-            .steps-line { top: 40px; left: calc(10% + 0.5rem); right: calc(10% + 0.5rem); }
-            .step-bubble { width: 28px; height: 28px; font-size: 0.75rem; }
-            .step-label { font-size: 0.68rem; }
+            .steps-container {
+                padding: 24px 16px 12px;
+            }
+            .step-bubble {
+                width: 40px;
+                height: 40px;
+                margin-top: 4px;
+                margin-bottom: 4px;
+                font-size: 14px;
+            }
+            .step-item.active .step-bubble {
+                width: 48px;
+                height: 48px;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+            .steps-line {
+                top: 48px;
+            }
+            .step-label {
+                font-size: 11px;
+                margin-top: 10px;
+            }
         }
 
         /* UPLOAD */
