@@ -45,7 +45,7 @@ router = APIRouter(prefix="/test-crop", tags=["Test Crop"])
 @router.post("/")
 async def upload_test_video(file: UploadFile = File(...)):
     # Save the file
-    ext = os.path.splitext(file.filename)[1]
+    ext = os.path.splitext(file.filename or "")[1]
     filename = f"test_{uuid.uuid4().hex}{ext}"
     input_path = os.path.join(settings.UPLOAD_DIR, filename)
     with open(input_path, "wb") as f:

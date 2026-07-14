@@ -25,9 +25,9 @@ def create_video(db: Session, video: schemas.VideoCreate) -> models.Video:
 def update_video_status(db: Session, video_id: int, status: str, duration_sec: Optional[float] = None) -> Optional[models.Video]:
     db_video = get_video(db, video_id)
     if db_video:
-        db_video.status = status
+        db_video.status = status  # type: ignore
         if duration_sec is not None:
-            db_video.duration_sec = duration_sec
+            db_video.duration_sec = duration_sec  # type: ignore
         db.commit()
         db.refresh(db_video)
     return db_video
@@ -54,10 +54,10 @@ def create_job(db: Session, job: schemas.JobCreate) -> models.Job:
 def update_job(db: Session, job_id: int, status: str, progress: float = 0.0, error_message: Optional[str] = None) -> Optional[models.Job]:
     db_job = get_job(db, job_id)
     if db_job:
-        db_job.status = status
-        db_job.progress = progress
-        db_job.error_message = error_message
-        db_job.updated_at = datetime.utcnow()
+        db_job.status = status  # type: ignore
+        db_job.progress = progress  # type: ignore
+        db_job.error_message = error_message  # type: ignore
+        db_job.updated_at = datetime.utcnow()  # type: ignore
         db.commit()
         db.refresh(db_job)
     return db_job
@@ -138,7 +138,7 @@ def get_clips_by_video(db: Session, video_id: int) -> List[models.ClipCandidate]
 def update_clip_status(db: Session, clip_id: int, status: str) -> Optional[models.ClipCandidate]:
     db_clip = get_clip(db, clip_id)
     if db_clip:
-        db_clip.status = status
+        db_clip.status = status  # type: ignore
         db.commit()
         db.refresh(db_clip)
     return db_clip
@@ -146,10 +146,10 @@ def update_clip_status(db: Session, clip_id: int, status: str) -> Optional[model
 def update_clip_times(db: Session, clip_id: int, start_time: float, end_time: float) -> Optional[models.ClipCandidate]:
     db_clip = get_clip(db, clip_id)
     if db_clip:
-        db_clip.start_time = start_time
-        db_clip.end_time = end_time
-        db_clip.duration_sec = end_time - start_time
-        db_clip.status = "trimmed"
+        db_clip.start_time = start_time  # type: ignore
+        db_clip.end_time = end_time  # type: ignore
+        db_clip.duration_sec = end_time - start_time  # type: ignore
+        db_clip.status = "trimmed"  # type: ignore
         db.commit()
         db.refresh(db_clip)
     return db_clip
