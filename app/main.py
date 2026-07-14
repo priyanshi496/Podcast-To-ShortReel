@@ -62,6 +62,9 @@ app.include_router(routes_videos.router)
 app.include_router(routes_jobs.router)
 app.include_router(routes_clips.router)
 
+from app.api import routes_test
+app.include_router(routes_test.router)
+
 # Serve output and uploads directories as static files
 # This allows downloading / viewing the raw and cropped videos directly.
 if os.path.exists(settings.OUTPUT_DIR):
@@ -70,6 +73,14 @@ if os.path.exists(settings.UPLOAD_DIR):
     app.mount("/static/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
 from fastapi.responses import HTMLResponse
+
+@app.get("/test", response_class=HTMLResponse)
+def read_test():
+    static_file_path = os.path.join(os.path.dirname(__file__), "static", "test.html")
+    if os.path.exists(static_file_path):
+        with open(static_file_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Test HTML file not found</h1>", status_code=404)
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():

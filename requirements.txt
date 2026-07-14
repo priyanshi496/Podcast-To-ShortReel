@@ -15,3 +15,4 @@ librosa
 funasr
 modelscope
 torch
+yt-dlp

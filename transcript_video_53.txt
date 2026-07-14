@@ -1,0 +1,641 @@
+[00:00.00 - 00:02.08] Speaker 1: I'd love to start with these.
+[00:02.08 - 00:03.35] Speaker 2: Ten years of work right there.
+[00:03.35 - 00:06.63] Speaker 1: Someone on your team call these the real life Tony Stark glasses.
+[00:06.63 - 00:08.00] Speaker 2: Very hard to make each one of these.
+[00:08.00 - 00:09.43] Speaker 1: That makes me feel incredibly optimistic.
+[00:09.43 - 00:13.83] Speaker 2: In a world where AI gets smarter and smarter, this is probably gonna be the next major platform after phones.
+[00:13.83 - 00:15.85] Speaker 1: I miss hugging my mom.
+[00:15.85 - 00:16.80] Speaker 2: The haptics is hard.
+[00:16.80 - 00:20.64] Speaker 1: How does generative AI change how social media feels?
+[00:20.64 - 00:22.08] Speaker 2: We haven't found the end yet.
+[00:22.08 - 00:26.01] Speaker 1: The average American has fewer friends now than they did fifteen years ago.
+[00:26.01 - 00:27.53] Speaker 1: Why do you think that's happening?
+[00:27.53 - 00:27.92] Speaker 1: I
+[00:29.85 - 00:33.00] Speaker 2: mean, there's a lot going on to to unpack there.
+[00:36.43 - 00:39.39] Speaker 1: I'm about to interview Meta CEO Mark Zuckerberg.
+[00:39.39 - 00:40.52] Speaker 2: Mark Zuckerberg.
+[00:40.52 - 00:45.21] Speaker 1: There are not that many people with more power over what our future might look like.
+[00:45.21 - 00:49.77] Speaker 1: Nearly half the total human population now uses Meta products.
+[00:49.77 - 00:53.77] Speaker 1: And I just tested some of their new tech that feels like science fiction.
+[00:53.77 - 00:55.92] Speaker 1: This is crazy.
+[00:55.92 - 01:02.64] Speaker 1: Mark Zuckerberg and the team at Meta are imagining a future that billions of other people might actually end up living in.
+[01:02.64 - 01:13.82] Speaker 1: So my goal for this conversation is to try to figure out what that future really looks like, to paint a picture of the future Mark Zuckerberg is trying to build so that you can decide for yourself what you think of it.
+[01:13.82 - 01:17.51] Speaker 1: Welcome to the first episode of our new series, huge conversations.
+[01:22.87 - 01:23.50] Speaker 2: Hey.
+[01:23.75 - 01:24.54] Speaker 2: Good to meet you.
+[01:24.54 - 01:25.18] Speaker 1: Thanks for doing that.
+[01:25.18 - 01:25.51] Speaker 2: Yeah.
+[01:25.51 - 01:26.39] Speaker 2: Looking forward to it.
+[01:27.26 - 01:28.06] Speaker 1: Awesome.
+[01:29.10 - 01:31.90] Speaker 1: I'd love to tell you what my goal is of this conversation.
+[01:31.90 - 01:32.54] Speaker 1: Go for it.
+[01:32.54 - 01:40.39] Speaker 1: Um, so we have a show called Huge If True, which is this very optimistic show about science and technology and the potential futures that we can build.
+[01:41.20 - 01:48.00] Speaker 1: And in every episode, we're sort of exploring what does it look like if you play a certain technological future out.
+[01:48.00 - 01:50.48] Speaker 1: And so my goal in this conversation is to
+[01:51.76 - 01:58.04] Speaker 1: try to help people see the future that you're imagining when you're building the products that you and the Meta Team are building.
+[01:58.04 - 02:00.28] Speaker 1: What are you imagining this looks like in the future?
+[02:00.28 - 02:01.95] Speaker 1: How are you imagining people use this?
+[02:02.04 - 02:03.71] Speaker 1: Um, all of that.
+[02:03.71 - 02:04.12] Speaker 2: Yeah.
+[02:04.12 - 02:04.51] Speaker 2: Cool.
+[02:04.51 - 02:04.92] Speaker 2: All right.
+[02:04.92 - 02:05.48] Speaker 1: Awesome.
+[02:05.48 - 02:07.64] Speaker 1: So I'd love to start with these.
+[02:07.90 - 02:08.84] Speaker 2: Let's do it.
+[02:08.84 - 02:10.37] Speaker 2: Ten years of work right there.
+[02:10.37 - 02:13.02] Speaker 1: I got to demo them a little bit earlier today.
+[02:14.46 - 02:18.46] Speaker 1: I heard someone on your team call these the real life Tony Stark glasses.
+[02:18.53 - 02:19.56] Speaker 2: We're getting there.
+[02:19.56 - 02:21.18] Speaker 1: But I'd love to just hear in your voice.
+[02:21.18 - 02:21.81] Speaker 1: What are these?
+[02:22.50 - 02:30.81] Speaker 2: Well, these are the first full holographic augmented reality glasses, I think, that exist in the world.
+[02:31.13 - 02:36.02] Speaker 2: Um, we've made, I think it's a a few thousand or something.
+[02:36.02 - 02:36.34] Speaker 2: Right?
+[02:36.34 - 02:38.58] Speaker 2: Um, very hard to make each one of these.
+[02:38.81 - 02:51.12] Speaker 2: But this is the culmination of ten years of research and and development that we've done to basically miniaturize all the computing that you need to have
+[02:52.11 - 03:00.75] Speaker 2: glasses, not a headset, but glasses that can put full holograms into the world with a wide field of view.
+[03:00.75 - 03:07.90] Speaker 2: So you can imagine sort of in the future, we'd be having a version of this conversation where, you know, maybe I or or you are not even here.
+[03:07.90 - 03:12.38] Speaker 2: It's like one of us is physically here and the other one is here as a as kind of a full body hologram.
+[03:12.46 - 03:13.90] Speaker 2: And it's not just a video call.
+[03:13.90 - 03:14.78] Speaker 2: You can actually interact.
+[03:14.78 - 03:15.50] Speaker 2: You can do things.
+[03:15.50 - 03:19.99] Speaker 2: I mean, in the in the demo, we had the, you know, ping pong and games and things like that.
+[03:19.99 - 03:21.43] Speaker 2: But, I mean, you could you can interact.
+[03:21.43 - 03:22.31] Speaker 2: You can work together.
+[03:22.31 - 03:27.75] Speaker 2: You can, you know, play poker, play chess, whatever, like the holographic cards, holographic board game.
+[03:28.24 - 03:29.59] Speaker 2: I I just think it's gonna be wild.
+[03:29.59 - 03:32.63] Speaker 2: It's gonna remake, I think, so many different
+[03:33.86 - 03:43.93] Speaker 2: fields that we think about today from how we work and productivity to a lot of things around science, a lot of things around education, entertainment, fun, gaming.
+[03:44.65 - 03:45.93] Speaker 2: So but this is just the beginning.
+[03:46.13 - 03:47.50] Speaker 2: You know, this is the first version.
+[03:47.50 - 03:57.34] Speaker 2: It's, like, it's a prototype version that we've made, uh, in order to develop the next version, which is hopefully gonna be the consumer one that we sell to a lot of people.
+[03:57.90 - 03:58.78] Speaker 1: Why build this?
+[03:59.34 - 04:01.99] Speaker 2: Well, I think it's gonna be the next major computing platform.
+[04:02.13 - 04:21.70] Speaker 2: So if you look at, like, the grand arc of computing over time, you've you've gone from, like, mainframes to, um, computers that basically, like, live on, you know, your desk or on a tower to phones that you have in your hand that you basically, like, you know, can take with you everywhere that you want, but it's it's pretty unnatural.
+[04:21.70 - 04:21.94] Speaker 2: Right?
+[04:21.94 - 04:24.02] Speaker 2: It takes you away from the world around you.
+[04:24.50 - 04:34.18] Speaker 2: And, um, I think that the trend in computing is it gets more ubiquitous, it gets more natural, um, and it just gets more social.
+[04:34.18 - 04:34.35] Speaker 2: Right?
+[04:34.35 - 04:37.00] Speaker 2: So you wanna be able to interact with people in the world around you.
+[04:37.31 - 04:40.75] Speaker 2: And I I think that this is probably gonna be the next major platform after phones.
+[04:41.06 - 04:41.94] Speaker 1: Look at these two.
+[04:41.94 - 04:44.06] Speaker 1: These are the clear ones that show
+[04:44.06 - 04:47.89] Speaker 2: all the that edition, and this is, like, a really special edition.
+[04:47.89 - 04:50.86] Speaker 2: There's not a single millimeter
+[04:51.89 - 04:53.50] Speaker 2: of of space.
+[04:53.50 - 05:03.05] Speaker 2: It's, you know, everything in here from the microprojectors that, um, basically shoot light into the waveguides.
+[05:03.05 - 05:03.37] Speaker 2: Right?
+[05:03.37 - 05:06.17] Speaker 2: It's a special type of display system.
+[05:06.17 - 05:13.94] Speaker 2: I mean, these aren't normal displays like you have in a phone or a TV or computer, like the type of displays that people have been building for decades.
+[05:13.94 - 05:15.38] Speaker 2: It's a waveguide system.
+[05:15.38 - 05:25.70] Speaker 2: The projector that's shooting light basically goes into these nano etchings across the waveguide that are what catches and creates the holograms.
+[05:26.04 - 05:33.39] Speaker 2: In order to synchronize that with your where you're looking, there's eye tracking and and little cameras.
+[05:33.48 - 05:34.50] Speaker 2: They illuminate your eyes.
+[05:34.80 - 05:51.43] Speaker 2: And then, of course, there's all the basic stuff that you need, all the computing, the batteries to power the whole thing, microphones, the speakers, because it it needs to be able to play audio and speak with you, um, and the cameras and sensors to see things around you in the world.
+[05:51.43 - 05:56.23] Speaker 2: That way, when it's placing holograms in the world, it can do that in the right place and understand where you are.
+[05:56.23 - 06:06.94] Speaker 2: So that probably is still not covering everything because there's a lot of things that need to go into syncing up the holographic images between the two displays.
+[06:06.94 - 06:10.23] Speaker 2: Because you don't just have a single display like you have in a phone or TV.
+[06:10.23 - 06:13.58] Speaker 2: You have two, and it moves around.
+[06:13.91 - 06:16.62] Speaker 2: And, um, you know, physical things are hard and need to be synced up.
+[06:16.88 - 06:26.50] Speaker 2: There's also the radio that has to communicate with your other computing devices to do heavier computing, um, and the risk based neural interface that you probably got to try out.
+[06:26.50 - 06:40.22] Speaker 2: We kind of miniaturized all of this and fitted into, uh, you know, normal looking pair of glasses, which is, uh, you know, when I told the team that we're gonna do this ten years ago, um, you know, people weren't sure if we were gonna be able to.
+[06:40.22 - 06:48.56] Speaker 2: But I I think, you know, not only we're gonna be able to do this, I think we're gonna be able to get it cheaper and higher quality and even even smaller and more stylish over time.
+[06:48.56 - 06:50.87] Speaker 2: So I I think this is gonna be a pretty wild future.
+[06:51.04 - 06:57.83] Speaker 1: There are so many versions of trying to get at a similar idea of digital objects in physical space.
+[06:58.06 - 06:59.83] Speaker 1: I'm thinking of, for example,
+[07:01.45 - 07:12.25] Speaker 1: glasses that have heads up displays where it's headlocked and it's moving with my eyes, glasses that are really creating digital objects in physical space that don't move as I move.
+[07:12.25 - 07:12.42] Speaker 2: Mhmm.
+[07:13.20 - 07:14.32] Speaker 1: I'm thinking of these.
+[07:14.32 - 07:17.86] Speaker 1: I'm also thinking of the Snapchat spectacles that they just announced.
+[07:18.10 - 07:25.06] Speaker 1: Then on the other hand, there are headsets like the Quest and also, the Apple Vision Pro that seem to fall into a different category.
+[07:25.06 - 07:32.11] Speaker 1: I'm curious how you would organize this landscape for people and how you think about people using these tools in their real lives in the near future.
+[07:32.50 - 07:32.82] Speaker 2: Yeah.
+[07:32.82 - 07:39.38] Speaker 2: So when we were getting started on this about ten years ago, I thought that something like this was gonna be the ultimate product for everyone.
+[07:39.38 - 07:39.62] Speaker 2: Right?
+[07:39.62 - 07:44.43] Speaker 2: You get to, you know, normal looking pair of glasses, and we'll continue improving that.
+[07:44.43 - 07:46.68] Speaker 2: That can have full holographic images.
+[07:46.68 - 07:47.07] Speaker 2: Yeah.
+[07:47.07 - 07:53.39] Speaker 2: I think it's it's super powerful, and it is sort of the science fiction future that I think we all hope to get to.
+[07:53.63 - 08:05.92] Speaker 2: On the journey, we took a few other approaches as well, um, to help us develop towards that, including building glasses that don't have displays, um, to try to learn.
+[08:06.16 - 08:12.64] Speaker 2: Just take a stylish pair of glasses today and put as much technology into it as you can, but really focus on the form factor.
+[08:12.64 - 08:15.68] Speaker 2: And that's the Rayband meta glasses, and it's doing really well.
+[08:16.50 - 08:22.18] Speaker 2: And, initially, we thought that that was sort of intro product for us to learn how to build this.
+[08:22.50 - 08:32.96] Speaker 2: But one of the things that's clear now is you're going to be able to make that product a lot more affordable than this, uh, probably permanently.
+[08:32.96 - 08:41.26] Speaker 2: So I actually think that there are gonna be a bunch of different of these paths that we've taken are going to be kind of permanent product lines that people will choose.
+[08:41.75 - 08:46.38] Speaker 2: I think you'll see displayless classes like the Raybound metas continue to get better and better.
+[08:46.38 - 08:47.50] Speaker 2: Great for AI.
+[08:47.50 - 08:49.42] Speaker 2: No display, but you can talk to it.
+[08:49.42 - 08:50.38] Speaker 2: It can talk back.
+[08:50.62 - 08:54.92] Speaker 2: I think there's gonna be something in between these that's basically a heads up despite.
+[08:54.92 - 08:57.00] Speaker 2: So it's not a 70 degree field of view.
+[08:57.25 - 09:00.61] Speaker 2: Maybe it's a 20 degree or a 30 degree field of view.
+[09:00.61 - 09:07.57] Speaker 2: So that's not gonna be what you want for putting kind of a full hologram of a person or interacting with the world around you.
+[09:07.87 - 09:13.77] Speaker 2: But it's gonna be great for, you know, when you're talking to AI, not just having voice, but also being able to see what it's saying.
+[09:13.77 - 09:13.94] Speaker 2: Yeah.
+[09:13.94 - 09:14.17] Speaker 2: Right?
+[09:14.17 - 09:23.37] Speaker 2: Or, um, being able to text someone with your wrist based neural interface and then have their text show up rather than having it read to you, which is it's we read it faster than we can listen.
+[09:24.17 - 09:25.53] Speaker 2: Or getting directions.
+[09:25.53 - 09:25.77] Speaker 2: Right?
+[09:25.77 - 09:28.17] Speaker 2: Or, um, just being able to search for information and get all that.
+[09:28.17 - 09:30.41] Speaker 2: So there's a lot of value for a heads up display.
+[09:30.50 - 09:36.10] Speaker 2: That will be somewhat more expensive than the displayless glasses, um, but somewhat cheaper than this.
+[09:36.10 - 09:37.13] Speaker 2: Then I think you're gonna get this.
+[09:38.10 - 09:50.50] Speaker 2: It's going to be probably the most premium and and expensive of the glasses products, but hopefully still something that, you know, like a computer, is generally accessible to most people in the world.
+[09:50.74 - 09:54.73] Speaker 2: But I think that there are gonna be all of those, and I I I think people will like them.
+[09:55.04 - 10:07.96] Speaker 2: I also think that the headsets that people are using around mixed reality will continue to be a thing too because no matter how good we get at miniaturizing the tech for this, you're just gonna be able to fit more compute into a full headset.
+[10:08.03 - 10:14.26] Speaker 2: You know, fundamentally, our mission is not, you know, build something that is advanced and only a few people can use.
+[10:14.26 - 10:19.14] Speaker 2: We wanna take it, you know, the last mile and do all the innovation to get it to everyone.
+[10:19.24 - 10:25.58] Speaker 2: We, you know, just shipped or announced Quest three s, new mixed reality headset.
+[10:25.58 - 10:29.74] Speaker 2: We basically are delivering high quality mixed reality for $299.
+[10:30.37 - 10:41.07] Speaker 2: I was really proud last year when we delivered Quest three, the first kind of really high quality, high resolution, color, mixed reality device, um, for $500.
+[10:41.07 - 10:41.29] Speaker 2: Right?
+[10:41.29 - 10:47.62] Speaker 2: It was like it's like a fraction of the cost of of what the competitors are doing, and I think it's actually higher quality in a lot of ways.
+[10:47.62 - 10:49.23] Speaker 2: And now we've just doubled down on that.
+[10:49.96 - 11:01.96] Speaker 2: So I think that they're all actually gonna end up being important long term product lines, display less, heads up display, full holographic AR, full headsets.
+[11:02.12 - 11:03.79] Speaker 2: I think that they're all gonna be important.
+[11:03.79 - 11:04.03] Speaker 1: Yeah.
+[11:04.57 - 11:17.27] Speaker 1: If you play out the future of not just the hardware that we've been talking about, um, so Meta Ray Bands, Quest, Orion, um, but also the Llama models
+[11:17.61 - 11:17.85] Speaker 2: Mhmm.
+[11:17.85 - 11:18.39] Speaker 1: If everything
+[11:19.36 - 11:22.87] Speaker 1: goes according to you and the team's wildest dreams.
+[11:22.87 - 11:26.24] Speaker 1: I'd love for you to just begin to describe what that feels like.
+[11:26.24 - 11:29.36] Speaker 2: I mean, I think that there are two primary values that we're trying to bring.
+[11:29.36 - 11:29.67] Speaker 2: Mhmm.
+[11:29.67 - 11:36.20] Speaker 2: On the AR and kind of mixed reality side, the main value we're trying to bring is this feeling of presence.
+[11:36.27 - 11:36.45] Speaker 2: Right?
+[11:36.45 - 11:45.87] Speaker 2: So there's something that I think is just really deep about being physically present with another person that you don't get from any other technology today.
+[11:45.87 - 11:51.73] Speaker 2: And I think that that's the thing when people have a very visceral reaction to experiencing virtual or mixed reality.
+[11:51.88 - 11:58.12] Speaker 2: What they're really reacting to is that they actually, for the first time with technology, feel a sense of presence.
+[11:58.12 - 12:01.85] Speaker 2: Like, they're in a place with a person, and that's super powerful.
+[12:01.85 - 12:06.73] Speaker 2: Like, I focused on designing social apps and experiences for twenty years.
+[12:07.21 - 12:14.63] Speaker 2: That's sort of, like, the holy grail of that, is being able to build a technology platform that delivers this, like, deep sense of of social presence.
+[12:15.40 - 12:18.45] Speaker 2: The other big track is around personalized AI.
+[12:18.45 - 12:23.40] Speaker 2: And for that and that's sort of where Llama and Med AI and all those things are going.
+[12:23.80 - 12:28.37] Speaker 2: There's all this development that's going into making the models smarter and smarter over time.
+[12:29.03 - 12:35.20] Speaker 2: But I think where this is gonna get really compelling is when it's personalized for you.
+[12:35.42 - 12:46.98] Speaker 2: And in order for it to be personalized for you, it has to have context and understand what's going on in your life, both kind of at a global level and, like, what's physically happening around you right now.
+[12:46.98 - 13:03.12] Speaker 2: And in order to do that, I think that glasses are going to be the ideal form factor because they're positioned on your face in a way where they can let them see what you see and hear what you hear, which are the two most important senses that we use for for kind of taking an information in context about the world.
+[13:03.20 - 13:06.14] Speaker 2: I think that this is all gonna be kind of really deep and profound stuff.
+[13:06.14 - 13:07.36] Speaker 2: But it's basically those two things.
+[13:07.36 - 13:13.28] Speaker 2: It's this feeling of presence and this capability of really personalized intelligence that can help you.
+[13:13.37 - 13:16.00] Speaker 1: I'd love to talk about each of those two things.
+[13:16.00 - 13:16.57] Speaker 2: Mhmm.
+[13:17.04 - 13:18.80] Speaker 1: The first on presence.
+[13:19.45 - 13:22.00] Speaker 1: I owe a lot to being able to connect with people online.
+[13:22.07 - 13:22.47] Speaker 1: Right?
+[13:22.47 - 13:23.99] Speaker 1: This job that I have is
+[13:23.83 - 13:23.99] Speaker 2: I think
+[13:24.29 - 13:24.77] Speaker 1: definition.
+[13:24.77 - 13:25.35] Speaker 1: Yeah.
+[13:25.41 - 13:26.62] Speaker 1: Also with my family.
+[13:26.62 - 13:28.87] Speaker 1: My parents don't live anywhere close to me.
+[13:28.87 - 13:31.01] Speaker 1: I video call them a lot.
+[13:31.01 - 13:34.62] Speaker 1: And when I think about the progress of technology like this,
+[13:35.62 - 13:44.65] Speaker 1: in a timeline from, like, the Telegram to the telephone to video call to some feeling of presence with another person who's Mhmm.
+[13:44.58 - 13:45.86] Speaker 1: Feels like they're right there in front of me.
+[13:45.86 - 13:45.94] Speaker 1: Yeah.
+[13:45.94 - 13:47.37] Speaker 1: That makes me feel incredibly optimistic.
+[13:47.37 - 13:50.34] Speaker 1: I would love a future where, like, I can
+[13:51.37 - 13:54.11] Speaker 1: blues in Scrabble to my mom Mhmm.
+[13:54.11 - 13:55.53] Speaker 1: And feel like she's really here
+[13:55.53 - 13:55.77] Speaker 2: in front
+[13:55.77 - 13:56.11] Speaker 1: of me.
+[13:56.11 - 13:56.58] Speaker 2: Yeah.
+[13:56.58 - 13:58.99] Speaker 1: And it feels like we're not that far away from something
+[13:59.23 - 13:59.70] Speaker 2: I agree.
+[13:59.70 - 14:01.37] Speaker 1: That persuades my brain that that's happening.
+[14:01.37 - 14:01.70] Speaker 2: Yeah.
+[14:01.70 - 14:02.35] Speaker 2: Totally.
+[14:03.07 - 14:03.77] Speaker 1: And, also,
+[14:04.75 - 14:07.71] Speaker 1: I miss hugging my mom.
+[14:07.71 - 14:08.11] Speaker 1: Mhmm.
+[14:08.11 - 14:08.50] Speaker 1: Right?
+[14:08.50 - 14:10.02] Speaker 1: Like, that never goes away.
+[14:10.02 - 14:10.26] Speaker 2: Yeah.
+[14:10.26 - 14:11.23] Speaker 2: Haptics is hard.
+[14:11.23 - 14:11.78] Speaker 2: Yeah.
+[14:11.78 - 14:12.02] Speaker 2: But
+[14:12.19 - 14:14.66] Speaker 1: And so my question is my question is about that.
+[14:14.66 - 14:21.00] Speaker 1: It's about this this feeling of, like, it's hard for me to imagine, um, a future where real physical presence
+[14:21.25 - 14:21.50] Speaker 2: Mhmm.
+[14:21.50 - 14:28.37] Speaker 1: Is not different and special in some way, um, where I where I don't miss literally hugging my mom.
+[14:28.37 - 14:28.76] Speaker 1: Yeah.
+[14:28.76 - 14:32.22] Speaker 1: And I'm curious how you think about
+[14:33.50 - 14:43.83] Speaker 1: the parts of human connection that are eye contact and physical touch and things that our eight brains value for connection with other people.
+[14:43.83 - 14:44.38] Speaker 1: Mhmm.
+[14:44.78 - 14:45.19] Speaker 2: Yeah.
+[14:45.19 - 14:48.47] Speaker 2: Well, eye contact, I think we're gonna get to a lot before the the touch part.
+[14:48.76 - 14:52.12] Speaker 2: For haptics, I I do think we'll make progress on that.
+[14:52.12 - 15:07.59] Speaker 2: But it's it's obviously there's a spectrum there too from kind of hands, which is where if you if you draw out the kind of, like, homunculous version of a person in terms of, like, what are what are our kind of sensory you know, what what's, like, the majority of what we're sensing.
+[15:07.59 - 15:08.62] Speaker 2: It's like it's yeah.
+[15:08.62 - 15:08.78] Speaker 2: Yeah.
+[15:08.78 - 15:09.19] Speaker 2: Yeah.
+[15:09.19 - 15:15.75] Speaker 2: So so I think being able to do that for your hands is probably the most important place to start.
+[15:15.75 - 15:18.48] Speaker 2: And you have a rough version of that with controllers today.
+[15:18.78 - 15:20.96] Speaker 2: Um, I think that that'll get even more over time.
+[15:20.96 - 15:31.24] Speaker 2: We have this demo playing ping pong where you have a controller whereas the digital ball hits the ping pong paddle, you feel it hit the as if it's hitting the ping pong paddle wherever it is.
+[15:31.24 - 15:35.55] Speaker 2: So you actually have a sense of, like, where it's it's hitting the the the paddle.
+[15:35.55 - 15:38.12] Speaker 2: So I I think that that was that was just a a wild demo.
+[15:38.12 - 15:39.48] Speaker 2: So I think we'll get some of that.
+[15:39.63 - 15:43.07] Speaker 2: The most extreme version of this is wanting forced feedback.
+[15:43.07 - 15:43.29] Speaker 2: Right?
+[15:43.29 - 15:46.99] Speaker 2: So, I mean, like, for doing a lot of sports, right, it's it's like, okay.
+[15:46.99 - 15:58.75] Speaker 2: We can kind of do a good approximation of, like, boxing today where you get, like, good feedback on your hands, But it would be hard to do a virtual reality version of jiu-jitsu where you're, like Yes.
+[15:58.75 - 16:02.12] Speaker 2: Grappling with someone and you need, like, real kind of force feedback on it.
+[16:02.12 - 16:04.91] Speaker 2: So that's probably, like, the hardest thing, right, to to go do.
+[16:06.25 - 16:07.62] Speaker 2: But I think we'll get there.
+[16:08.00 - 16:15.62] Speaker 2: You know, I think like most science fiction, it's not this binary thing that you just, like, wake up one day and we're like, oh, we've realized all the dreams.
+[16:15.62 - 16:32.80] Speaker 2: But but I I do think that these platforms are gonna be the first time that I think that there's a realistic sense of presence in all the ways that that's special to people, um, for most things that people wanna do, which are not the most physical ones.
+[16:32.80 - 16:35.12] Speaker 2: And even some of the basic physical ones, think we'll get.
+[16:35.28 - 16:36.80] Speaker 2: But then there's a long tail of other stuff.
+[16:36.80 - 16:39.24] Speaker 2: I mean, smell is also really important for people.
+[16:39.24 - 16:39.55] Speaker 2: Yeah.
+[16:39.55 - 16:39.79] Speaker 2: Right?
+[16:39.79 - 16:43.38] Speaker 2: So I think it's disproportionately important for memories.
+[16:43.79 - 16:44.36] Speaker 2: And
+[16:45.79 - 16:50.67] Speaker 2: that's not really a thing that I think in the next few years we're gonna have in any of these devices.
+[16:50.67 - 16:53.62] Speaker 2: I mean, that's a very difficult and challenging thing on its own.
+[16:54.25 - 17:01.29] Speaker 1: What is the piece of that that you feel most interested in that you keep coming back to in your mind?
+[17:01.29 - 17:11.25] Speaker 2: This has the frustrating property to develop that the sense of presence is almost like when you're designing something that that's sort of trying to artificially deliver it.
+[17:11.65 - 17:13.97] Speaker 2: You're delivering an illusion to a person.
+[17:14.21 - 17:24.15] Speaker 2: And more than any one thing that provides a sense of presence, it's actually more the case that any one thing done wrong breaks the sense of presence.
+[17:24.23 - 17:30.95] Speaker 2: You you kind of know that you're interacting with technology, but it's so convincing that
+[17:32.34 - 17:34.10] Speaker 2: that you just kind of go along with it.
+[17:34.10 - 17:34.74] Speaker 2: And you're like, okay.
+[17:34.74 - 17:34.90] Speaker 2: Yeah.
+[17:34.90 - 17:35.14] Speaker 2: No.
+[17:35.14 - 17:37.30] Speaker 2: This person feels like it feel like they're there.
+[17:37.30 - 17:37.61] Speaker 2: Right?
+[17:37.61 - 17:46.39] Speaker 2: Um, when I did that ping pong demo, I like, at the end of it, I dropped the ping pong paddle on the virtual table, and it shattered.
+[17:46.39 - 17:50.23] Speaker 2: So that was not the best for for, um, for our internal development.
+[17:50.23 - 17:53.02] Speaker 2: But but, like, that's winning in in our in our development.
+[17:53.02 - 17:53.26] Speaker 2: Right?
+[17:53.26 - 18:01.40] Speaker 2: It's like when when you when you feel like something is is kind of so realistic that you you're just convinced that, um, that it's there.
+[18:01.56 - 18:03.32] Speaker 2: Now and there are a of things that can break that.
+[18:03.32 - 18:03.56] Speaker 2: Right?
+[18:03.56 - 18:06.52] Speaker 2: So I think a a field of view that's too low.
+[18:06.52 - 18:06.68] Speaker 2: Right?
+[18:06.68 - 18:09.48] Speaker 2: So something feels real, but then you turn your head and it's not there.
+[18:09.73 - 18:14.45] Speaker 2: Um, latency, right, physics that don't behave like realistic physics.
+[18:14.97 - 18:22.65] Speaker 2: It also is interesting in some ways what people can accept as physically real even though it's not.
+[18:22.65 - 18:22.89] Speaker 2: Right?
+[18:22.89 - 18:25.36] Speaker 2: So, look, we've done a ton of work on avatars.
+[18:25.36 - 18:28.56] Speaker 2: We we have this whole work stream on Kotak avatars to do these Yes.
+[18:28.56 - 18:33.20] Speaker 2: Photorealistic avatars, and it's I think it's gonna be incredibly compelling, and people are gonna love it.
+[18:33.36 - 18:33.92] Speaker 2: But
+[18:35.04 - 18:48.27] Speaker 2: one of the things that I found interesting is the ability to mix photorealistic and expressive kind of the cartoony avatars with photorealistic worlds and kind of more cartoony computer game type worlds.
+[18:48.27 - 18:58.20] Speaker 2: So you can have the a codec kind of photorealistic avatar of a person in what is clearly like a video game or cartoon world, and people are generally pretty fine with that.
+[18:58.20 - 18:58.68] Speaker 2: It's like, okay.
+[18:58.68 - 18:59.79] Speaker 2: That that feels pretty good.
+[19:00.11 - 19:01.32] Speaker 2: And similarly,
+[19:02.36 - 19:16.25] Speaker 2: having a photorealistic world but good, increasingly good, um, kind of cartoon avatars, as long as the avatars move in a way that feels authentic to the person you're interacting with, it actually feels pretty good.
+[19:16.25 - 19:25.22] Speaker 2: You know, it's when you look at a two d still frame of it, um, some of the stuff can look a little bit silly, and and we've certainly, um, you know, had had a harsh share of memes around that.
+[19:25.38 - 19:36.64] Speaker 2: But, um, but when you're in there, you know, and you've you've played around with a lot of the stuff, it feels realistic because it's basically mimicking the kind of authentic mannerisms of of a person that you're interacting with.
+[19:36.64 - 19:36.88] Speaker 2: Yeah.
+[19:36.88 - 19:41.11] Speaker 2: And even if it's not a codec, photorealistic avatar, if it's kind of a more cartoony expressive one.
+[19:41.11 - 19:50.98] Speaker 2: So I I think that that's it's it's very interesting to see kinda which pieces you need to unlock and what where you just need to be, like, very technically excellent and consistent.
+[19:50.98 - 19:55.61] Speaker 2: But it's, um, this isn't a space where it's, like, you deliver one thing and it's good.
+[19:55.61 - 19:56.81] Speaker 2: This is, like, there's a
+[19:57.74 - 20:04.22] Speaker 2: wide breadth of things that you need to nail and then have it all come together, and that's why these are, you know, 10 new projects.
+[20:05.42 - 20:14.22] Speaker 1: It seems like an interesting way to learn about the human brain and what we actually care about with respect to what feels real.
+[20:14.94 - 20:20.14] Speaker 1: I was wondering about there was this moment in an interview that you did with Lex Friedman.
+[20:20.14 - 20:27.38] Speaker 1: You quoted research that says that the average American has fewer friends now than they did fifteen years ago.
+[20:27.38 - 20:27.94] Speaker 2: Yeah.
+[20:27.94 - 20:34.26] Speaker 1: And I was so interested in that because it seems like if we want to get to a world where there's more human connection
+[20:34.50 - 20:34.82] Speaker 2: Mhmm.
+[20:34.82 - 20:39.32] Speaker 1: This is the trend that we're gonna have to grapple with.
+[20:39.97 - 20:40.84] Speaker 1: And Yeah.
+[20:40.84 - 20:52.14] Speaker 1: Just to give some data on this, in the American time use survey, over the last twenty years, the amount of time American adults spend socializing in person has dropped by nearly 30%.
+[20:52.14 - 20:57.90] Speaker 1: For ages 15 to 24, according to the surgeon general, it's nearly 70%.
+[20:57.90 - 20:58.94] Speaker 1: And I I Mhmm.
+[20:58.94 - 21:04.22] Speaker 1: Look at that data, and I think to myself, well, maybe if we're all socializing digitally, that doesn't matter so much.
+[21:04.22 - 21:06.73] Speaker 1: Maybe there's a future where that's actually fine.
+[21:06.89 - 21:10.32] Speaker 1: But there's also data that suggests that we're struggling somewhat.
+[21:10.32 - 21:15.93] Speaker 1: The number of Americans who say that they don't have a single close friend
+[21:16.32 - 21:16.89] Speaker 2: Yeah.
+[21:16.89 - 21:17.60] Speaker 1: That share has
+[21:17.60 - 21:18.73] Speaker 2: dropped 3%
+[21:18.73 - 21:21.60] Speaker 1: to 12% in the last thirty years.
+[21:21.85 - 21:29.76] Speaker 1: It feels to me like with all the tools that we've built for human connection, we're struggling to connect.
+[21:31.45 - 21:32.33] Speaker 1: And I'm curious,
+[21:33.25 - 21:35.25] Speaker 1: why do you think that's happening?
+[21:36.84 - 21:40.28] Speaker 2: I mean, there's a lot going on to to unpack there.
+[21:40.36 - 21:41.00] Speaker 2: Um,
+[21:42.13 - 21:50.97] Speaker 2: a lot has changed sort of economically and socially during that period, and a lot of those trends go back before a lot of the modern technology.
+[21:50.97 - 21:55.61] Speaker 2: So so, I mean, this is something that a lot of academics and and folks have have studied.
+[21:55.61 - 21:56.08] Speaker 2: But
+[21:57.85 - 22:09.26] Speaker 2: it is an interesting lens to look at this, though, because I think whenever you're talking about building digital types of connection, one of the first questions that you get is,
+[22:10.23 - 22:12.63] Speaker 2: is that gonna replace the physical connection?
+[22:12.78 - 22:19.15] Speaker 2: And my answer to that, especially in the case of something like this, is that
+[22:20.51 - 22:21.95] Speaker 2: no, because
+[22:23.07 - 22:26.43] Speaker 2: people already don't have as much connection as they would like to have.
+[22:26.43 - 22:32.93] Speaker 2: It's not like this is replacing some sort of better physical connection that they would have otherwise had.
+[22:32.93 - 22:40.45] Speaker 2: It's that the average person would like to have 10 friends, and they have two, right, or three.
+[22:40.69 - 22:48.76] Speaker 2: And there's just more demand to socialize than what people are able to do given the current construct.
+[22:49.25 - 22:55.81] Speaker 2: And giving people the ability to be present with people who are in other places physically just seems like it will unlock more.
+[22:55.81 - 23:00.19] Speaker 2: It's not gonna make it so and if I have glasses, it's not gonna make it that I spend less time with my wife.
+[23:00.34 - 23:05.54] Speaker 2: It's gonna make it so that I spend more time with, you know, my sister who lives across the country.
+[23:05.86 - 23:11.49] Speaker 2: And, um, that's I I think that that's that's good, and I think people need that.
+[23:11.49 - 23:23.94] Speaker 2: Um, as as for the rest, I I I think we could probably spend a multihour podcast just going into all of the different, um, kinda socioeconomic, political dynamics that are going on.
+[23:24.33 - 23:38.01] Speaker 2: But, um, none of the trends that I've seen, does it seem like the primary thing that's going on, is that because people are interacting online, they're now not interacting with their with people, um, physically.
+[23:38.31 - 23:50.15] Speaker 2: It's, um, now, certainly, I think you, um, you I I do interact with people online who I also like to interact with physically, but and I think that that's kind of like a combination,
+[23:51.50 - 23:54.95] Speaker 2: like, combined richer relationship that you have overall.
+[23:54.95 - 24:04.06] Speaker 2: But, um, I I think that there's a lot going on with the loss of of kind of social capital and connections that really predates a lot of the modern technology.
+[24:05.47 - 24:20.19] Speaker 1: The goal of what I'm what I'm trying most to learn about is how we can structure the technologies that we use in the future to get toward this future, I think you're imagining, of more human connection in more ways.
+[24:20.81 - 24:21.77] Speaker 1: I'm curious.
+[24:21.77 - 24:24.74] Speaker 1: You brought up the other big pillar of AI.
+[24:25.05 - 24:33.61] Speaker 1: And in some of your conversations, I'm thinking of a conversation with Tim Ferriss in particular, you talked about a lot of different use cases of AI.
+[24:33.94 - 24:38.85] Speaker 1: And they seem to me to fall on somewhat of a spectrum.
+[24:38.85 - 24:39.33] Speaker 1: Mhmm.
+[24:39.49 - 24:43.49] Speaker 1: Like, for example, you mentioned automatic real time translation.
+[24:43.49 - 24:43.73] Speaker 2: Mhmm.
+[24:43.73 - 24:45.97] Speaker 1: Like, basically, the Star Trek translator
+[24:46.13 - 24:46.29] Speaker 2: Yeah.
+[24:46.29 - 24:46.93] Speaker 1: Universal translator.
+[24:47.01 - 24:48.29] Speaker 2: Pretty much there.
+[24:48.29 - 24:48.77] Speaker 1: Yeah.
+[24:48.77 - 25:02.07] Speaker 1: And and that's one example on one end of the spectrum where some people might argue that there is a chance that someone is less likely, for example, to learn a language because we can all speak to each other in real time in different languages.
+[25:02.07 - 25:07.15] Speaker 1: I think nobody would really argue that, therefore, we shouldn't have that kind of universal translator.
+[25:07.15 - 25:07.47] Speaker 1: Like, there's
+[25:07.47 - 25:09.15] Speaker 2: one end of the Latin and Greek.
+[25:09.15 - 25:09.55] Speaker 1: Right.
+[25:09.55 - 25:09.88] Speaker 1: Exactly.
+[25:09.88 - 25:10.43] Speaker 1: So
+[25:11.39 - 25:19.65] Speaker 1: And and so I think that end of the spectrum is something like, um, technologies that really measurably unlock Mhmm.
+[25:19.65 - 25:23.00] Speaker 1: Our humanity because they remove a struggle between people.
+[25:23.56 - 25:28.93] Speaker 1: And then on the other end of the spectrum, there are a lot of educational things, for example, where the struggle is kind of the point.
+[25:28.93 - 25:29.17] Speaker 1: Right?
+[25:29.17 - 25:30.21] Speaker 1: Like, it's like building a muscle.
+[25:30.21 - 25:31.18] Speaker 1: Like, you Yeah.
+[25:31.18 - 25:36.22] Speaker 1: I I can think of so many times in my life where, like, the reason why I was doing something was not the output.
+[25:36.22 - 25:38.61] Speaker 1: It was the fact that I was trying so hard to do it.
+[25:38.94 - 25:46.78] Speaker 1: There's one example in the Tim Ferriss interview where you talked about, um, your kids struggling to, uh, articulate themselves emotionally.
+[25:46.78 - 25:47.02] Speaker 1: Mhmm.
+[25:47.02 - 25:48.54] Speaker 1: And adults very much had the same problem.
+[25:48.54 - 25:48.95] Speaker 1: Mhmm.
+[25:49.26 - 25:52.95] Speaker 1: And you talked about AI as a way to help them articulate those emotions.
+[25:52.95 - 25:53.50] Speaker 1: Yeah.
+[25:53.50 - 26:02.71] Speaker 1: And I thought about all of the many times in my life where I have struggled to articulate my emotions and how I really could have used some help in those moments.
+[26:02.96 - 26:13.43] Speaker 1: And I also find myself thinking about the times when that was really building a muscle, where, like, the act of struggling to communicate with someone and understand what they wanted from me was was important to my development.
+[26:13.58 - 26:14.06] Speaker 1: Mhmm.
+[26:14.06 - 26:33.22] Speaker 1: And so my question is, if you think about that as a spectrum between things that are really important to our humanity where and the struggle being removed is helpful versus things where the struggle is the point and it it, um, unlocks something about our humanity and is important to preserve, like building a muscle.
+[26:33.38 - 26:37.06] Speaker 1: How do you draw the line between those things?
+[26:37.06 - 26:42.24] Speaker 1: And how do we ensure that the muscles that we're building for this future are stronger and not weaker?
+[26:42.24 - 26:43.35] Speaker 2: That's interesting.
+[26:43.35 - 26:46.24] Speaker 2: I mean, I think we're always gonna find new things to struggle with.
+[26:46.55 - 26:53.20] Speaker 2: And, I mean, it's you can always get better at communicating with other people and kind of expressing yourself and understanding other people.
+[26:53.51 - 27:00.29] Speaker 2: So having a tool that can help you do that better isn't gonna mean that, like, oh, now we perfectly understand every you know, it's mean Yeah.
+[27:02.53 - 27:04.13] Speaker 2: And, I mean, I think the
+[27:05.25 - 27:09.89] Speaker 2: maybe one of the most functional aspects of this, you're already seeing a lot of these AI models really help people with coding.
+[27:10.26 - 27:10.82] Speaker 2: Right?
+[27:10.82 - 27:18.67] Speaker 2: Like, a generation ago, um, before I I was getting started, a lot of coding was, like, really low level system software.
+[27:18.67 - 27:22.67] Speaker 2: And, you know, then by the time that I got into it, there's a little bit of that.
+[27:22.67 - 27:27.49] Speaker 2: But, you know, you can make websites pretty easily, make apps pretty easily.
+[27:27.89 - 27:40.56] Speaker 2: And I think in twenty years or a lot sooner than that, um, you're gonna basically be in a world where kids will be able to just describe the things that they want and build incredibly complex pieces of software.
+[27:40.56 - 27:42.00] Speaker 2: So it's, um,
+[27:42.97 - 27:46.17] Speaker 2: in that world, are kids gonna be not struggling?
+[27:46.56 - 27:47.52] Speaker 2: I I don't think so.
+[27:47.52 - 27:56.13] Speaker 2: I think that they're gonna be just, um, expressing their creativity, and it'll it'll be this kind of constant iterative feedback loop around, like, okay.
+[27:56.13 - 28:00.61] Speaker 2: Like, yeah, I, you know, took a few minutes to describe this thing.
+[28:01.61 - 28:07.14] Speaker 2: And, like, yeah, this whole, like, amazing virtual world was created that I can have seen on my glasses or whatever.
+[28:07.38 - 28:10.74] Speaker 2: But, like, these things are not exactly what I want them to be.
+[28:10.74 - 28:12.57] Speaker 2: So now I need to, like, go back and edit them.
+[28:12.57 - 28:13.94] Speaker 2: It just I don't know.
+[28:13.94 - 28:15.46] Speaker 2: I I I think that there's always more.
+[28:16.75 - 28:17.63] Speaker 1: Another way to get
+[28:17.63 - 28:20.43] Speaker 2: at this some the things that I think makes makes people so good.
+[28:20.43 - 28:22.35] Speaker 2: It just there's there's always more to do.
+[28:22.35 - 28:23.39] Speaker 1: We'll always find the struggle.
+[28:23.39 - 28:23.88] Speaker 1: Yeah.
+[28:23.95 - 28:24.19] Speaker 1: Yeah.
+[28:24.19 - 28:32.35] Speaker 1: Another way to get at this is if you if you play this out, to make the tools even better in, like, ten years, let's say your kids are in high school.
+[28:32.35 - 28:32.51] Speaker 2: Mhmm.
+[28:32.73 - 28:44.32] Speaker 1: There ways that you would want them using AI because you think it would accelerate them intellectually and ways that you would advocate for them not to use it, uh, or things that you would have concerns about?
+[28:44.73 - 28:48.85] Speaker 2: I mean, I think that there are some things that you need to be able to do yourself.
+[28:48.85 - 28:51.89] Speaker 2: I think that that's a lot of the basic fear that people have around this.
+[28:51.89 - 28:52.29] Speaker 1: I agree with
+[28:52.29 - 28:52.61] Speaker 2: that.
+[28:52.61 - 29:04.40] Speaker 2: Is that while we're building these amazing tools, we get away from the self confidence and ability of being able to do, like, this basic stuff yourself.
+[29:04.40 - 29:05.03] Speaker 2: So it's like, alright.
+[29:05.03 - 29:18.65] Speaker 2: You have a calculator, but it's still good to be able to do kind of basic math in your head because there are a lot of things that come up throughout the day that you just wanna have a general numeracy around.
+[29:18.65 - 29:18.97] Speaker 2: Right?
+[29:18.97 - 29:30.79] Speaker 2: That, um, often they're not expressed in numerical terms, but just in terms of understanding trends or understanding arguments that people are making, you you kinda need to understand the shape of how numbers come together.
+[29:30.79 - 29:36.24] Speaker 2: And so, I mean, I think one of the big debates is, like, should we still teach our kids to program computers?
+[29:36.24 - 29:41.51] Speaker 2: Even though you're gonna have these, um, these tools in the future that are just so
+[29:42.46 - 29:48.45] Speaker 2: much more powerful than anything that we have now to produce incredibly complicated pieces of software?
+[29:48.93 - 29:51.81] Speaker 2: I think the answer to that is probably yes because, um,
+[29:52.93 - 29:58.00] Speaker 2: I think teaching someone how to code is teaching them a way to think rigorously.
+[29:58.31 - 30:10.35] Speaker 2: And that even if they're not doing most of the code production, I think it's important that you kind of have the ability to think in that way, and I think it's gonna just make you generally a better thinker and better person.
+[30:10.83 - 30:11.54] Speaker 2: So,
+[30:12.83 - 30:16.35] Speaker 2: yeah, maybe that's, like, this generations version of calculators.
+[30:16.35 - 30:22.75] Speaker 2: It's like, so you'll you'll wanna you wanna use the calculator, but, um, you'll also wanna be able to generally do without it.
+[30:23.05 - 30:25.77] Speaker 2: Other ones like language, I I I don't know.
+[30:25.77 - 30:26.81] Speaker 2: I mean, different people can come out.
+[30:26.81 - 30:41.09] Speaker 2: I mean, I think this is one of the interesting questions about parenting these days is, like, um, is is just kind of, like, what are what's important to to teach your your kids in in an era where so much is gonna change over the the time that they're even in school.
+[30:41.33 - 30:43.09] Speaker 2: Language, I think you can make similar arguments.
+[30:43.09 - 30:51.73] Speaker 2: I I know there's a lot of it's, like, it's probably gonna be less functionally relevant in the future to learn multiple languages, but it it sort of helps you think in different ways.
+[30:53.24 - 30:57.31] Speaker 2: You know, I found from the languages that I've studied that a lot of it yeah.
+[30:57.31 - 30:59.40] Speaker 2: You learn about the structure of your own language.
+[30:59.40 - 31:02.35] Speaker 2: You you can you know, you also learn about the culture.
+[31:02.35 - 31:02.59] Speaker 2: Right?
+[31:02.59 - 31:13.02] Speaker 2: Because so much of how things are expressed in different places is tied to the nuance and the history of of kind of what how how so I think, like, you that's all valuable and interesting stuff to get into.
+[31:13.34 - 31:13.98] Speaker 2: But then,
+[31:15.02 - 31:19.18] Speaker 2: I know, at the same time, we only have so many hours in the day, so people need to prioritize what they're gonna learn.
+[31:19.18 - 31:28.91] Speaker 2: And it may be that, okay, in a world with perfect translation, which, by the way, we basically just announced on the Ray Ban Meadows that now you're gonna be able to, you know, just, like, go to different countries.
+[31:28.91 - 31:29.95] Speaker 2: We're starting out sales.
+[31:29.95 - 31:30.26] Speaker 2: Yeah.
+[31:30.26 - 31:33.39] Speaker 2: We're we're starting out with just a few languages, but we'll roll it out to more.
+[31:33.39 - 31:37.78] Speaker 2: And, you know, you'll be you could be traveling anywhere, and you have your glasses, and they just translate in real time in your ear.
+[31:39.11 - 31:40.32] Speaker 2: So it's wild.
+[31:40.79 - 31:41.03] Speaker 2: Yeah.
+[31:41.03 - 31:44.96] Speaker 2: So I I think people are gonna need to choose what what what they wanna focus on going forward.
+[31:45.27 - 31:53.68] Speaker 1: How do the developments that we've been talking about in AI intersect with social media and the platforms that most people use today?
+[31:54.00 - 32:00.07] Speaker 1: There's a a future where there's generated images and generated text and maybe Yeah.
+[32:00.16 - 32:01.59] Speaker 1: AI influencers.
+[32:02.48 - 32:07.44] Speaker 1: How does generative AI change how social media feels in the future?
+[32:08.00 - 32:08.72] Speaker 2: Yeah.
+[32:08.72 - 32:11.20] Speaker 2: I mean, I think that that's a that's a really deep one.
+[32:12.08 - 32:20.15] Speaker 2: You know, there's already been one big shift, which is that social media started out as people primarily interacting with their friends.
+[32:20.30 - 32:30.71] Speaker 2: And now it is, you know, at least half of the content is basically people interacting with creators or content that's not created by people who they've kind of personally know.
+[32:31.95 - 32:39.54] Speaker 2: So we sort of already have that paradigm, and I think AI is probably going to accelerate that.
+[32:39.54 - 32:41.86] Speaker 2: It will give all these people additional tools.
+[32:41.95 - 32:42.18] Speaker 2: Right?
+[32:42.18 - 32:47.02] Speaker 2: So your friends will create kind of funnier memes and more interesting content.
+[32:49.43 - 32:51.02] Speaker 2: That'll come from a lot of different ways.
+[32:51.02 - 32:55.43] Speaker 2: I think some of it will be, okay, your friends have glasses and they capture a bunch of stuff.
+[32:55.43 - 33:02.56] Speaker 2: And before, they might have not been able to edit it to make it interesting, or maybe it was just too much work, or they didn't even realize that they captured something amazing.
+[33:02.56 - 33:03.68] Speaker 2: But now the AI is like, hey.
+[33:03.68 - 33:06.24] Speaker 2: I, like, made this thing for you out of your content.
+[33:06.56 - 33:07.92] Speaker 2: Um, and it's like, okay.
+[33:07.92 - 33:08.64] Speaker 2: That's awesome.
+[33:08.64 - 33:09.68] Speaker 2: Like, people enjoy that.
+[33:10.66 - 33:20.18] Speaker 2: Creators, obviously, kind of much more specialized skills, are going to be able to use even more advanced AI tools to make more compelling content.
+[33:20.42 - 33:34.49] Speaker 2: But then I think that there will be a bunch of kinda green field type stuff where maybe in the future, there will be content that is purely generated by AI, by the system, personalized for you.
+[33:35.05 - 33:39.13] Speaker 2: Maybe it's summarizing things that are out there that that are gonna be interesting.
+[33:39.13 - 33:39.77] Speaker 2: Maybe it's
+[33:41.26 - 33:43.91] Speaker 2: just producing something funny that makes you laugh.
+[33:43.99 - 33:49.50] Speaker 2: This is gonna be, like, a very kinda deep zone that, um, that there's a lot to to experiment with.
+[33:49.67 - 33:54.78] Speaker 2: I know there are gonna be AI creators as well as creators building AI versions of themselves.
+[33:54.78 - 33:57.90] Speaker 2: I mean, that's a thing that we just, um, showed too.
+[33:57.90 - 34:03.42] Speaker 2: It it it connect is is basically I mean, the if you're a creator, one of the big challenges is, alright.
+[34:03.42 - 34:10.63] Speaker 2: There are only so many hours in the day, and your community probably has a nearly unlimited demand to interact with you.
+[34:10.63 - 34:13.03] Speaker 2: And you wanna interact with them because you're trying to grow your community.
+[34:13.03 - 34:16.23] Speaker 2: I mean, that's both socially and from a business perspective.
+[34:16.23 - 34:20.55] Speaker 2: That's sort of, you know, growing the community is an important part of what every creator does.
+[34:20.55 - 34:22.63] Speaker 2: So, okay, if we can make it so that
+[34:23.57 - 34:29.73] Speaker 2: each creator can basically make an, like, an AI artifact that their community can interact with.
+[34:29.73 - 34:38.15] Speaker 2: People will be clear that's not the actual creator themselves, but it's almost like a piece of digital art that you're producing, like an interactive sculpture or something.
+[34:38.15 - 34:41.51] Speaker 2: That it's like it's like you train it to here's the context that I wanted to have.
+[34:41.51 - 34:43.75] Speaker 2: Here's the topics I wanted to communicate on.
+[34:43.82 - 34:45.75] Speaker 2: Here's stuff that I wanted to stay away from.
+[34:46.07 - 34:53.15] Speaker 2: Um, you're giving your community something to interact with when you can't be there to to kind of answer all the questions.
+[34:53.78 - 34:56.17] Speaker 2: And I know that's gonna be super compelling.
+[34:56.17 - 35:12.82] Speaker 2: So there's, like, all these interesting things, but I think it's I mean, AI, it's kinda like the Internet in a way where it's probably gonna change almost every field and almost every feature of every application that we use.
+[35:13.38 - 35:17.90] Speaker 2: Um, it seems sort of hyperbolic to say that, but I do think that's true.
+[35:17.90 - 35:21.36] Speaker 2: And it's just hard to sort of enumerate all the different things up front.
+[35:21.36 - 35:29.90] Speaker 2: But I think that over the next five to ten years, we're just gonna explore the impacts in each of these areas, and it's gonna be, like, an amazing amount of innovation and really exciting.
+[35:30.46 - 35:33.48] Speaker 1: I feel two things simultaneously when you say that.
+[35:33.48 - 35:44.51] Speaker 1: I feel both like I really want to be optimistic about the future of these platforms, and I obviously have gained so much from an enormous pace of change.
+[35:44.51 - 35:44.76] Speaker 1: Right?
+[35:44.76 - 35:46.67] Speaker 1: Like, everything that we're doing now.
+[35:46.84 - 35:50.28] Speaker 1: And what I actually feel is worried.
+[35:50.28 - 36:05.00] Speaker 1: I feel some specific concerns around the way that, you know, I might communicate with an audience and the way that they might respond to that or the way that human communication might change, but also more generalized, just sort of fear of the pace of change and and worry.
+[36:05.00 - 36:06.92] Speaker 1: And I don't think I'm alone in that feeling.
+[36:06.92 - 36:07.07] Speaker 2: Yeah.
+[36:07.07 - 36:08.28] Speaker 2: And you're supposed to be the optimist.
+[36:08.28 - 36:08.92] Speaker 1: I know.
+[36:09.63 - 36:14.61] Speaker 1: And I'm curious, like, how you talk to people who feel that way.
+[36:14.61 - 36:20.38] Speaker 1: What concerns do you feel are most legitimate, and what do you feel most misunderstood?
+[36:21.48 - 36:25.96] Speaker 2: I think the pace of change is always a a concerning thing.
+[36:26.05 - 36:26.38] Speaker 2: Right?
+[36:26.38 - 36:27.01] Speaker 2: It's, um,
+[36:28.55 - 36:32.15] Speaker 2: there is a lot of uncertainty about how how things will go in the future.
+[36:32.23 - 36:40.30] Speaker 2: And we're all gonna get really amazing new tools to do both our hobbies and our jobs, and, um,
+[36:42.46 - 36:45.42] Speaker 2: they'll make it so we can do better work and have better lives.
+[36:45.51 - 36:55.51] Speaker 2: But at least on the professional side, it's gonna be our responsibility to keep up with that or else it's gonna be difficult for us to compete with other people who are doing a good job of of kind of keeping up with the new trends.
+[36:55.51 - 36:56.46] Speaker 2: So I I get it.
+[36:56.46 - 36:57.03] Speaker 2: I mean, I think,
+[36:58.65 - 37:08.17] Speaker 2: you know, especially in the, you know, line of of work of being a creator, mean, it's a very sort of competitive I don't think that, like, creators necessarily think about it as competitive, but it it is.
+[37:08.17 - 37:08.34] Speaker 2: Right?
+[37:08.34 - 37:10.17] Speaker 2: It's like it's you know, you and and
+[37:13.36 - 37:14.23] Speaker 2: so I get it.
+[37:14.23 - 37:25.90] Speaker 2: I I think that this is gonna make it so that, like, the quality of work that people produce and how interesting it is and how much they can communicate and, like, really efficiently is is just gonna kinda go through the roof.
+[37:26.38 - 37:34.23] Speaker 2: But, um, but when you're staring down a set of changes, like, you know that there's some big change coming
+[37:35.67 - 37:38.78] Speaker 2: and you don't know what it is, that's always a time of anxiety.
+[37:38.78 - 37:39.82] Speaker 2: So I I I get it.
+[37:40.15 - 37:47.28] Speaker 1: If I take my creator hat off and I'm just a person who is starting out my career,
+[37:49.11 - 37:55.51] Speaker 1: out building a family, how would you advise someone like me to
+[37:57.42 - 38:02.78] Speaker 1: prepare well for the future that we're headed toward, to be able to
+[38:04.15 - 38:08.30] Speaker 1: learn new skills now or just think about this future in an educated way?
+[38:08.30 - 38:08.55] Speaker 1: Yeah.
+[38:09.03 - 38:13.51] Speaker 2: I mean, I just think maintaining curiosity about things is is important.
+[38:13.90 - 38:20.86] Speaker 2: I I do think we can overstate to what extent the next ten years is gonna be sort of different from the last ten or fifteen.
+[38:20.86 - 38:23.42] Speaker 2: I mean, a ton of stuff changed over the last ten or fifteen years too.
+[38:23.42 - 38:28.26] Speaker 2: It's not like this is the only time in history where there's some technology that's gonna make it set.
+[38:28.26 - 38:30.17] Speaker 2: There's new opportunities and things change.
+[38:30.42 - 38:37.61] Speaker 2: Um, the Internet coming into maturity and everyone having smartphones has already rewired things dramatically.
+[38:37.86 - 38:43.98] Speaker 2: And, I mean, maybe the next period will be a somewhat bigger change or maybe it won't.
+[38:43.98 - 38:48.07] Speaker 2: Um, I think it'll feel different to different people, but, um,
+[38:49.42 - 38:51.51] Speaker 2: I don't think this is, going from zero to one.
+[38:51.53 - 38:52.34] Speaker 2: It's not like, okay.
+[38:52.34 - 38:55.38] Speaker 2: Everything's just kinda been normal, and now, like, now it's about to change.
+[38:55.38 - 39:01.69] Speaker 2: It's like the technology evolves over time, and and, like, the opportunities that we have evolve and improve.
+[39:01.69 - 39:20.78] Speaker 2: And I I think that that's like, the people who do well, I think, are are people who are generally curious about it and and dig in and and try to use it to live better lives rather than the people who who basically, you know, try to fight it in in some way.
+[39:21.61 - 39:25.61] Speaker 1: One thing that I really wanna ask you about is open sourced.
+[39:25.61 - 39:26.17] Speaker 1: Yeah.
+[39:26.17 - 39:31.84] Speaker 1: I think imagine that we're talking to an audience that has maybe heard that term Mhmm.
+[39:31.84 - 39:37.38] Speaker 1: But doesn't have any real idea of how that might impact them in the development of AI.
+[39:37.38 - 39:37.71] Speaker 1: Yeah.
+[39:37.71 - 39:42.36] Speaker 1: How would you explain the reasonable debate that people in your field are having about this right now?
+[39:42.84 - 39:44.67] Speaker 2: Well, I I think there are two pieces.
+[39:44.67 - 39:46.03] Speaker 2: I mean, so what does open source mean?
+[39:46.51 - 39:49.00] Speaker 2: It means that people can build a lot of different things.
+[39:49.07 - 39:49.32] Speaker 2: Right?
+[39:49.32 - 39:53.63] Speaker 2: So at a high level, I look at the vision that a bunch of companies have.
+[39:53.63 - 39:53.80] Speaker 2: Right?
+[39:53.80 - 39:57.40] Speaker 2: So OpenAI, Google, they're building an AI.
+[39:57.40 - 39:57.63] Speaker 2: Right?
+[39:57.63 - 40:00.69] Speaker 2: Like, one AI that I think in general, they're like, okay.
+[40:00.69 - 40:07.40] Speaker 2: This is gonna be you know, it's like you're gonna use they think you're gonna use Gemini or ChatGPT for, like, all of the different things that you wanna interact with.
+[40:07.57 - 40:10.92] Speaker 2: And at a high level, that's just not how I think the world is gonna go.
+[40:10.92 - 40:16.76] Speaker 2: I think we're gonna have a lot of different AI systems just like we're gonna have we have a lot of different apps.
+[40:16.84 - 40:31.55] Speaker 2: Um, I think in the future, every business, just like they have a website and a phone number and an email address and a social media account, is also going to have an AI that can interact with with their customers to help them sell things, to help them do support.
+[40:33.46 - 40:35.55] Speaker 2: I think a lot of creators will have their own AIs.
+[40:35.55 - 40:35.69] Speaker 2: Right?
+[40:35.69 - 40:39.61] Speaker 2: I I I think, like, a lot of people will will interact with with a bunch of different things.
+[40:39.61 - 40:42.11] Speaker 2: There's a question of, okay, do you want a future
+[40:43.48 - 40:49.57] Speaker 2: that's fundamentally kind of very concentrated and where you're interacting with kind of one system for everything?
+[40:49.73 - 40:56.17] Speaker 2: Or do you want one where a lot of different people are building, um, a lot of different AIs and systems.
+[40:56.17 - 41:00.34] Speaker 2: Just kind of like, you probably didn't want there to be, you know, just one app or just one website.
+[41:00.34 - 41:03.30] Speaker 2: It's like a richer world when there's a diversity of different things.
+[41:03.30 - 41:04.57] Speaker 2: So that's one piece.
+[41:04.57 - 41:07.38] Speaker 2: It's it's just giving people the ability to build it themselves.
+[41:07.38 - 41:17.34] Speaker 2: And what open source does, it makes it so that everyone can take and modify the model and build stuff on top of it, um, which is different from, um, the kinda closed and centralized approach.
+[41:17.82 - 41:18.69] Speaker 2: The
+[41:20.78 - 41:25.73] Speaker 2: safety debate is a specific part of this, which is, um,
+[41:26.78 - 41:38.71] Speaker 2: in a world where AI gets smarter and smarter, what's the way that we have the highest chance of of having a a a kind of positive future and and not having a lot of the safety concerns.
+[41:38.71 - 41:43.11] Speaker 2: And I think some people think that, um,
+[41:44.15 - 41:55.92] Speaker 2: if we keep the model closed and don't give it to a lot of developers, that should make it safer because then you don't get bad developers doing bad things with the model.
+[41:56.23 - 41:56.88] Speaker 2: Um,
+[41:59.44 - 42:07.63] Speaker 2: historically, I think what we've seen with open source is actually the opposite, which is that this is not the first open source project.
+[42:07.63 - 42:07.86] Speaker 2: Right?
+[42:07.86 - 42:11.07] Speaker 2: I mean, this is obviously this has been a thing in the industry for decades.
+[42:11.23 - 42:22.82] Speaker 2: And I think what we've traditionally seen is that open source software is safer and more secure, largely because you put it out there, more people can scrutinize it because they can see you all parts of the system.
+[42:23.53 - 42:27.30] Speaker 2: And then there are inevitably issues with any software.
+[42:27.61 - 42:28.57] Speaker 2: There are bugs.
+[42:28.57 - 42:30.01] Speaker 2: There are security issues.
+[42:30.40 - 42:32.40] Speaker 2: And initially with open source, people thought, hey.
+[42:32.40 - 42:39.51] Speaker 2: If you're putting the software out there and there are holes in it, isn't everyone just gonna go exploit those holes and especially the bad guys?
+[42:39.82 - 42:50.59] Speaker 2: But it turned out that it sort of in this counterintuitive way that by making by adding more scrutiny to the systems, the holes became apparent quicker and then were fixed.
+[42:50.59 - 42:54.42] Speaker 2: And then people roll out a new version just like we roll out a new version of our models.
+[42:54.42 - 42:54.65] Speaker 2: Right?
+[42:54.65 - 42:57.78] Speaker 2: Llama three, Llama 3.1, Llama 3.2, everyone upgrades.
+[42:58.03 - 43:00.73] Speaker 2: Um, so I think the same thing is gonna happen here.
+[43:00.86 - 43:12.86] Speaker 2: I think it's sort of this counterintuitive thing where even though I I think there's some concern around, alright, are bad guys gonna do bad things with these models?
+[43:13.69 - 43:18.17] Speaker 2: I actually think you just get a kind of smarter and safer model for everyone.
+[43:18.17 - 43:21.07] Speaker 2: More it's rolled out, the more kind of scrutiny is on it.
+[43:21.38 - 43:25.38] Speaker 2: Um, and then part of that is we get feedback and we make the model safer.
+[43:25.38 - 43:28.82] Speaker 2: So that as we roll it out to to more people, it's it's safer for more people to use.
+[43:28.82 - 43:37.92] Speaker 2: So I think that the history of open source and the software industry generally would suggest that open source is gonna lead to a more prosperous and safer future.
+[43:38.88 - 43:46.42] Speaker 1: Our show is called Huge If True, and what I mean by that is kind of testing the most optimistic, non obvious thing.
+[43:46.42 - 43:46.65] Speaker 1: Mhmm.
+[43:46.65 - 43:52.26] Speaker 1: And so my question to you is, what is the biggest open, genuine question on your mind right now?
+[43:56.03 - 43:57.21] Speaker 2: In which field?
+[43:58.51 - 43:59.46] Speaker 1: You're in so many.
+[44:00.98 - 44:10.26] Speaker 1: I am particularly curious about the combination of AI and hardware, but I realize that we've covered a lot.
+[44:10.26 - 44:10.51] Speaker 1: Mhmm.
+[44:10.51 - 44:14.19] Speaker 1: So I'm curious the direction you'd take this on a question that occupies you right now.
+[44:14.40 - 44:14.88] Speaker 2: Gosh.
+[44:14.88 - 44:23.92] Speaker 2: I mean, I I think maybe one that's a little more AI specific is there a current set of methods that seem to be scaling very well.
+[44:23.92 - 44:24.40] Speaker 2: Right?
+[44:24.40 - 44:35.00] Speaker 2: So with past AI architectures, you could kind of feed an AI system a certain amount of data and and use a certain amount of compute, but eventually it hit a plateau.
+[44:35.00 - 44:35.32] Speaker 2: Mhmm.
+[44:35.32 - 44:45.78] Speaker 2: And one of the interesting things about these new transformer based architectures over the last, you know, five to ten years is that we haven't found the end yet.
+[44:45.86 - 44:48.26] Speaker 2: So that leads to this dynamic where
+[44:49.61 - 44:54.82] Speaker 2: Llama three, you know, we could train on, you know, 10 to 20,000 GPUs.
+[44:54.82 - 44:58.48] Speaker 2: Llama four, we could train on, you know, more than a 100,000 GPUs.
+[44:58.48 - 45:01.76] Speaker 2: Llama five, we can plan to scale even further.
+[45:02.01 - 45:05.36] Speaker 2: And there's just an interesting question of how far that goes.
+[45:06.01 - 45:10.09] Speaker 2: It's totally possible that at some point we just, like, hit a limit.
+[45:10.09 - 45:14.07] Speaker 2: And just like previous systems, there's an asymptote and it doesn't keep on growing.
+[45:14.23 - 45:33.78] Speaker 2: But it's also possible that that limit is not gonna happen anytime soon and that we're gonna be able to keep on just building more clusters and generating more, you know, synthetic data to train the systems, and that they're just gonna keep on getting more and more useful for people for quite a while to come.
+[45:33.94 - 45:34.51] Speaker 2: And
+[45:35.46 - 45:44.69] Speaker 2: it's a really big and high stakes question, I think, for for the companies because we're basically making these bets on how much infrastructure to build out for the future.
+[45:44.69 - 45:49.26] Speaker 2: And this is, like, hundreds of billions of dollars of infrastructure.
+[45:49.26 - 45:54.36] Speaker 2: So, like, I'm clearly betting that this is gonna keep scaling for a while.
+[45:54.36 - 45:59.25] Speaker 2: But it's one of the big questions, I think, in the field because it is possible that it doesn't.
+[45:59.40 - 46:05.57] Speaker 2: You know, that obviously would lead to a very different world, uh, where it's I mean, I'm sure people still figure it out eventually.
+[46:05.86 - 46:09.94] Speaker 2: Just need to make some new fundamental improvements to the architecture in some way.
+[46:10.17 - 46:22.38] Speaker 2: But that might be a somewhat longer trajectory for, okay, maybe, you know, the the kind of fundamental AI, um, advances slow down for a bit and we just take some time to build new products around this.
+[46:22.46 - 46:39.84] Speaker 2: Or it could be the case, and that's what I'm betting on, that the fundamental AI will just continue advancing for quite a while and that we're gonna get both a new set of products that are just really compelling in all these ways, and that the technology landscape and what's possible will just continue being dynamic over, a twenty year period.
+[46:40.09 - 46:48.90] Speaker 2: And, um, that's probably what I guess is gonna happen, but it I I think it's one of the bigger questions in the industry and kind of for technology across the world today.
+[46:49.53 - 46:51.38] Speaker 1: Is there anything else that you wanna say?
+[46:52.34 - 46:53.21] Speaker 2: I don't know.
+[46:53.21 - 46:53.61] Speaker 2: Awesome.
+[46:53.61 - 46:54.26] Speaker 2: We're good.
+[46:54.26 - 46:54.98] Speaker 1: Amazing.
+[46:54.98 - 46:55.53] Speaker 1: Yeah.
+[46:55.53 - 46:56.82] Speaker 1: Thank you so much for doing this.
+[46:56.82 - 46:57.05] Speaker 2: Yeah.
+[46:57.05 - 46:57.30] Speaker 2: No.
+[46:57.30 - 46:57.61] Speaker 2: Thank you.

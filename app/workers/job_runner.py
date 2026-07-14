@@ -3,6 +3,8 @@ import threading
 import logging
 import os
 import traceback
+from concurrent.futures import ThreadPoolExecutor
+from typing import cast
 from sqlalchemy.orm import Session
 from app.db import SessionLocal
 from app import crud, schemas, models
@@ -11,36 +13,77 @@ from app.services import audio, transcribe, segment, rank, render
 
 logger = logging.getLogger(__name__)
 
+class ProgressSimulator:
+    def __init__(self, job_id: int, start_prog: float, end_prog: float, duration_sec: int):
+        self.job_id = job_id
+        self.start_prog = start_prog
+        self.end_prog = end_prog
+        self.duration_sec = duration_sec
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self._run)
+
+    def _run(self):
+        db_local = SessionLocal()
+        try:
+            steps = int(self.duration_sec / 2.0)
+            if steps <= 0: steps = 1
+            step_size = (self.end_prog - self.start_prog) / steps
+            
+            prog = self.start_prog
+            while not self.stop_event.wait(2.0) and prog < self.end_prog:
+                prog += step_size
+                if prog > self.end_prog:
+                    prog = self.end_prog
+                try:
+                    crud.update_job(db_local, self.job_id, status="running", progress=round(prog, 2))
+                except Exception:
+                    pass
+        finally:
+            db_local.close()
+            
+    def start(self):
+        self.thread.start()
+        
+    def stop(self):
+        self.stop_event.set()
+        self.thread.join()
+
 def process_job(db: Session, job: models.Job):
     logger.info(f"Processing job {job.id} (type: {job.job_type}) for video {job.video_id}")
     
     # Update job to running
-    crud.update_job(db, job.id, status="running", progress=0.1)
+    crud.update_job(db, cast(int, job.id), status="running", progress=0.1)
     
-    video = crud.get_video(db, job.video_id)
+    video = crud.get_video(db, cast(int, job.video_id))
     if not video:
         raise ValueError(f"Video {job.video_id} not found.")
 
-    if job.job_type == "transcribe":
+    if cast(str, job.job_type) == "transcribe":
         # 1. Update video status
-        crud.update_video_status(db, video.id, status="processing")
+        crud.update_video_status(db, cast(int, video.id), status="processing")
         
         # 2. Get video duration
         logger.info("Getting video duration...")
-        duration = audio.get_video_duration(video.storage_path)
-        crud.update_video_status(db, video.id, status="processing", duration_sec=duration)
-        crud.update_job(db, job.id, status="running", progress=0.3)
+        duration = audio.get_video_duration(cast(str, video.storage_path))
+        crud.update_video_status(db, cast(int, video.id), status="processing", duration_sec=duration)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.3)
         
         # 3. Extract and normalize audio
         logger.info("Extracting and normalizing audio...")
         audio_filename = f"video_{video.id}_audio.wav"
-        audio_path = audio.extract_and_normalize_audio(video.storage_path, audio_filename)
-        crud.update_job(db, job.id, status="running", progress=0.5)
+        audio_path = audio.extract_and_normalize_audio(cast(str, video.storage_path), audio_filename)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.5)
         
         # 4. Transcribe using Whisper local
         logger.info("Transcribing audio...")
-        transcripts_data = transcribe.transcribe_audio(audio_path)
-        crud.update_job(db, job.id, status="running", progress=0.7)
+        sim = ProgressSimulator(cast(int, job.id), 0.5, 0.85, 60)
+        sim.start()
+        try:
+            transcripts_data = transcribe.transcribe_audio(audio_path)
+        finally:
+            sim.stop()
+        
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.9)
         
         # Clean up audio WAV file to save space
         try:
@@ -54,7 +97,7 @@ def process_job(db: Session, job: models.Job):
         logger.info("Saving transcript segments to database...")
         segments_create = [
             schemas.TranscriptSegmentCreate(
-                video_id=video.id,
+                video_id=cast(int, video.id),
                 speaker=item["speaker"],
                 start_time=item["start_time"],
                 end_time=item["end_time"],
@@ -64,23 +107,17 @@ def process_job(db: Session, job: models.Job):
             for item in transcripts_data
         ]
         crud.create_transcript_segments(db, segments_create)
-        crud.update_job(db, job.id, status="running", progress=0.9)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.9)
         
-        # 6. Complete Job and automatically enqueue Ranking Job
-        crud.update_job(db, job.id, status="done", progress=1.0)
-        
-        rank_job = schemas.JobCreate(
-            video_id=video.id,
-            job_type="rank",
-            status="queued"
-        )
-        crud.create_job(db, rank_job)
-        logger.info(f"Transcribe job {job.id} done. Enqueued rank job.")
+        # 6. Complete Job and update video status
+        crud.update_video_status(db, cast(int, video.id), status="transcribed")
+        crud.update_job(db, cast(int, job.id), status="done", progress=1.0)
+        logger.info(f"Transcribe job {job.id} done. Video {video.id} status set to transcribed.")
 
-    elif job.job_type == "rank":
+    elif cast(str, job.job_type) == "rank":
         # 1. Fetch transcript segments
         logger.info("Fetching segments...")
-        segments = crud.get_segments_by_video(db, video.id)
+        segments = crud.get_segments_by_video(db, cast(int, video.id))
         if not segments:
             raise ValueError("No transcript segments found for ranking.")
         
@@ -93,12 +130,12 @@ def process_job(db: Session, job: models.Job):
             }
             for s in segments
         ]
-        crud.update_job(db, job.id, status="running", progress=0.3)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.3)
         
         # 2. Segment transcript into overlapping windows
         logger.info("Segmenting transcript into windows...")
         candidates = segment.segment_transcript(segments_dict)
-        crud.update_job(db, job.id, status="running", progress=0.5)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.5)
         
         # 3. Score and rank candidates
         logger.info(f"Scoring {len(candidates)} candidates using Nemotron batch scorer...")
@@ -108,10 +145,11 @@ def process_job(db: Session, job: models.Job):
         wav_path = os.path.join(settings.TEMP_DIR, audio_filename)
         audio_re_extracted = False
         if not os.path.exists(wav_path):
-            if video.storage_path and os.path.isfile(video.storage_path):
+            storage_path_str = cast(str, video.storage_path)
+            if storage_path_str and os.path.isfile(storage_path_str):
                 logger.info("Temporary audio file not found. Re-extracting audio for ranking features...")
                 try:
-                    wav_path = audio.extract_and_normalize_audio(video.storage_path, audio_filename)
+                    wav_path = audio.extract_and_normalize_audio(cast(str, video.storage_path), audio_filename)
                     audio_re_extracted = True
                 except Exception as ae:
                     logger.warning(f"Failed to extract audio for ranking features: {ae}")
@@ -120,30 +158,36 @@ def process_job(db: Session, job: models.Job):
                 logger.info("No source video file found (uploaded transcript only). Skipping audio signal features.")
                 wav_path = None
             
+        def rank_progress_callback(sub_progress: float):
+            # Map [0.0, 1.0] of ranking phase to [0.50, 0.90] of the overall job progress
+            overall_prog = 0.50 + (0.40 * sub_progress)
+            crud.update_job(db, cast(int, job.id), status="running", progress=round(overall_prog, 2))
+
         try:
             ranked_candidates = rank.rank_candidates(
                 candidates,
                 video_id=str(video.id),
                 limit=5,
                 audio_path=wav_path,
-                transcript_lines=segments_dict
+                transcript_lines=segments_dict,
+                progress_callback=rank_progress_callback
             )
         finally:
             if audio_re_extracted:
                 try:
-                    if os.path.exists(wav_path):
+                    if wav_path and os.path.exists(wav_path):
                         os.remove(wav_path)
                         logger.info(f"Temporary audio file removed after ranking: {wav_path}")
                 except Exception as e:
                     logger.warning(f"Failed to remove temp audio file {wav_path}: {e}")
                     
-        crud.update_job(db, job.id, status="running", progress=0.8)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.92)
         
         # 4. Save ranked candidates
         logger.info("Saving clip candidates to database...")
         for clip_data in ranked_candidates:
             clip_create = schemas.ClipCandidateCreate(
-                video_id=video.id,
+                video_id=cast(int, video.id),
                 rank=clip_data.get("rank", 1),
                 start_time=clip_data.get("start_time", 0.0),
                 end_time=clip_data.get("end_time", 0.0),
@@ -176,31 +220,32 @@ def process_job(db: Session, job: models.Job):
             )
             crud.create_clip_candidate(db, clip_create)
             
-        crud.update_job(db, job.id, status="done", progress=1.0)
-        crud.update_video_status(db, video.id, status="processed")
+        crud.update_job(db, cast(int, job.id), status="done", progress=1.0)
+        crud.update_video_status(db, cast(int, video.id), status="processed")
         logger.info(f"Rank job {job.id} done. Extracted and saved {len(ranked_candidates)} clips.")
 
 
-    elif job.job_type == "render":
-        if not job.clip_candidate_id:
+    elif cast(str, job.job_type) == "render":
+        if not cast(int, job.clip_candidate_id):
             raise ValueError("Render job missing clip_candidate_id relation.")
             
-        clip = crud.get_clip(db, job.clip_candidate_id)
+        clip = crud.get_clip(db, cast(int, job.clip_candidate_id))
         if not clip:
             raise ValueError(f"Clip candidate {job.clip_candidate_id} not found.")
             
-        if not video.storage_path or not os.path.exists(video.storage_path):
-            crud.update_clip_status(db, clip.id, "failed")
-            crud.update_job(db, job.id, status="failed", error_message="No source video file found. Video rendering requires the original MP4 upload.")
+        storage_path_str = cast(str, video.storage_path)
+        if not storage_path_str or not os.path.exists(storage_path_str):
+            crud.update_clip_status(db, cast(int, clip.id), "failed")
+            crud.update_job(db, cast(int, job.id), status="failed", error_message="No source video file found. Video rendering requires the original MP4 upload.")
             logger.warning(f"Render job {job.id} failed: No source video file found for video {video.id}.")
             return
 
         # 1. Update clip status
-        crud.update_clip_status(db, clip.id, "rendering")
-        crud.update_job(db, job.id, status="running", progress=0.2)
+        crud.update_clip_status(db, cast(int, clip.id), "rendering")
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.2)
         
         # 2. Get segments for SRT subtitles
-        segments = crud.get_segments_by_video(db, video.id)
+        segments = crud.get_segments_by_video(db, cast(int, video.id))
         segments_dict = [
             {
                 "start_time": s.start_time,
@@ -213,54 +258,175 @@ def process_job(db: Session, job: models.Job):
         # 3. Create temp SRT file
         srt_name = f"clip_{clip.id}_subtitles.srt"
         srt_path = os.path.join(settings.TEMP_DIR, srt_name)
-        render.generate_srt_file(segments_dict, clip.start_time, clip.end_time, srt_path)
-        crud.update_job(db, job.id, status="running", progress=0.4)
+        render.generate_srt_file(segments_dict, cast(float, clip.start_time), cast(float, clip.end_time), srt_path)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.4)
         
         # 4. Render vertical and landscape
         logger.info(f"Rendering formats for clip {clip.id}...")
         output_base = f"clip_{clip.id}"
-        render_results = render.render_clip(
-            video_path=video.storage_path,
-            clip_start=clip.start_time,
-            clip_end=clip.end_time,
-            srt_path=srt_path,
-            output_base_name=output_base
-        )
-        crud.update_job(db, job.id, status="running", progress=0.8)
+        
+        sim = ProgressSimulator(cast(int, job.id), 0.4, 0.95, 60)
+        sim.start()
+        try:
+            render_results = render.render_clip(
+                video_path=cast(str, video.storage_path),
+                clip_start=cast(float, clip.start_time),
+                clip_end=cast(float, clip.end_time),
+                srt_path=srt_path,
+                output_base_name=output_base
+            )
+        finally:
+            sim.stop()
+        
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.98)
         
         # 5. Save clip exports
         logger.info("Saving exports paths to database...")
         for fmt, path in render_results.items():
-            crud.create_clip_export(db, clip.id, path, srt_path, fmt)
+            crud.create_clip_export(db, cast(int, clip.id), path, srt_path, fmt)
         
         # 6. Mark done
-        crud.update_clip_status(db, clip.id, "rendered")
-        crud.update_job(db, job.id, status="done", progress=1.0)
+        crud.update_clip_status(db, cast(int, clip.id), "rendered")
+        crud.update_job(db, cast(int, job.id), status="done", progress=1.0)
         logger.info(f"Render job {job.id} done for clip {clip.id}.")
 
+    elif cast(str, job.job_type) == "compile":
+        if not cast(int, job.clip_candidate_id):
+            raise ValueError("Compile job missing clip_candidate_id relation.")
+            
+        clip = crud.get_clip(db, cast(int, job.clip_candidate_id))
+        if not clip:
+            raise ValueError(f"Placeholder clip candidate {job.clip_candidate_id} not found.")
+            
+        storage_path_str = cast(str, video.storage_path)
+        if not storage_path_str or not os.path.exists(storage_path_str):
+            crud.update_clip_status(db, cast(int, clip.id), "failed")
+            crud.update_job(db, cast(int, job.id), status="failed", error_message="No source video file found. Video rendering requires the original MP4 upload.")
+            logger.warning(f"Compile job {job.id} failed: No source video file found for video {video.id}.")
+            return
+
+        # 1. Update status
+        crud.update_clip_status(db, cast(int, clip.id), "rendering")
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.2)
+        
+        # 2. Read the request parts from the temporary JSON payload file
+        import json
+        payload_path = os.path.join(settings.TEMP_DIR, f"compile_request_{job.id}.json")
+        if not os.path.exists(payload_path):
+            crud.update_clip_status(db, cast(int, clip.id), "failed")
+            crud.update_job(db, cast(int, job.id), status="failed", error_message=f"Job payload not found at {payload_path}")
+            logger.error(f"Compile job {job.id} failed: payload file {payload_path} does not exist.")
+            return
+            
+        try:
+            with open(payload_path, "r", encoding="utf-8") as f:
+                parts = json.load(f)
+        except Exception as je:
+            crud.update_clip_status(db, cast(int, clip.id), "failed")
+            crud.update_job(db, cast(int, job.id), status="failed", error_message=f"Failed to parse job payload: {je}")
+            logger.error(f"Compile job {job.id} failed: could not parse payload file. Error: {je}")
+            return
+            
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.4)
+        
+        # 3. Get segments for SRT subtitles
+        segments = crud.get_segments_by_video(db, cast(int, video.id))
+        segments_dict = [
+            {
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "text": s.text
+            }
+            for s in segments
+        ]
+        
+        # 4. Compile the parts
+        logger.info(f"Compiling {len(parts)} parts for job {job.id}...")
+        output_base = f"compile_{video.id}_{job.id}"
+        
+        try:
+            sim = ProgressSimulator(cast(int, job.id), 0.4, 0.95, 60)
+            sim.start()
+            try:
+                compiled_video_path = render.compile_parts(
+                    video_path=cast(str, video.storage_path),
+                    parts=parts,
+                    segments_dict=segments_dict,
+                    output_base_name=output_base
+                )
+            finally:
+                sim.stop()
+            
+            crud.update_job(db, cast(int, job.id), status="running", progress=0.98)
+            
+            # 5. Create ClipExport record
+            crud.create_clip_export(db, cast(int, clip.id), compiled_video_path, None, "vertical")
+            
+            # 6. Mark done
+            crud.update_clip_status(db, cast(int, clip.id), "rendered")
+            crud.update_job(db, cast(int, job.id), status="done", progress=1.0)
+            logger.info(f"Compile job {job.id} done successfully. Output: {compiled_video_path}")
+            
+        finally:
+            # Clean up the payload file
+            if os.path.exists(payload_path):
+                try:
+                    os.remove(payload_path)
+                    logger.info(f"Removed temp job payload file {payload_path}")
+                except Exception as ce:
+                    logger.warning(f"Failed to clean up job payload file {payload_path}: {ce}")
+
+def run_job(job_id: int):
+    db = SessionLocal()
+    try:
+        job = crud.get_job(db, job_id)
+        if job:
+            try:
+                process_job(db, job)
+            except Exception as ex:
+                error_msg = f"Error processing job: {str(ex)}\n{traceback.format_exc()}"
+                logger.error(error_msg)
+                crud.update_job(db, cast(int, job.id), status="failed", error_message=error_msg)
+                # Also update video or clip status to failed if applicable
+                if cast(str, job.job_type) in ["transcribe", "rank"]:
+                    crud.update_video_status(db, cast(int, job.video_id), status="failed")
+                elif cast(str, job.job_type) == "render" and cast(int, job.clip_candidate_id) is not None:
+                    crud.update_clip_status(db, cast(int, job.clip_candidate_id), status="failed")
+    except Exception as e:
+        logger.error(f"Worker exception in thread for job {job_id}: {e}")
+    finally:
+        db.close()
+
 def job_worker_loop():
-    logger.info("Job runner daemon worker loop starting...")
+    logger.info("Job runner daemon worker loop starting with ThreadPoolExecutor...")
+    executor = ThreadPoolExecutor(max_workers=3)
+    active_futures = set()
+
     while True:
         db = SessionLocal()
         try:
-            job = crud.get_next_queued_job(db)
-            if job:
-                try:
-                    process_job(db, job)
-                except Exception as ex:
-                    error_msg = f"Error processing job: {str(ex)}\n{traceback.format_exc()}"
-                    logger.error(error_msg)
-                    crud.update_job(db, job.id, status="failed", error_message=error_msg)
-                    # Also update video or clip status to failed if applicable
-                    if job.job_type in ["transcribe", "rank"]:
-                        crud.update_video_status(db, job.video_id, status="failed")
-                    elif job.job_type == "render" and job.clip_candidate_id:
-                        crud.update_clip_status(db, job.clip_candidate_id, status="failed")
+            # Clean up finished futures
+            done_futures = {f for f in active_futures if f.done()}
+            active_futures.difference_update(done_futures)
+
+            # If pool is not full, try to pick up a new queued job
+            if len(active_futures) < 3:
+                job = crud.get_next_queued_job(db)
+                if job:
+                    # Immediately mark as running to prevent picking it up again on the next tick
+                    crud.update_job(db, cast(int, job.id), status="running")
+                    
+                    # Submit to thread pool
+                    future = executor.submit(run_job, cast(int, job.id))
+                    active_futures.add(future)
+                else:
+                    # No job in queue, sleep
+                    time.sleep(settings.WORKER_POLL_INTERVAL)
             else:
-                # No job in queue, sleep
+                # Pool is full, sleep
                 time.sleep(settings.WORKER_POLL_INTERVAL)
         except Exception as e:
-            logger.error(f"Worker exception: {e}")
+            logger.error(f"Worker polling loop exception: {e}")
             time.sleep(settings.WORKER_POLL_INTERVAL)
         finally:
             db.close()
@@ -274,8 +440,8 @@ def start_job_worker():
         if orphaned_jobs:
             logger.info(f"Found {len(orphaned_jobs)} orphaned 'running' jobs. Resetting to 'queued'...")
             for j in orphaned_jobs:
-                j.status = "queued"
-                j.progress = 0.0
+                j.status = "queued"  # type: ignore
+                j.progress = 0.0     # type: ignore
             db.commit()
     except Exception as e:
         logger.error(f"Failed to reset orphaned jobs on startup: {e}")

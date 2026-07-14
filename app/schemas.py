@@ -17,6 +17,28 @@ class VideoResponse(VideoBase):
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
+# YouTube Download Schemas
+class YouTubeInfoRequest(BaseModel):
+    url: str
+
+class YouTubeFormat(BaseModel):
+    format_id: str
+    resolution: str
+    ext: str
+    filesize_approx: Optional[int] = None
+    format_note: Optional[str] = None
+
+class YouTubeInfoResponse(BaseModel):
+    url: str
+    title: str
+    thumbnail: Optional[str] = None
+    formats: List[YouTubeFormat]
+
+class YouTubeDownloadRequest(BaseModel):
+    url: str
+    format_id: str
+
+
 # Job Schemas
 class JobBase(BaseModel):
     video_id: int
@@ -98,6 +120,14 @@ class ClipCandidateCreate(ClipCandidateBase):
 class ClipCandidateTrim(BaseModel):
     start_time: float
     end_time: float
+
+# Compile Schemas
+class CompilePart(BaseModel):
+    start_time: float
+    end_time: float
+
+class CompileRequest(BaseModel):
+    parts: List[CompilePart]
 
 class ClipExportResponse(BaseModel):
     id: int

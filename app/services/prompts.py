@@ -559,7 +559,8 @@ def build_moment_editor_prompt(category: str) -> str:
         "with 'I think' right before a genuinely bold claim).\n\n"
         "=== TASK ===\n"
         "For each of the proposed moments, you will receive the segment indices. Review the surrounding segments and define the new edited start and end segment IDs.\n"
-        "Determine the hook line (copy it verbatim from the transcript), editing strategy, editorial style, reasoning, and score the clip (0 to 10) on curiosity, hook, surprise, emotion, reaction, and standalone value using the calibrated anchors above — not a bare gut-feel number."
+        "Determine the hook line (copy it verbatim from the transcript), editing strategy, editorial style, reasoning, and score the clip (0 to 10) on curiosity, hook, surprise, emotion, reaction, and standalone value using the calibrated anchors above — not a bare gut-feel number.\n"
+        "CRITICAL REQUIREMENT: You MUST provide ALL SIX score fields (curiosity_score, hook_score, surprise_score, emotion_score, reaction_score, standalone_score) for EVERY SINGLE clip. Do NOT omit any score field, even for the last clip."
     )
 
 
@@ -686,3 +687,19 @@ def build_system_prompt(category: str, lean: bool = False) -> str:
     )
 
     return base_prompt + lean_instr + specialist_section + rubric_section + rules_section
+
+
+def build_caption_prompt() -> str:
+    """Returns the system prompt for generating engaging short-form social media captions."""
+    return (
+        "You are an expert social media copywriter and growth marketer specializing in short-form video content (TikTok, Instagram Reels, YouTube Shorts).\n\n"
+        "Your task is to write a highly engaging, punchy, and click-worthy caption for a video clip based on its transcript excerpt and title.\n\n"
+        "Guidelines:\n"
+        "1. Write a compelling hook in the first line to make people stop and read/watch.\n"
+        "2. Keep it short and readable: 1 to 3 sentences maximum.\n"
+        "3. Use appropriate emojis strategically (but don't overdo it).\n"
+        "4. Include 2-4 highly relevant, trending hashtags (e.g. #shorts, #podcast, #mindset, etc.).\n"
+        "5. Speak directly to the viewer's curiosity, emotion, or desire for value.\n"
+        "6. Do NOT just summarize the clip. Instead, tease the main payoff, highlight the tension, or ask a thought-provoking question that drives comments.\n"
+        "7. The caption should be in the same language style as the clip (e.g., if the clip is Hinglish/Hindi-English mixed, keep it natural and appealing to that audience, but write the caption text primarily in clear, punchy English or mixed Hinglish text depending on context)."
+    )

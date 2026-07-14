@@ -1,613 +1,1223 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podcast to Short Reel Converter</title>
+    <title>ShortReel — Podcast to Short Reel Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0b0f19;
-            --bg-surface: rgba(20, 26, 43, 0.6);
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --color-primary: #7c3aed;
-            --color-primary-glow: rgba(124, 58, 237, 0.4);
-            --color-secondary: #06b6d4;
-            --color-success: #10b981;
-            --color-warning: #f59e0b;
-            --color-error: #ef4444;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --font-display: 'Outfit', sans-serif;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --bg-base: #0a0a0c;
+            --bg-elev-1: #0f0f13;
+            --bg-elev-2: #14141a;
+            --bg-elev-3: #1a1a22;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.10);
+            --text: #f5f5f7;
+            --text-muted: #8a8a94;
+            --text-dim: #5a5a64;
+            --accent: #a78bfa;
+            --accent-2: #7c8cf8;
+            --accent-glow: rgba(167, 139, 250, 0.35);
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --color-primary: #a78bfa;
+            --color-primary-glow: rgba(167, 139, 250, 0.35);
+            --color-secondary: #7dd3fc;
+            --color-success: #4ade80;
+            --color-warning: #fbbf24;
+            --color-error: #f87171;
+            --text-main: var(--text);
+            --text-color: var(--text);
+            --border-color: var(--border);
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+            --font-serif: 'Instrument Serif', serif;
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --shadow-soft: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.25);
+            --shadow-glow: 0 0 0 1px var(--accent-glow), 0 8px 30px -8px var(--accent-glow);
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { overflow-x: hidden; }
 
         body {
-            background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
-            color: var(--text-main);
+            background: var(--bg-base);
+            color: var(--text);
             font-family: var(--font-sans);
             min-height: 100vh;
-            line-height: 1.5;
-            padding-bottom: 5rem;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: var(--font-display);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        header {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--color-secondary);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px var(--color-secondary);
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        /* CARD STYLE */
-        .glass-card {
-            background: var(--bg-surface);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            margin-bottom: 2rem;
-        }
-
-        /* STEP PROGRESS */
-        .steps-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3rem;
+            line-height: 1.55;
+            font-size: 15px;
+            font-feature-settings: "ss01", "cv11";
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 6rem;
             position: relative;
         }
 
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(1000px 500px at 15% -10%, rgba(167, 139, 250, 0.12), transparent 60%),
+                radial-gradient(800px 500px at 100% 0%, rgba(125, 211, 252, 0.06), transparent 60%);
+            z-index: 0;
+        }
+
+        main, header { position: relative; z-index: 1; }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        h2 { font-size: 1.35rem; }
+        h3 { font-size: 1.05rem; font-weight: 600; }
+        h4 { font-size: 0.95rem; font-weight: 600; }
+
+        a { color: inherit; }
+
+        /* HEADER */
+        header {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text);
+            min-width: 0;
+        }
+        .logo::before {
+            content: "";
+            width: 22px; height: 22px;
+            border-radius: 7px;
+            background: conic-gradient(from 180deg, #a78bfa, #7dd3fc, #a78bfa);
+            box-shadow: 0 0 20px -4px var(--accent-glow);
+            flex-shrink: 0;
+        }
+        .logo-dot { display: none; }
+        .logo em {
+            font-style: normal;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-left: 0.15rem;
+        }
+
+        /* MAIN */
+        main {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* CARDS */
+        .glass-card {
+            background: linear-gradient(180deg, var(--bg-elev-2), var(--bg-elev-1));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-soft);
+        }
+        @media (max-width: 640px) { .glass-card { padding: 1.25rem; border-radius: var(--radius); } }
+
+        .hidden { display: none !important; }
+
+        /* BUTTONS */
+        .btn {
+            all: unset;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.6rem 1rem;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1;
+            color: var(--text);
+            background: var(--bg-elev-3);
+            border: 1px solid var(--border-strong);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 180ms var(--ease), border-color 180ms var(--ease), transform 180ms var(--ease), box-shadow 180ms var(--ease);
+            white-space: nowrap;
+        }
+        .btn:hover { background: #22222c; border-color: rgba(255,255,255,0.16); }
+        .btn:active { transform: translateY(1px); }
+        .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #a78bfa, #7c6df0);
+            color: #0a0a0c;
+            border-color: transparent;
+            font-weight: 600;
+            box-shadow: 0 6px 20px -6px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        .btn-primary:hover { background: linear-gradient(180deg, #b498ff, #8a7cf5); border-color: transparent; }
+
+        .btn-secondary {
+            background: var(--bg-elev-3);
+            color: var(--text);
+            border: 1px solid var(--border-strong);
+        }
+        .btn-secondary:hover { background: #22222c; }
+
+        .btn-success {
+            background: rgba(74, 222, 128, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .btn-disabled {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        #btn-reset {
+            padding: 0.5rem 0.85rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        #btn-reset:hover { color: var(--text); }
+
+        /* STEPS */
+        .steps-container {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(180deg, var(--bg-elev-2), var(--bg-elev-1));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+        }
         .steps-line {
             position: absolute;
-            top: 24px;
-            left: 5%;
-            right: 5%;
+            top: 46px;
+            left: calc(10% + 1.25rem);
+            right: calc(10% + 1.25rem);
             height: 2px;
-            background-color: var(--border-color);
-            z-index: 1;
+            border-radius: 999px;
+            background: var(--border-strong);
+            z-index: 0;
         }
-
         .steps-line-fill {
             position: absolute;
-            top: 24px;
-            left: 5%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--color-secondary));
             width: 0%;
-            z-index: 2;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 400ms var(--ease);
+            box-shadow: 0 0 12px -2px var(--accent-glow);
         }
-
         .step-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 20%;
-            z-index: 3;
+            gap: 0.55rem;
+            position: relative;
+            z-index: 1;
         }
-
         .step-bubble {
-            width: 50px;
-            height: 50px;
+            width: 34px; height: 34px;
             border-radius: 50%;
-            background-color: #141b2c;
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .step-item.active .step-bubble {
-            border-color: var(--color-primary);
-            color: var(--text-main);
-            box-shadow: 0 0 15px var(--color-primary-glow);
-            background-color: var(--color-primary);
-        }
-
-        .step-item.completed .step-bubble {
-            border-color: var(--color-success);
-            color: var(--bg-base);
-            background-color: var(--color-success);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .step-label {
-            margin-top: 0.75rem;
+            display: grid; place-items: center;
+            background: var(--bg-elev-3);
+            border: 1px solid var(--border-strong);
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-muted);
+            transition: all 220ms var(--ease);
+        }
+        .step-item.active .step-bubble {
+            background: linear-gradient(180deg, var(--accent), var(--accent-2));
+            color: #0a0a0c;
+            border-color: transparent;
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15), 0 0 20px -4px var(--accent-glow);
+        }
+        .step-item.completed .step-bubble {
+            background: linear-gradient(rgba(74, 222, 128, 0.12), rgba(74, 222, 128, 0.12)), var(--bg-elev-3);
+            color: var(--success);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+        .step-item.completed .step-bubble::after {
+            content: "✓";
+            font-weight: 700;
+        }
+        .step-item.completed .step-bubble { font-size: 0; }
+        .step-item.completed .step-bubble::after { font-size: 0.85rem; }
+        .step-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
             text-align: center;
-            transition: color 0.3s ease;
+        }
+        .step-item.active .step-label { color: var(--text); }
+        @media (max-width: 640px) {
+            .steps-container { padding: 1rem 0.75rem; }
+            .steps-line { top: 40px; left: calc(10% + 0.5rem); right: calc(10% + 0.5rem); }
+            .step-bubble { width: 28px; height: 28px; font-size: 0.75rem; }
+            .step-label { font-size: 0.68rem; }
         }
 
-        .step-item.active .step-label {
-            color: var(--text-main);
-        }
-
-        /* UPLOAD ZONE */
+        /* UPLOAD */
         .upload-zone {
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            gap: 0.5rem;
+            padding: 3rem 1.5rem;
+            background:
+                repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,0.015) 12px 13px),
+                var(--bg-elev-1);
+            border: 1.5px dashed rgba(255,255,255,0.12);
+            border-radius: var(--radius);
             cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.01);
+            transition: border-color 180ms var(--ease), background 180ms var(--ease), transform 180ms var(--ease);
             position: relative;
             overflow: hidden;
         }
-
         .upload-zone:hover {
-            border-color: var(--color-primary);
-            background-color: rgba(124, 58, 237, 0.03);
-            box-shadow: inset 0 0 20px rgba(124, 58, 237, 0.05);
+            border-color: var(--accent);
+            background: rgba(167, 139, 250, 0.03);
         }
-
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(167, 139, 250, 0.06);
+        }
         .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            transition: transform 0.3s ease;
+            display: grid; place-items: center;
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            background: var(--bg-elev-3);
+            border: 1px solid var(--border-strong);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
         }
+        .file-input { display: none; }
 
-        .upload-zone:hover .upload-icon {
-            transform: translateY(-5px);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        /* BUTTONS */
-        .btn {
-            background-color: #1e293b;
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-sans);
+        /* TABS (segmented control) */
+        .tabs-bar {
             display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        #tab-auto-transcribe,
+        #tab-direct-transcript,
+        #tab-youtube-url {
+            padding: 0.5rem 0.9rem !important;
+            font-size: 0.82rem !important;
+            font-weight: 500 !important;
+            color: var(--text-muted) !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: all 180ms var(--ease) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.4rem !important;
+            white-space: nowrap !important;
+            font-family: var(--font-sans) !important;
+            line-height: 1 !important;
+        }
+        #tab-auto-transcribe:hover,
+        #tab-direct-transcript:hover,
+        #tab-youtube-url:hover { color: var(--text); }
+        .tab-active-style {
+            background: var(--bg-elev-3) !important;
+            color: var(--text) !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
-        .btn:hover {
-            background-color: #334155;
-            border-color: var(--text-muted);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary), #6366f1);
-            border: none;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #8b5cf6, #4f46e5);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--color-success), #059669);
-            border: none;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #34d399, #047857);
-            transform: translateY(-1px);
-        }
-
-        .btn-disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* JOBS PANEL */
-        .job-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
+        /* INPUTS */
+        .field-block {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 1.25rem;
+            padding: 1.25rem;
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .field-label .req { color: var(--error); }
+        .field-hint {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-top: 0.4rem;
+            line-height: 1.4;
+        }
+        .field-hint code {
+            font-family: var(--font-mono);
+            background: var(--bg-elev-3);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            border: 1px solid var(--border);
         }
 
+        input[type="file"],
+        input[type="text"],
+        input[type="url"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            background: var(--bg-elev-2);
+            border: 1px solid var(--border-strong);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease);
+        }
+        input[type="file"] { cursor: pointer; padding: 0.7rem; background: var(--bg-elev-1); border-style: dashed; }
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+        }
+
+        /* JOBS */
+        #jobs-container { display: flex; flex-direction: column; gap: 0.6rem; }
+        .job-card {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
         .job-info {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
+            min-width: 0;
         }
-
-        .job-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top: 2px solid var(--color-secondary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
+        .job-info > div { min-width: 0; }
         .job-type-pill {
-            background: rgba(124, 58, 237, 0.15);
-            color: #c084fc;
-            padding: 0.25rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            background: rgba(167,139,250,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(167,139,250,0.25);
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
             text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
-
-        .status-badge {
-            padding: 0.25rem 0.6rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        .job-spinner {
+            width: 14px; height: 14px;
+            border: 2px solid var(--border-strong);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 700ms linear infinite;
+            display: inline-block;
+            flex-shrink: 0;
         }
-
-        .status-running {
-            background: rgba(6, 182, 212, 0.15);
-            color: #22d3ee;
-        }
-
-        .status-done {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-        }
-
-        .status-failed {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-        }
-
-        .status-queued {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fcd34d;
-        }
-
-        /* PROGRESS BAR */
+        @keyframes spin { to { transform: rotate(360deg); } }
         .progress-bar-container {
-            width: 100px;
+            width: 140px;
             height: 6px;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 99px;
+            background: var(--bg-elev-3);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--color-secondary));
+            border-radius: 999px;
+            transition: width 400ms var(--ease);
+        }
+        .status-badge {
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .status-running { background: rgba(251,191,36,0.12); color: var(--warning); border: 1px solid rgba(251,191,36,0.25); }
+        .status-completed, .status-complete, .status-success { background: rgba(74,222,128,0.12); color: var(--success); border: 1px solid rgba(74,222,128,0.25); }
+        .status-failed, .status-error { background: rgba(248,113,113,0.12); color: var(--error); border: 1px solid rgba(248,113,113,0.25); }
+        .status-pending, .status-queued { background: var(--bg-elev-3); color: var(--text-muted); border: 1px solid var(--border-strong); }
+        @media (max-width: 640px) {
+            .job-card { grid-template-columns: 1fr; }
+            .progress-bar-container { width: 100%; }
+        }
+
+        /* ── TRANSCRIPT STUDIO EDITOR ── */
+        #section-transcript-ready {
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--success);
+            padding: 0 !important;
             overflow: hidden;
         }
 
-        .progress-bar-fill {
-            height: 100%;
-            background-color: var(--color-secondary);
-            transition: width 0.3s ease;
+        /* Header bar */
+        .ts-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-elev-2);
+            flex-wrap: wrap;
+        }
+        .ts-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            min-width: 0;
+        }
+        .ts-status-dot {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: rgba(74,222,128,0.12);
+            border: 1px solid rgba(74,222,128,0.3);
+            display: grid; place-items: center;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .ts-header-title { font-size: 0.97rem; font-weight: 600; color: var(--text); }
+        .ts-header-sub {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+        .ts-header-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .ts-header-actions .btn {
+            padding: 0.45rem 0.85rem !important;
+            font-size: 0.8rem !important;
         }
 
-        /* CLIP CANDIDATE GRID */
+        /* Main 72/28 body — NO min-height so sidebar never stretches */
+        .ts-body {
+            display: grid;
+            grid-template-columns: minmax(0, 2.57fr) minmax(0, 1fr);
+            align-items: start; /* critical: prevents sidebar from stretching */
+        }
+        @media (max-width: 900px) {
+            .ts-body { grid-template-columns: 1fr; }
+        }
+
+        /* Left: independently scrollable transcript pane */
+        .ts-left {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            /* Total visual height = search bar (≈53px) + rows */
+        }
+        .ts-search-bar {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-elev-2);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .ts-search-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem !important;
+            background: var(--bg-elev-3) !important;
+            border: 1px solid var(--border-strong) !important;
+            border-radius: 8px !important;
+            color: var(--text) !important;
+            font-size: 0.83rem !important;
+        }
+        .ts-rows {
+            height: 76vh;
+            max-height: 76vh;
+            overflow-y: auto;
+            padding: 0.25rem 0;
+        }
+        .ts-rows::-webkit-scrollbar { width: 4px; }
+        .ts-rows::-webkit-scrollbar-track { background: transparent; }
+        .ts-rows::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+        .ts-row {
+            display: grid;
+            grid-template-columns: 8px auto 1fr;
+            gap: 0;
+            align-items: start;
+            padding: 0.6rem 1rem 0.6rem 1.25rem;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            transition: background 120ms var(--ease);
+        }
+        .ts-row:hover { background: rgba(167,139,250,0.05); }
+        .ts-row.ts-row-active { background: rgba(167,139,250,0.1) !important; }
+        .ts-row-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--border-strong);
+            margin-top: 0.45rem;
+            transition: background 120ms;
+        }
+        .ts-row.ts-row-active .ts-row-dot { background: var(--accent); }
+        .ts-row-time {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--accent);
+            white-space: nowrap;
+            padding: 0 0.6rem 0 0.5rem;
+            padding-top: 0.05rem;
+            line-height: 1.8;
+        }
+        .ts-row-text {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .ts-row:hover .ts-row-text { color: var(--text); }
+        .ts-row.ts-row-active .ts-row-text { color: var(--text); }
+        .ts-row-speaker {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 2px;
+            font-family: var(--font-mono);
+        }
+
+        /* Right: sticky sidebar — sizes to content, never stretches */
+        .ts-right {
+            position: sticky;
+            top: 80px; /* clears the app's fixed/sticky top nav */
+            align-self: start;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-elev-2);
+            border-left: 1px solid var(--border); /* reinforce separator */
+            max-height: calc(76vh + 53px); /* match transcript + search bar */
+        }
+        .ts-sidebar-header {
+            padding: 1rem 1.25rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .ts-sidebar-header h3 {
+            font-size: 0.88rem !important;
+            color: var(--text) !important;
+            font-weight: 600 !important;
+            margin: 0 !important;
+        }
+        .ts-sidebar-header p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0.25rem 0 0 !important;
+        }
+        .ts-parts-list {
+            overflow-y: auto;
+            padding: 0.75rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            /* shrink-wrap: no flex:1, height determined by content up to max */
+            max-height: calc(76vh - 130px); /* viewport minus header+footer */
+        }
+        .ts-parts-list::-webkit-scrollbar { width: 3px; }
+        .ts-parts-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+        .ts-part-card {
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .ts-part-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ts-part-label button {
+            background: none !important;
+            border: none !important;
+            color: var(--error) !important;
+            font-size: 0.75rem !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            opacity: 0.7;
+        }
+        .ts-part-label button:hover { opacity: 1; }
+        .ts-part-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        .ts-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .ts-input-group label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .ts-input-group input {
+            padding: 0.4rem 0.55rem !important;
+            font-size: 0.82rem !important;
+            border-radius: 6px !important;
+            background: var(--bg-elev-3) !important;
+            border: 1px solid var(--border-strong) !important;
+            color: var(--text) !important;
+            font-family: var(--font-mono) !important;
+        }
+        .ts-input-group input:focus {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 2px rgba(167,139,250,0.15) !important;
+        }
+        .ts-sidebar-footer {
+            padding: 0.85rem 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--bg-elev-2);
+            /* Always pinned to the bottom of the sidebar */
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -4px 16px -4px rgba(0,0,0,0.25);
+        }
+        .ts-sidebar-footer .btn {
+            width: 100%;
+            font-size: 0.82rem !important;
+            padding: 0.55rem 1rem !important;
+        }
+
+        /* ── IN/OUT SELECTION STATES ── */
+
+        /* Row hover: show action buttons */
+        .ts-row { position: relative; }
+        .ts-row-actions {
+            display: none;
+            gap: 4px;
+            align-items: center;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ts-row:hover .ts-row-actions { display: flex; }
+        .ts-action-btn {
+            font-size: 0.67rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px solid;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: transparent;
+            transition: background 100ms, color 100ms;
+            line-height: 1.6;
+        }
+        .ts-action-in  { color: #4ade80; border-color: rgba(74,222,128,0.4); }
+        .ts-action-in:hover  { background: rgba(74,222,128,0.15); }
+        .ts-action-out { color: #f87171; border-color: rgba(248,113,113,0.4); }
+        .ts-action-out:hover { background: rgba(248,113,113,0.15); }
+
+        /* IN row */
+        .ts-row-in {
+            background: rgba(74,222,128,0.08) !important;
+            border-left: 3px solid #4ade80;
+        }
+        .ts-row-in .ts-row-dot  { background: #4ade80 !important; }
+        .ts-row-in .ts-row-time { color: #4ade80 !important; }
+        .ts-row-in::before {
+            content: 'IN';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: #4ade80;
+            letter-spacing: 0.06em;
+            writing-mode: vertical-rl;
+        }
+
+        /* OUT row */
+        .ts-row-out {
+            background: rgba(248,113,113,0.08) !important;
+            border-left: 3px solid #f87171;
+        }
+        .ts-row-out .ts-row-dot  { background: #f87171 !important; }
+        .ts-row-out .ts-row-time { color: #f87171 !important; }
+        .ts-row-out::before {
+            content: 'OUT';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: #f87171;
+            letter-spacing: 0.06em;
+            writing-mode: vertical-rl;
+        }
+
+        /* Rows between IN and OUT */
+        .ts-row-between {
+            background: rgba(167,139,250,0.06) !important;
+            border-left: 3px solid rgba(167,139,250,0.3);
+        }
+        .ts-row-between .ts-row-text { color: var(--text) !important; }
+
+        /* Pending IN state: rows hover shows pulsing ring on dot */
+        .ts-rows.selecting-out .ts-row:not(.ts-row-in):hover {
+            background: rgba(248,113,113,0.05);
+            cursor: crosshair;
+        }
+
+        /* Sidebar clip range cards (no inputs, just display) */
+        .ts-clip-card {
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            animation: clipCardIn 200ms var(--ease) forwards;
+        }
+        @keyframes clipCardIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .ts-clip-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ts-clip-card-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .ts-clip-card-remove {
+            background: none !important;
+            border: none !important;
+            color: var(--error) !important;
+            font-size: 0.75rem !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            opacity: 0.6;
+            transition: opacity 120ms;
+        }
+        .ts-clip-card-remove:hover { opacity: 1 !important; }
+        .ts-clip-range {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .ts-clip-time {
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.3rem 0.55rem;
+            border-radius: 6px;
+            line-height: 1;
+        }
+        .ts-clip-time-start { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+        .ts-clip-time-end   { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+        .ts-clip-arrow { color: var(--text-muted); font-size: 0.8rem; }
+        .ts-clip-duration {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Hint shown when no clips exist */
+        .ts-hint {
+            padding: 1.25rem 1rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+        .ts-hint-icon { font-size: 1.5rem; margin-bottom: 0.4rem; display: block; }
+
+        /* Status pill in sidebar header */
+        .ts-select-status {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-weight: 600;
+            margin-top: 0.25rem;
+            display: inline-block;
+            transition: all 200ms;
+        }
+        .ts-select-status.idle   { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+        .ts-select-status.in-set { background: rgba(74,222,128,0.15); color: #4ade80; }
+
+        /* Override transcript action button inline styles */
+        #btn-start-ranking {
+            background: linear-gradient(180deg, #a78bfa, #7c6df0) !important;
+            color: #0a0a0c !important;
+            border: 1px solid transparent !important;
+            box-shadow: 0 4px 16px -4px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25) !important;
+        }
+        #section-transcript-ready h3 { color: var(--text) !important; font-size: 1rem !important; }
+
+        /* Mobile: un-sticky the sidebar, stack vertically */
+        @media (max-width: 900px) {
+            .ts-right {
+                position: static !important;
+                max-height: none !important;
+                border-left: none !important;
+                border-top: 1px solid var(--border);
+            }
+            .ts-rows { height: 50vh; max-height: 50vh; }
+            .ts-parts-list { max-height: 40vh; }
+        }
+
+        /* CLIP CARDS */
         .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 1.5rem;
+        }
+        .clip-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: border-color 200ms var(--ease), transform 200ms var(--ease);
+        }
+        .clip-card:hover { border-color: var(--border-strong); }
+        .clip-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-elev-2);
+        }
+        .clip-title-edit {
+            flex: 1;
+            min-width: 0;
+            padding: 0.4rem 0.6rem !important;
+            background: transparent !important;
+            border: 1px solid transparent !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+            color: var(--text) !important;
+        }
+        .clip-title-edit:hover { border-color: var(--border-strong) !important; background: var(--bg-elev-3) !important; }
+        .clip-title-edit:focus { border-color: var(--accent) !important; background: var(--bg-elev-3) !important; }
+        .clip-rank-pill {
+            display: inline-grid; place-items: center;
+            min-width: 36px; height: 36px;
+            padding: 0 10px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, var(--accent), var(--accent-2));
+            color: #0a0a0c;
+            font-weight: 700;
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px -4px var(--accent-glow);
+        }
+        .clip-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            padding: 1.5rem;
+        }
+        .clip-meta-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .clip-meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 4px 12px;
+            background: var(--bg-elev-3);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .clip-meta-item b { color: var(--text); font-weight: 600; }
+        .clip-scores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem 1.25rem;
+        }
+        .score-bar-wrapper { display: flex; flex-direction: column; gap: 6px; }
+        .score-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+        .score-bar-label span:last-child { color: var(--text); font-weight: 600; }
+        .score-bar {
+            height: 4px;
+            background: var(--bg-elev-3);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 400ms var(--ease);
+        }
+        .clip-excerpt-box {
+            padding: 1rem 1.15rem;
+            background: var(--bg-elev-2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .clip-excerpt-box b { font-style: normal; color: var(--text); font-weight: 600; margin-right: 4px; }
+        .clip-inputs-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .clip-input-group { display: flex; flex-direction: column; gap: 6px; }
+        .clip-input-group label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .clip-actions {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-elev-2);
+        }
+        .clip-actions .btn { width: 100%; }
+
+        /* COMPILATION */
+        #compile-parts-list .compile-part-row {
+            background: var(--bg-elev-1) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            padding: 0.9rem 1rem !important;
+            flex-wrap: wrap !important;
+        }
+        #compile-parts-list .input-start,
+        #compile-parts-list .input-end {
+            width: 130px !important;
+            padding: 0.45rem 0.6rem !important;
+            background: var(--bg-elev-2) !important;
+            border: 1px solid var(--border-strong) !important;
+            border-radius: 6px !important;
+            color: var(--text) !important;
+            font-family: var(--font-mono) !important;
+            font-size: 0.82rem !important;
+        }
+        #compile-parts-list .btn {
+            background: rgba(248,113,113,0.1) !important;
+            border: 1px solid rgba(248,113,113,0.25) !important;
+            color: var(--error) !important;
+            padding: 0.4rem 0.75rem !important;
+            font-size: 0.78rem !important;
+        }
+
+        /* EXPORTS */
+        .exports-gallery {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
-
-        @media (min-width: 768px) {
-            .clips-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .clip-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .clip-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(124, 58, 237, 0.25);
-        }
-
-        .clip-header {
-            padding: 1.25rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .clip-title-edit {
-            background: transparent;
-            border: none;
-            border-bottom: 1px dashed transparent;
-            color: var(--text-main);
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1.1rem;
-            width: 75%;
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
-
-        .clip-title-edit:focus {
-            border-color: var(--color-primary);
-        }
-
-        .clip-rank-pill {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            color: var(--bg-base);
-            font-weight: 800;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-        }
-
-        .clip-body {
-            padding: 1.25rem;
-            flex-grow: 1;
-        }
-
-        .clip-meta-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-        }
-
-        .clip-meta-item {
-            background-color: rgba(255, 255, 255, 0.04);
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .clip-scores-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-            background-color: rgba(0, 0, 0, 0.15);
-            padding: 0.75rem;
-            border-radius: 8px;
-        }
-
-        .score-bar-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .score-bar-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .score-bar {
-            height: 4px;
-            background-color: rgba(255,255,255,0.08);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .score-bar-fill {
-            height: 100%;
-            background-color: var(--color-primary);
-        }
-
-        .clip-excerpt-box {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--color-secondary);
-            font-size: 0.85rem;
-            color: #d1d5db;
-            margin-bottom: 1.25rem;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .clip-inputs-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .clip-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            flex: 1;
-        }
-
-        .clip-input-group label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .clip-input-group input {
-            background-color: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 0.4rem 0.6rem;
-            border-radius: 6px;
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-            outline: none;
-            text-align: center;
-        }
-
-        .clip-input-group input:focus {
-            border-color: var(--color-secondary);
-        }
-
-        .clip-actions {
-            padding: 1.25rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* RENDERS GALLERY */
-        .exports-gallery {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .exports-gallery {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
         .export-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
             padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            background: var(--bg-elev-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
         }
-
+        .export-card h3 {
+            font-size: 1rem !important;
+            font-weight: 600;
+        }
+        .export-card h4 {
+            font-size: 0.78rem !important;
+            font-family: var(--font-mono) !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted) !important;
+            font-weight: 500 !important;
+        }
         .video-container {
             width: 100%;
-            background-color: #000;
-            border-radius: 8px;
+            background: #000;
+            border-radius: 10px;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border: 1px solid var(--border);
         }
-
         .video-container-vertical {
+            max-width: 320px;
             aspect-ratio: 9/16;
-            max-height: 450px;
         }
-
         .video-container-landscape {
             aspect-ratio: 16/9;
         }
-
         .video-player {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%; display: block;
             object-fit: contain;
+            background: #000;
         }
 
-        /* ANIMATIONS */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Override JS-injected inline-style export-card grid so it becomes responsive */
+        #exports-container .export-card > div[style*="grid-template-columns"] {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
         }
 
-        .pulse {
-            animation: pulse-animation 2s infinite;
+        /* Utilities that some pieces reference */
+        code { font-family: var(--font-mono); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: none; }
         }
 
-        @keyframes pulse-animation {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+        /* SCROLLBARS */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-elev-3);
+            border-radius: 999px;
+            border: 2px solid var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #2a2a34; }
+
+        /* Skip link + reduced motion */
+        .skip-link {
+            position: absolute; left: -9999px;
+            top: 0;
+            background: var(--accent); color: #000;
+            padding: 0.5rem 1rem; border-radius: 6px;
+            z-index: 1000;
+        }
+        .skip-link:focus { left: 1rem; top: 1rem; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
-        .hidden {
-            display: none !important;
+        /* Section headings & subcopy tweaks */
+        .glass-card > h2 { margin-bottom: 0.35rem; }
+        .glass-card > p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Section header row (clips) */
+        .section-header-row {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 0.35rem;
+        }
+        @media (max-width: 640px) {
+            .section-header-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
+
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <div class="logo">
-            Podcast shortReel <span class="logo-dot"></span>
+            ShortReel <em>studio</em>
         </div>
-        <button class="btn" id="btn-reset" onclick="resetApp()">🧹 Fresh Reset</button>
+        <button class="btn" id="btn-reset" onclick="resetApp()" aria-label="Reset application state">Fresh Reset</button>
     </header>
 
-    <main>
+    <main id="main-content">
         <!-- STEPS PROGRESS -->
-        <div class="steps-container">
-            <div class="steps-line"></div>
-            <div class="steps-line-fill" id="steps-line-fill"></div>
-            
+        <div class="steps-container" role="progressbar" aria-label="Pipeline progress">
+            <div class="steps-line">
+                <div class="steps-line-fill" id="steps-line-fill"></div>
+            </div>
+
             <div class="step-item active" id="step1">
                 <div class="step-bubble">1</div>
-                <div class="step-label">Upload Video</div>
+                <div class="step-label">Upload</div>
             </div>
             <div class="step-item" id="step2">
                 <div class="step-bubble">2</div>
-                <div class="step-label">Transcription</div>
+                <div class="step-label">Transcribe</div>
             </div>
             <div class="step-item" id="step3">
                 <div class="step-bubble">3</div>
@@ -615,116 +1225,198 @@
             </div>
             <div class="step-item" id="step4">
                 <div class="step-bubble">4</div>
-                <div class="step-label">Approve Clips</div>
+                <div class="step-label">Approve</div>
             </div>
             <div class="step-item" id="step5">
                 <div class="step-bubble">5</div>
-                <div class="step-label">Download Reels</div>
+                <div class="step-label">Download</div>
             </div>
         </div>
 
         <!-- UPLOAD SECTION -->
         <section class="glass-card" id="section-upload">
-            <h2 style="margin-bottom: 0.5rem;">Upload Podcast Content</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Upload your MP4 video podcast for automatic transcription, or upload a pre-made transcript file directly to start ranking immediately.</p>
-            
-            <!-- Upload tabs -->
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
-                <button class="btn" id="tab-auto-transcribe" onclick="switchUploadTab('auto')" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">🎥 Auto-Transcribe Video</button>
-                <button class="btn" id="tab-direct-transcript" onclick="switchUploadTab('transcript')" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer; transition: all 0.2s;">📄 Upload Custom Transcript</button>
+            <h2>Upload podcast content</h2>
+            <p style="margin-bottom: 1.5rem;">Upload an MP4 for auto-transcription, drop in an existing transcript, or point us at a YouTube URL.</p>
+
+            <div class="tabs-bar" role="tablist">
+                <button class="btn tab-active-style" id="tab-auto-transcribe" onclick="switchUploadTab('auto')" role="tab">Auto-transcribe video</button>
+                <button class="btn" id="tab-direct-transcript" onclick="switchUploadTab('transcript')" role="tab">Upload transcript</button>
+                <button class="btn" id="tab-youtube-url" onclick="switchUploadTab('youtube')" role="tab">YouTube URL</button>
             </div>
-            
+
             <!-- Tab 1: Auto-Transcribe -->
             <div id="tab-content-auto">
                 <div class="upload-zone" onclick="document.getElementById('file-input').click()" id="upload-zone">
-                    <span class="upload-icon">📁</span>
-                    <h3 id="upload-status-text">Drag & Drop or Click to Select File</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;" id="upload-filename-text">Supports .mp4 format</p>
+                    <span class="upload-icon" aria-hidden="true">↑</span>
+                    <h3 id="upload-status-text">Drop an MP4 or click to browse</h3>
+                    <p style="color: var(--text-muted); font-size: 0.82rem;" id="upload-filename-text">MP4 up to a few GB · we'll transcribe it for you</p>
                     <input type="file" id="file-input" class="file-input" accept="video/mp4" onchange="handleFileSelect(event)">
                 </div>
             </div>
-            
+
             <!-- Tab 2: Upload Custom Transcript -->
             <div id="tab-content-transcript" class="hidden" style="animation: fadeIn 0.3s ease;">
-                <div style="display: flex; flex-direction: column; gap: 1.25rem; background: rgba(0,0,0,0.15); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                <div class="field-block">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">1. Select Transcript File <span style="color: #ff4a4a;">*</span></label>
-                        <input type="file" id="transcript-input" accept=".txt,.json" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
-                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.3;">Supports JSON or text with line format: <code>[0.00s - 1.84s] Speaker: transcript text</code></p>
+                        <label class="field-label">1. Transcript file <span class="req">*</span></label>
+                        <input type="file" id="transcript-input" accept=".txt,.json">
+                        <p class="field-hint">JSON, or text lines like <code>[0.00s - 1.84s] Speaker: transcript text</code></p>
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">2. Select Video File <span style="color: var(--text-muted); font-weight: normal; font-size: 0.85rem;">(Optional - Required for clip video cropping/rendering)</span></label>
-                        <input type="file" id="transcript-video-input" accept="video/mp4" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none; cursor: pointer;">
+                        <label class="field-label">2. Video file <span style="color: var(--text-muted); font-weight: 400;">(optional — required to render clips)</span></label>
+                        <input type="file" id="transcript-video-input" accept="video/mp4">
                     </div>
-                    <button class="btn btn-primary" id="btn-submit-transcript" onclick="handleTranscriptUpload()" style="margin-top: 0.5rem; align-self: flex-start; padding: 0.75rem 2rem; font-weight: 600; font-size: 0.95rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s;">
-                        <span>⚡</span> Run AI Ranking Pipeline
-                    </button>
+                    <button class="btn btn-primary" id="btn-submit-transcript" onclick="handleTranscriptUpload()">Run AI ranking pipeline</button>
+                </div>
+            </div>
+
+            <!-- Tab 3: YouTube URL -->
+            <div id="tab-content-youtube" class="hidden" style="animation: fadeIn 0.3s ease;">
+                <div class="field-block">
+                    <div id="youtube-input-section">
+                        <label class="field-label">YouTube video URL <span class="req">*</span></label>
+                        <div style="display: flex; gap: 0.5rem; align-items: stretch; flex-wrap: wrap;">
+                            <input type="url" id="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..." style="flex: 1 1 240px;">
+                            <button class="btn btn-primary" id="btn-fetch-youtube" onclick="fetchYouTubeFormats()">Fetch formats</button>
+                        </div>
+                    </div>
+
+                    <div id="youtube-formats-section" class="hidden">
+                        <h3 style="font-size: 0.85rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 500; margin-bottom: 0.75rem;">Select download resolution</h3>
+                        <div id="youtube-formats-table-container" style="background: var(--bg-elev-2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                <thead>
+                                    <tr style="background: var(--bg-elev-3); border-bottom: 1px solid var(--border);">
+                                        <th style="padding: 0.75rem 1rem; font-weight: 500; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;">File type</th>
+                                        <th style="padding: 0.75rem 1rem; font-weight: 500; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;">Format</th>
+                                        <th style="padding: 0.75rem 1rem; font-weight: 500; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="youtube-formats-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ACTIVE JOBS MONITOR -->
         <section class="glass-card hidden" id="section-jobs">
-            <h2 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                Active Operations <span class="job-spinner"></span>
+            <h2 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                Active operations <span class="job-spinner"></span>
             </h2>
-            <div id="jobs-container">
-                <!-- Dynamically populated -->
-            </div>
+            <div id="jobs-container"></div>
         </section>
 
-        <!-- TRANSCRIPT GENERATED ALERT -->
-        <section class="glass-card hidden" id="section-transcript-ready" style="border: 1px solid rgba(0, 255, 127, 0.35); background: rgba(0, 255, 127, 0.04); padding: 1.25rem; margin-bottom: 1.5rem; text-align: left; animation: fadeIn 0.4s ease;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="font-size: 1.75rem;">📄</span>
+        <!-- TRANSCRIPT STUDIO EDITOR -->
+        <section class="glass-card hidden" id="section-transcript-ready">
+
+            <!-- Header bar -->
+            <div class="ts-header">
+                <div class="ts-header-left">
+                    <div class="ts-status-dot">✓</div>
                     <div>
-                        <h3 style="margin: 0; color: #00ff7f; font-size: 1.1rem; font-weight: 600;">Transcript Ready!</h3>
-                        <p style="margin: 0.2rem 0 0 0; color: var(--text-muted); font-size: 0.85rem;">The podcast audio has been fully transcribed. AI Ranking is now running to extract viral clip opportunities.</p>
+                        <div class="ts-header-title">Transcript ready</div>
+                        <div class="ts-header-sub" id="transcript-ready-text">Click a timestamp to auto-fill the clip builder →</div>
                     </div>
                 </div>
-                <div style="display: flex; gap: 0.50rem;">
-                    <button class="btn btn-secondary" onclick="downloadTranscript()" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        <span>📥</span> Download Raw Transcript
-                    </button>
-                    <button class="btn" onclick="toggleTranscriptPreview()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
-                        👁️ Preview Transcript
-                    </button>
+                <div class="ts-header-actions" id="transcript-action-buttons">
+                    <button class="btn btn-primary" onclick="startAiRanking()" id="btn-start-ranking">✨ AI Viral Clips</button>
+                    <button class="btn btn-secondary" onclick="loadTranscriptPreview()" title="Refresh transcript">↺ Refresh</button>
+                    <button class="btn btn-secondary" onclick="downloadTranscript()">⬇ Download</button>
                 </div>
             </div>
-            <!-- Collapsible Preview Area -->
-            <div id="transcript-preview-area" class="hidden" style="margin-top: 1rem; padding: 1.25rem; background: rgba(0,0,0,0.35); border-radius: 6px; max-height: 250px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.45; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.08); text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
-                <div id="transcript-preview-content" style="white-space: pre-wrap;">Loading preview...</div>
+
+            <!-- 70/30 split body -->
+            <div class="ts-body">
+
+                <!-- LEFT 70%: Clickable transcript -->
+                <div class="ts-left">
+                    <div class="ts-search-bar">
+                        <input class="ts-search-input" id="ts-search" type="text" placeholder="🔍  Search transcript..." oninput="filterTranscript(this.value)">
+                    </div>
+                    <div class="ts-rows" id="transcript-preview-content">Loading transcript...</div>
+                </div>
+
+                <!-- RIGHT 30%: Sticky clip builder -->
+                <div class="ts-right">
+                    <div class="ts-sidebar-header">
+                        <h3>✂️ Clip Builder</h3>
+                        <p>Click <b style="color:#4ade80">IN</b> then <b style="color:#f87171">OUT</b> on any transcript row.</p>
+                        <span class="ts-select-status idle" id="ts-select-status">● Waiting for IN point</span>
+                    </div>
+
+                    <div class="ts-parts-list" id="compile-parts-list">
+                        <div class="ts-hint" id="ts-clip-hint">
+                            <span class="ts-hint-icon">🎬</span>
+                            Click <b style="color:#4ade80">IN</b> on a row to start your first clip.
+                        </div>
+                    </div>
+
+                    <div class="ts-sidebar-footer" id="section-compile">
+                        <button class="btn btn-primary" onclick="submitCompileRequest()" id="btn-submit-compile">🚀 Stitch &amp; Compile</button>
+                        <button class="btn btn-secondary" style="font-size:0.75rem!important;opacity:0.7" onclick="clearAllClips()">✕ Clear all clips</button>
+                    </div>
+                </div>
             </div>
+
         </section>
 
 
         <!-- CLIP CANDIDATES VIEW -->
         <section class="glass-card hidden" id="section-clips">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 style="margin: 0;">AI Suggested Clip Candidates</h2>
-                <button class="btn btn-secondary" onclick="downloadTranscript()" id="btn-download-transcript" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
-                    <span>📄</span> Get Transcript
-                </button>
+            <div class="section-header-row">
+                <div style="min-width: 0;">
+                    <h2>AI-suggested clip candidates</h2>
+                    <p>Edit boundaries and titles, then render the reels you love.</p>
+                </div>
+                <button class="btn btn-secondary" onclick="downloadTranscript()" id="btn-download-transcript">Get transcript</button>
             </div>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Edit time boundaries or titles, and render the final reels.</p>
-            
-            <div class="clips-grid" id="clips-container">
-                <!-- Dynamically populated -->
-            </div>
+
+            <div class="clips-grid" id="clips-container" style="margin-top: 1.25rem;"></div>
         </section>
 
         <!-- RENDERED OUTPUTS GALLERY -->
         <section class="glass-card hidden" id="section-exports">
-            <h2 style="margin-bottom: 0.5rem;">Exported Reels & Shorts</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Your landscape and vertical cropped clips with embedded subtitles.</p>
-            
-            <div class="exports-gallery" id="exports-container">
-                <!-- Dynamically populated -->
-            </div>
+            <h2>Exported reels &amp; shorts</h2>
+            <p style="margin-bottom: 1.25rem;">Your vertical and landscape cuts with embedded subtitles.</p>
+            <div class="exports-gallery" id="exports-container"></div>
         </section>
     </main>
 
+    <script>
+        // Visual polish layer — does NOT alter existing app logic.
+        (function(){
+            const tabIds = ['tab-auto-transcribe','tab-direct-transcript','tab-youtube-url'];
+            function syncTabs(){
+                tabIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    // Consider "active" if JS set a non-transparent background inline.
+                    const bg = el.style.background || '';
+                    const isActive = bg && bg !== 'transparent';
+                    el.classList.toggle('tab-active-style', !!isActive);
+                });
+            }
+            tabIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('click', () => setTimeout(syncTabs, 0));
+            });
+            // Initial sync
+            document.addEventListener('DOMContentLoaded', syncTabs);
+            setTimeout(syncTabs, 50);
+
+            // Dragover styling on upload zone (visual only; does not affect file select)
+            const zone = document.getElementById('upload-zone');
+            if (zone) {
+                ['dragenter','dragover'].forEach(ev => zone.addEventListener(ev, e => {
+                    e.preventDefault(); zone.classList.add('dragover');
+                }));
+                ['dragleave','drop'].forEach(ev => zone.addEventListener(ev, () => zone.classList.remove('dragover')));
+            }
+        })();
+    </script>
     <script>
         let currentVideoId = null;
         let activeJobs = [];
@@ -732,7 +1424,7 @@
 
         function updateSteps(stepNum, status = 'active') {
             const steps = [1, 2, 3, 4, 5];
-            const percent = ((stepNum - 1) / 4) * 90;
+            const percent = ((stepNum - 1) / 4) * 100;
             document.getElementById('steps-line-fill').style.width = `${percent}%`;
 
             steps.forEach(s => {
@@ -781,38 +1473,246 @@
             }
         }
 
-        async function toggleTranscriptPreview() {
+        // Stores all segments for filtering
+        let _transcriptSegments = [];
+
+        async function loadTranscriptPreview() {
             if (!currentVideoId) return;
-            const previewArea = document.getElementById('transcript-preview-area');
-            const previewContent = document.getElementById('transcript-preview-content');
-            
-            if (previewArea.classList.contains('hidden')) {
-                previewArea.classList.remove('hidden');
-                previewContent.innerText = "Loading transcript preview...";
-                try {
-                    const res = await fetch(`/videos/${currentVideoId}/transcript`);
-                    if (!res.ok) throw new Error("Failed to fetch transcript");
-                    const segments = await res.json();
-                    
-                    if (segments.length === 0) {
-                        previewContent.innerText = "No segments found yet.";
-                        return;
-                    }
-                    
-                    let text = "";
-                    segments.forEach(s => {
-                        const speaker = s.speaker ? `${s.speaker}` : "Speaker 1";
-                        text += `[${formatTime(s.start_time)} - ${formatTime(s.end_time)}] ${speaker}: ${s.text}\n`;
-                    });
-                    previewContent.innerText = text;
-                } catch (err) {
-                    console.error(err);
-                    previewContent.innerText = "Error loading preview: " + err.message;
+            const container = document.getElementById('transcript-preview-content');
+            container.innerHTML = '<span style="color:var(--text-muted);padding:1rem;display:block;">Loading transcript...</span>';
+            try {
+                const res = await fetch(`/videos/${currentVideoId}/transcript`);
+                if (!res.ok) throw new Error("Failed to fetch transcript");
+                _transcriptSegments = await res.json();
+
+                if (_transcriptSegments.length === 0) {
+                    container.innerHTML = '<span style="color:var(--text-muted);padding:1rem;display:block;">No transcript segments found yet.</span>';
+                    return;
                 }
-            } else {
-                previewArea.classList.add('hidden');
+
+                renderTranscriptRows(_transcriptSegments);
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<span style="color:var(--error);padding:1rem;display:block;">Error loading: ${err.message}</span>`;
             }
         }
+
+        function renderTranscriptRows(segments) {
+            const container = document.getElementById('transcript-preview-content');
+            container.innerHTML = '';
+            segments.forEach(s => {
+                const row = document.createElement('div');
+                row.className = 'ts-row';
+                row.dataset.start = s.start_time;
+                row.dataset.end   = s.end_time;
+                const startFmt = formatTime(s.start_time);
+                const speaker  = s.speaker || 'Speaker 1';
+
+                row.innerHTML = `
+                    <div class="ts-row-dot"></div>
+                    <div class="ts-row-time">${startFmt}</div>
+                    <div style="flex:1;min-width:0;">
+                        <div class="ts-row-speaker">${speaker}</div>
+                        <div class="ts-row-text">${s.text}</div>
+                    </div>
+                    <div class="ts-row-actions">
+                        <button class="ts-action-btn ts-action-in"  title="Set IN point here"  onclick="event.stopPropagation(); setInPoint(${JSON.stringify({start_time:s.start_time,end_time:s.end_time}).replace(/"/g,"'")} , this.closest('.ts-row'))">IN</button>
+                        <button class="ts-action-btn ts-action-out" title="Set OUT point here" onclick="event.stopPropagation(); setOutPoint(${JSON.stringify({start_time:s.start_time,end_time:s.end_time}).replace(/"/g,"'")} , this.closest('.ts-row'))">OUT</button>
+                    </div>
+                `;
+
+                // Also handle plain click: if IN is set treat as OUT, else as IN
+                row.addEventListener('click', () => {
+                    if (_inPointSec !== null) {
+                        setOutPoint(s, row);
+                    } else {
+                        setInPoint(s, row);
+                    }
+                });
+
+                container.appendChild(row);
+            });
+        }
+
+        function filterTranscript(query) {
+            if (!_transcriptSegments.length) return;
+            const q = query.toLowerCase().trim();
+            const filtered = q ? _transcriptSegments.filter(s =>
+                s.text.toLowerCase().includes(q) ||
+                (s.speaker || '').toLowerCase().includes(q)
+            ) : _transcriptSegments;
+            renderTranscriptRows(filtered);
+        }
+
+        // ── IN/OUT POINT SELECTION ENGINE ──────────────────────────────────
+        let _inPointRow  = null;   // DOM element of the IN row
+        let _inPointSec  = null;   // raw seconds
+        let _clipCount   = 0;
+
+        function _setSelectStatus(state) {
+            const el = document.getElementById('ts-select-status');
+            if (!el) return;
+            if (state === 'idle') {
+                el.className = 'ts-select-status idle';
+                el.textContent = '● Waiting for IN point';
+            } else {
+                el.className = 'ts-select-status in-set';
+                el.textContent = '● IN set — now click OUT';
+            }
+        }
+
+        function setInPoint(seg, rowEl) {
+            // Clear any previous pending IN without an OUT
+            _clearPendingIn();
+
+            _inPointRow = rowEl;
+            _inPointSec = seg.start_time;
+
+            rowEl.classList.add('ts-row-in');
+            // Switch rows container to "selecting-out" mode for visual hint
+            document.getElementById('transcript-preview-content').classList.add('selecting-out');
+            _setSelectStatus('in-set');
+        }
+
+        function setOutPoint(seg, rowEl) {
+            if (_inPointSec === null) {
+                // No IN yet — treat this row as IN instead
+                setInPoint(seg, rowEl);
+                return;
+            }
+
+            // Determine ordering (allow clicking out-of-order)
+            const startSec = Math.min(_inPointSec, seg.end_time);
+            const endSec   = Math.max(_inPointSec, seg.end_time);
+
+            if (startSec >= endSec) {
+                // Same row — ignore
+                _clearPendingIn();
+                return;
+            }
+
+            // Highlight range
+            _highlightRange(_inPointSec, seg.end_time);
+
+            // Create clip card in sidebar
+            _clipCount++;
+            _createClipCard(_clipCount, startSec, endSec);
+
+            // Reset IN state
+            _inPointRow  = null;
+            _inPointSec  = null;
+            document.getElementById('transcript-preview-content').classList.remove('selecting-out');
+            _setSelectStatus('idle');
+
+            // Hide the hint
+            const hint = document.getElementById('ts-clip-hint');
+            if (hint) hint.style.display = 'none';
+        }
+
+        function _clearPendingIn() {
+            if (_inPointRow) {
+                _inPointRow.classList.remove('ts-row-in');
+                _inPointRow = null;
+            }
+            _inPointSec = null;
+            document.getElementById('transcript-preview-content')?.classList.remove('selecting-out');
+            _setSelectStatus('idle');
+        }
+
+        function _highlightRange(inSec, outEndSec) {
+            const minSec = Math.min(inSec, outEndSec);
+            const maxSec = Math.max(inSec, outEndSec);
+
+            document.querySelectorAll('.ts-row').forEach(row => {
+                const rStart = parseFloat(row.dataset.start);
+                const rEnd   = parseFloat(row.dataset.end);
+                row.classList.remove('ts-row-in', 'ts-row-out', 'ts-row-between');
+
+                if (Math.abs(rStart - inSec) < 0.01) {
+                    row.classList.add('ts-row-in');
+                } else if (Math.abs(rEnd - outEndSec) < 0.01) {
+                    row.classList.add('ts-row-out');
+                } else if (rStart >= minSec && rEnd <= maxSec) {
+                    row.classList.add('ts-row-between');
+                }
+            });
+        }
+
+        function _createClipCard(num, startSec, endSec) {
+            const container = document.getElementById('compile-parts-list');
+            const durSec    = Math.round(endSec - startSec);
+            const durStr    = durSec >= 60
+                ? `${Math.floor(durSec/60)}m ${durSec%60}s`
+                : `${durSec}s`;
+
+            const card = document.createElement('div');
+            card.className = 'ts-clip-card';
+            card.dataset.startSec = startSec;
+            card.dataset.endSec   = endSec;
+
+            card.innerHTML = `
+                <div class="ts-clip-card-header">
+                    <span class="ts-clip-card-label">Clip ${num}</span>
+                    <button class="ts-clip-card-remove" onclick="removeClipCard(this.closest('.ts-clip-card'))">✕</button>
+                </div>
+                <div class="ts-clip-range">
+                    <span class="ts-clip-time ts-clip-time-start">${formatTime(startSec)}</span>
+                    <span class="ts-clip-arrow">→</span>
+                    <span class="ts-clip-time ts-clip-time-end">${formatTime(endSec)}</span>
+                </div>
+                <div class="ts-clip-duration">${durStr} selected</div>
+            `;
+
+            container.appendChild(card);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeClipCard(card) {
+            // Un-highlight rows that belong to this clip
+            const s = parseFloat(card.dataset.startSec);
+            const e = parseFloat(card.dataset.endSec);
+            document.querySelectorAll('.ts-row').forEach(row => {
+                const rStart = parseFloat(row.dataset.start);
+                const rEnd   = parseFloat(row.dataset.end);
+                if (rStart >= s && rEnd <= e) {
+                    row.classList.remove('ts-row-in', 'ts-row-out', 'ts-row-between');
+                }
+            });
+            card.remove();
+            _reindexClipCards();
+        }
+
+        function clearAllClips() {
+            document.querySelectorAll('.ts-row').forEach(r =>
+                r.classList.remove('ts-row-in', 'ts-row-out', 'ts-row-between'));
+            const container = document.getElementById('compile-parts-list');
+            container.innerHTML = '';
+            const hint = document.getElementById('ts-clip-hint');
+            if (!hint) {
+                const h = document.createElement('div');
+                h.className = 'ts-hint';
+                h.id = 'ts-clip-hint';
+                h.innerHTML = '<span class="ts-hint-icon">🎬</span>Click <b style="color:#4ade80">IN</b> on a row to start your first clip.';
+                container.appendChild(h);
+            } else {
+                container.appendChild(hint);
+                hint.style.display = '';
+            }
+            _clipCount = 0;
+            _clearPendingIn();
+        }
+
+        function _reindexClipCards() {
+            let n = 1;
+            document.querySelectorAll('.ts-clip-card').forEach(card => {
+                const lbl = card.querySelector('.ts-clip-card-label');
+                if (lbl) lbl.textContent = `Clip ${n++}`;
+            });
+            _clipCount = n - 1;
+        }
+
+        // Legacy alias (kept for compatibility)
+        async function toggleTranscriptPreview() { await loadTranscriptPreview(); }
 
         async function resetApp() {
             if (!confirm("Are you sure you want to clear all data and reset the app?")) return;
@@ -821,8 +1721,9 @@
             currentVideoId = null;
             activeJobs = [];
             
-            // Hide preview area if open
-            document.getElementById('transcript-preview-area').classList.add('hidden');
+            // Reset transcript preview
+            document.getElementById('transcript-preview-content').innerHTML = '<span style="color:var(--text-muted);padding:1rem;display:block;">Click Refresh to load transcript...</span>';
+            _transcriptSegments = [];
             
             try {
                 // Clear UI
@@ -830,6 +1731,7 @@
                 document.getElementById('section-jobs').classList.add('hidden');
                 document.getElementById('section-transcript-ready').classList.add('hidden');
                 document.getElementById('section-clips').classList.add('hidden');
+                clearAllClips();
                 document.getElementById('section-exports').classList.add('hidden');
                 document.getElementById('upload-status-text').innerText = 'Drag & Drop or Click to Select File';
                 document.getElementById('upload-filename-text').innerText = 'Supports .mp4 format';
@@ -850,31 +1752,162 @@
         function switchUploadTab(tab) {
             const btnAuto = document.getElementById('tab-auto-transcribe');
             const btnTrans = document.getElementById('tab-direct-transcript');
+            const btnYouTube = document.getElementById('tab-youtube-url');
             const contentAuto = document.getElementById('tab-content-auto');
             const contentTrans = document.getElementById('tab-content-transcript');
+            const contentYouTube = document.getElementById('tab-content-youtube');
             
+            // Reset all
+            [btnAuto, btnTrans, btnYouTube].forEach(btn => {
+                if (btn) {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--text-muted)';
+                    btn.style.borderColor = 'transparent';
+                }
+            });
+            [contentAuto, contentTrans, contentYouTube].forEach(content => {
+                if (content) content.classList.add('hidden');
+            });
+            
+            let activeBtn, activeContent;
             if (tab === 'auto') {
-                btnAuto.style.background = 'rgba(255,255,255,0.15)';
-                btnAuto.style.color = '#fff';
-                btnAuto.style.borderColor = 'rgba(255,255,255,0.1)';
+                activeBtn = btnAuto;
+                activeContent = contentAuto;
+            } else if (tab === 'transcript') {
+                activeBtn = btnTrans;
+                activeContent = contentTrans;
+            } else if (tab === 'youtube') {
+                activeBtn = btnYouTube;
+                activeContent = contentYouTube;
+            }
+            
+            if (activeBtn) {
+                activeBtn.style.background = 'rgba(255,255,255,0.15)';
+                activeBtn.style.color = '#fff';
+                activeBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+            }
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+        }
+
+        async function fetchYouTubeFormats() {
+            const urlInput = document.getElementById('youtube-url-input');
+            const btnFetch = document.getElementById('btn-fetch-youtube');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert("Please enter a valid YouTube URL");
+                return;
+            }
+            
+            btnFetch.disabled = true;
+            btnFetch.innerHTML = `<span class="job-spinner" style="width:14px;height:14px;"></span> Fetching...`;
+            
+            try {
+                const res = await fetch('/videos/youtube/info', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ url: url })
+                });
                 
-                btnTrans.style.background = 'transparent';
-                btnTrans.style.color = 'var(--text-muted)';
-                btnTrans.style.borderColor = 'transparent';
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.detail || "Failed to fetch formats");
+                }
                 
-                contentAuto.classList.remove('hidden');
-                contentTrans.classList.add('hidden');
-            } else {
-                btnTrans.style.background = 'rgba(255,255,255,0.15)';
-                btnTrans.style.color = '#fff';
-                btnTrans.style.borderColor = 'rgba(255,255,255,0.1)';
+                const data = await res.json();
                 
-                btnAuto.style.background = 'transparent';
-                btnAuto.style.color = 'var(--text-muted)';
-                btnAuto.style.borderColor = 'transparent';
+                const tbody = document.getElementById('youtube-formats-tbody');
+                tbody.innerHTML = '';
                 
-                contentTrans.classList.remove('hidden');
-                contentAuto.classList.add('hidden');
+                if (!data.formats || data.formats.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="padding: 1rem; text-align: center; color: var(--text-muted);">No mp4 formats found.</td></tr>';
+                } else {
+                    data.formats.forEach(f => {
+                        const tr = document.createElement('tr');
+                        tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                        
+                        const size = f.filesize_approx ? ` (${(f.filesize_approx / (1024*1024)).toFixed(1)} MB)` : '';
+                        
+                        tr.innerHTML = `
+                            <td style="padding: 1rem; color: var(--text-color);">${f.resolution} (.${f.ext})</td>
+                            <td style="padding: 1rem; color: var(--text-muted);">${f.format_note || 'Auto'} ${size}</td>
+                            <td style="padding: 0.5rem 1rem;">
+                                <button class="btn btn-primary" onclick="downloadYouTubeFormat('${data.url}', '${f.format_id}')" 
+                                    style="background: #4caf50; padding: 0.4rem 1rem; font-size: 0.85rem; border-radius: 4px;">
+                                    📥 Download
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                
+                document.getElementById('youtube-formats-section').classList.remove('hidden');
+                
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btnFetch.disabled = false;
+                btnFetch.innerHTML = 'Fetch Formats';
+            }
+        }
+        
+        async function downloadYouTubeFormat(url, formatId) {
+            const formatsSection = document.getElementById('youtube-formats-section');
+            const inputSection = document.getElementById('youtube-input-section');
+            
+            formatsSection.classList.add('hidden');
+            inputSection.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;">
+                    <div class="job-spinner" style="width: 32px; height: 32px; border-width: 4px; margin-bottom: 1rem;"></div>
+                    <h3 style="margin: 0; color: #fff;">Downloading YouTube Video...</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">This may take a minute depending on video length and resolution.</p>
+                </div>
+            `;
+            
+            try {
+                const res = await fetch('/videos/youtube/download', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ url: url, format_id: formatId })
+                });
+                
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.detail || "Failed to download video");
+                }
+                
+                const videoData = await res.json();
+                currentVideoId = videoData.id;
+                
+                updateSteps(2);
+                
+                // Hide upload section & show jobs section
+                document.getElementById('section-upload').classList.add('hidden');
+                document.getElementById('section-jobs').classList.remove('hidden');
+                
+                // Start status polling loop
+                startPollingJobs();
+                
+            } catch (err) {
+                alert("Error during download: " + err.message);
+                // Reset UI state
+                document.getElementById('section-upload').classList.remove('hidden');
+                inputSection.innerHTML = `
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); font-size: 0.95rem;">
+                            Enter YouTube Video URL <span style="color: #ff4a4a;">*</span>
+                        </label>
+                        <div style="display: flex; gap: 0.5rem; align-items: stretch;">
+                            <input type="url" id="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..."
+                                style="flex-grow: 1; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; color: var(--text-color); font-size: 0.9rem; outline: none;">
+                            <button class="btn btn-primary" id="btn-fetch-youtube" onclick="fetchYouTubeFormats()"
+                                style="padding: 0 1.5rem; font-weight: 600; border-radius: 6px; cursor: pointer;">
+                                Fetch Formats
+                            </button>
+                        </div>
+                `;
             }
         }
 
@@ -927,6 +1960,39 @@
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = "<span>⚡</span> Run AI Ranking Pipeline";
+            }
+        }
+
+        async function startAiRanking() {
+            if (!currentVideoId) return;
+            const btn = document.getElementById('btn-start-ranking');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="job-spinner"></span> Starting AI...`;
+
+            try {
+                const response = await fetch(`/videos/${currentVideoId}/rank`, {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to start AI Ranking");
+                }
+                
+                // Hide button so user knows it's running
+                btn.style.display = 'none';
+                
+                // Update descriptive text
+                document.getElementById('transcript-ready-text').innerText = "AI Ranking is now running to extract viral clip opportunities. Please wait...";
+                
+                // Jump to step 3 and make sure jobs section is visible and polling
+                updateSteps(3);
+                document.getElementById('section-jobs').classList.remove('hidden');
+                startPollingJobs();
+            } catch (err) {
+                console.error(err);
+                alert("Error starting AI Ranking: " + err.message);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             }
         }
 
@@ -997,44 +2063,117 @@
                 // Analyze current pipeline step
                 const transcribeJob = jobs.find(j => j.job_type === 'transcribe');
                 const rankJob = jobs.find(j => j.job_type === 'rank');
-                const renderJobs = jobs.filter(j => j.job_type === 'render');
+                const renderJobs = jobs.filter(j => j.job_type === 'render' || j.job_type === 'compile');
 
                 // Update Step Wizard
                 const isTranscribeDone = transcribeJob && transcribeJob.status === 'done';
                 const isRankingActiveOrDone = rankJob; // if rank job exists, transcription is done
 
                 if (isTranscribeDone || isRankingActiveOrDone) {
+                    const wasHidden = document.getElementById('section-transcript-ready').classList.contains('hidden');
                     document.getElementById('section-transcript-ready').classList.remove('hidden');
+                    // Auto-load transcript on first reveal
+                    if (wasHidden) loadTranscriptPreview();
+                    
+                    // If rank job is active or done, hide the 'Find Viral Clips' button and update text
+                    const btnRank = document.getElementById('btn-start-ranking');
+                    const readyText = document.getElementById('transcript-ready-text');
+                    if (isRankingActiveOrDone && btnRank && readyText) {
+                        btnRank.style.display = 'none';
+                        if (rankJob.status === 'running') {
+                            readyText.innerText = "AI Ranking is now running to extract viral clip opportunities. Please wait...";
+                        } else if (rankJob.status === 'done') {
+                            readyText.innerText = "AI Ranking is complete! Review the suggested clips below.";
+                        }
+                    } else if (!isRankingActiveOrDone && btnRank && readyText) {
+                        btnRank.style.display = 'inline-flex';
+                        readyText.innerText = "The podcast audio has been fully transcribed. You can now use the manual multi-part compiler below, or let AI find viral clips for you.";
+                    }
                 } else {
                     document.getElementById('section-transcript-ready').classList.add('hidden');
                 }
 
-                if (transcribeJob && transcribeJob.status === 'running') {
-                    updateSteps(2);
-                } else if (rankJob && rankJob.status === 'running') {
-                    updateSteps(3);
-                } else if (rankJob && rankJob.status === 'done') {
-                    updateSteps(4);
-                    // Show clips candidate selection
-                    document.getElementById('section-clips').classList.remove('hidden');
-                    loadClipCandidates();
+                // Determine current wizard step based on job states
+                let step = 1;
+                if (transcribeJob) {
+                    if (transcribeJob.status === 'running') {
+                        step = 2;
+                    } else if (transcribeJob.status === 'done') {
+                        step = 3; // transcribe is done, waiting for rank or manual compile
+                    }
                 }
 
-                // If rendering is happening
-                if (renderJobs.length > 0) {
-                    if (renderJobs.some(r => r.status === 'running' || r.status === 'queued')) {
-                        updateSteps(4); // still in approval/rendering
-                    } else if (renderJobs.every(r => r.status === 'done')) {
-                        updateSteps(5); // fully completed
-                        document.getElementById('section-exports').classList.remove('hidden');
-                        loadRenderedExports();
+                if (rankJob) {
+                    if (rankJob.status === 'running') {
+                        step = 3;
+                    } else if (rankJob.status === 'done') {
+                        step = 4; // AI ranking done, waiting for approval
+                        // Show clips candidate selection
+                        document.getElementById('section-clips').classList.remove('hidden');
+                        loadClipCandidates();
                     }
+                }
+
+                if (isTranscribeDone) {
+                    document.getElementById('section-compile').classList.remove('hidden');
+                }
+
+                // AI render jobs (for clips generated by AI)
+                const aiRenderJobs = jobs.filter(j => j.job_type === 'render');
+                // Manual compile jobs
+                const manualCompileJobs = jobs.filter(j => j.job_type === 'compile');
+
+                if (aiRenderJobs.length > 0) {
+                    if (aiRenderJobs.some(r => r.status === 'running' || r.status === 'queued')) {
+                        step = 4; // rendering AI clips
+                    } else if (aiRenderJobs.every(r => r.status === 'done')) {
+                        step = 5; // AI clips done
+                    }
+                } else if (manualCompileJobs.length > 0 && !rankJob) {
+                    // Only let manual compile guide the wizard step if AI ranking was not run
+                    if (manualCompileJobs.some(r => r.status === 'running' || r.status === 'queued')) {
+                        step = 4;
+                    } else if (manualCompileJobs.every(r => r.status === 'done')) {
+                        step = 5;
+                    }
+                }
+
+                updateSteps(step);
+
+                // Show exports section and load downloads if ANY rendering/compiling job is done
+                const hasFinishedExports = jobs.some(j => (j.job_type === 'render' || j.job_type === 'compile') && j.status === 'done');
+                if (hasFinishedExports) {
+                    document.getElementById('section-exports').classList.remove('hidden');
+                    loadRenderedExports();
                 }
 
                 // Check if all queued operations are complete (transcribe + rank + any renders if present)
                 const active = jobs.some(j => j.status === 'queued' || j.status === 'running');
-                if (!active && renderJobs.length > 0 && renderJobs.every(r => r.status === 'done')) {
-                    clearInterval(pollingInterval); // Stop polling when finished
+                const hasFailed = jobs.some(j => j.status === 'failed');
+
+                if (hasFailed) {
+                    clearInterval(pollingInterval);
+                    const failedJob = jobs.find(j => j.status === 'failed');
+                    
+                    if (failedJob.job_type === 'transcribe') {
+                        document.getElementById('upload-status-text').innerText = "Error: Transcription Failed. Please try uploading again.";
+                        document.getElementById('upload-status-text').style.color = "var(--color-error)";
+                        document.getElementById('section-upload').classList.remove('hidden');
+                    } else if (failedJob.job_type === 'rank') {
+                        const btnRank = document.getElementById('btn-start-ranking');
+                        if (btnRank) {
+                            btnRank.style.display = 'inline-flex';
+                            btnRank.disabled = false;
+                            btnRank.innerHTML = "❌ AI Ranking Failed - Try Again";
+                        }
+                        const readyText = document.getElementById('transcript-ready-text');
+                        if (readyText) {
+                            readyText.innerText = "Error during AI Ranking: " + (failedJob.error_message || "Unknown error");
+                            readyText.style.color = "var(--color-error)";
+                        }
+                    }
+                } else if (!active) {
+                    clearInterval(pollingInterval); // Stop polling when finished or idle
                 }
 
             } catch (err) {
@@ -1078,6 +2217,7 @@
             });
         }
 
+        window.lastClipsStr = "";
         async function loadClipCandidates() {
             if (!currentVideoId) return;
 
@@ -1086,6 +2226,10 @@
                 if (!response.ok) return;
 
                 const clips = await response.json();
+                const clipsStr = JSON.stringify(clips);
+                if (clipsStr === window.lastClipsStr) return;
+                window.lastClipsStr = clipsStr;
+
                 renderClipsGrid(clips);
             } catch (err) {
                 console.error(err);
@@ -1136,23 +2280,19 @@
                         </div>
 
                         <div class="clip-excerpt-box">
-                            <b>Excerpt:</b> "${clip.transcript_excerpt}"
+                            💡 <b>Caption suggestion:</b> ${clip.suggested_caption}
                         </div>
 
                         <div class="clip-inputs-row">
                             <div class="clip-input-group">
-                                <label>Start (sec)</label>
-                                <input type="number" step="0.1" id="start-${clip.id}" value="${clip.start_time}" onchange="updateClipTimes(${clip.id})">
+                                <label>Start (mm:ss)</label>
+                                <input type="text" id="start-${clip.id}" value="${formatTime(clip.start_time)}" onchange="updateClipTimes(${clip.id})">
                             </div>
                             <div class="clip-input-group">
-                                <label>End (sec)</label>
-                                <input type="number" step="0.1" id="end-${clip.id}" value="${clip.end_time}" onchange="updateClipTimes(${clip.id})">
+                                <label>End (mm:ss)</label>
+                                <input type="text" id="end-${clip.id}" value="${formatTime(clip.end_time)}" onchange="updateClipTimes(${clip.id})">
                             </div>
                         </div>
-
-                        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.3;">
-                            💡 <b>Caption suggestion:</b> ${clip.suggested_caption}
-                        </p>
                     </div>
                     <div class="clip-actions" id="actions-${clip.id}">
                         ${btnHtml}
@@ -1194,6 +2334,18 @@
             }
         }
 
+        function parseTime(timeStr) {
+            if (!timeStr.includes(':')) return parseFloat(timeStr) || 0;
+            const parts = timeStr.split(':');
+            let secs = 0;
+            if (parts.length === 2) {
+                secs = parseInt(parts[0]) * 60 + parseFloat(parts[1]);
+            } else if (parts.length === 3) {
+                secs = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2]);
+            }
+            return secs;
+        }
+
         async function updateClipTimes(clipId) {
             const startInput = document.getElementById(`start-${clipId}`);
             const endInput = document.getElementById(`end-${clipId}`);
@@ -1203,8 +2355,8 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        start_time: parseFloat(startInput.value),
-                        end_time: parseFloat(endInput.value)
+                        start_time: parseTime(startInput.value),
+                        end_time: parseTime(endInput.value)
                     })
                 });
                 
@@ -1245,6 +2397,7 @@
             }
         }
 
+        window.lastExportsStr = "";
         async function loadRenderedExports() {
             if (!currentVideoId) return;
 
@@ -1253,11 +2406,8 @@
                 if (!response.ok) return;
 
                 const clips = await response.json();
-                const container = document.getElementById('exports-container');
-                container.innerHTML = "";
-
-                let hasExports = false;
-
+                
+                let exportsData = [];
                 for (const clip of clips) {
                     if (clip.status !== 'rendered') continue;
 
@@ -1266,8 +2416,23 @@
                     
                     const exportsList = await exportRes.json();
                     if (exportsList.length === 0) continue;
+                    
+                    exportsData.push({clip, exports: exportsList});
+                }
+                
+                const currentExportsStr = JSON.stringify(exportsData);
+                if (currentExportsStr === window.lastExportsStr) return;
+                window.lastExportsStr = currentExportsStr;
 
-                    hasExports = true;
+                const container = document.getElementById('exports-container');
+                container.innerHTML = "";
+
+                let hasExports = exportsData.length > 0;
+
+                for (const data of exportsData) {
+                    const clip = data.clip;
+                    const exportsList = data.exports;
+
                     const verticalExport = exportsList.find(e => e.format === 'vertical');
                     const landscapeExport = exportsList.find(e => e.format === 'landscape');
 
@@ -1340,7 +2505,117 @@
                 console.error("Error auto-restoring state:", err);
             }
         };
+
+        function parseTimeToSeconds(timeStr) {
+            timeStr = timeStr.trim();
+            if (!timeStr) return NaN;
+            
+            // If it's a raw float or integer, return it
+            if (/^\d+(\.\d+)?$/.test(timeStr)) {
+                return parseFloat(timeStr);
+            }
+            
+            // Parse MM:SS or HH:MM:SS format
+            const parts = timeStr.split(':');
+            if (parts.length === 2) {
+                const mins = parseInt(parts[0], 10);
+                const secs = parseFloat(parts[1]);
+                if (isNaN(mins) || isNaN(secs)) return NaN;
+                return mins * 60 + secs;
+            } else if (parts.length === 3) {
+                const hrs = parseInt(parts[0], 10);
+                const mins = parseInt(parts[1], 10);
+                const secs = parseFloat(parts[2]);
+                if (isNaN(hrs) || isNaN(mins) || isNaN(secs)) return NaN;
+                return hrs * 3600 + mins * 60 + secs;
+            }
+            
+            return NaN;
+        }
+
+        function addCompilePartRow(startVal = "", endVal = "") {
+            const container = document.getElementById('compile-parts-list');
+            const rowCount = container.children.length;
+
+            const card = document.createElement('div');
+            card.className = 'ts-part-card';
+
+            card.innerHTML = `
+                <div class="ts-part-label">
+                    <span>Part ${rowCount + 1}</span>
+                    <button onclick="this.closest('.ts-part-card').remove(); reindexCompilePartRows();">🗑 Remove</button>
+                </div>
+                <div class="ts-part-inputs">
+                    <div class="ts-input-group">
+                        <label>Start</label>
+                        <input type="text" class="input-start" placeholder="00:05" value="${startVal}" />
+                    </div>
+                    <div class="ts-input-group">
+                        <label>End</label>
+                        <input type="text" class="input-end" placeholder="00:35" value="${endVal}" />
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+            // Scroll sidebar down to show new card
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function reindexCompilePartRows() {
+            const container = document.getElementById('compile-parts-list');
+            Array.from(container.children).forEach((card, idx) => {
+                const label = card.querySelector('.ts-part-label span');
+                if (label) label.innerText = `Part ${idx + 1}`;
+            });
+        }
+
+        async function submitCompileRequest() {
+            if (!currentVideoId) return alert('No active video loaded.');
+
+            const cards = document.querySelectorAll('.ts-clip-card');
+            if (cards.length === 0) return alert('Select at least one clip range from the transcript.');
+
+            const parts = [];
+            for (const card of cards) {
+                const startVal = parseFloat(card.dataset.startSec);
+                const endVal   = parseFloat(card.dataset.endSec);
+                if (isNaN(startVal) || isNaN(endVal) || startVal >= endVal) continue;
+                parts.push({ start_time: startVal, end_time: endVal });
+            }
+
+            if (parts.length === 0) return alert('No valid clips to compile.');
+
+            const btn = document.getElementById('btn-submit-compile');
+            btn.disabled = true;
+            btn.innerText = 'Queuing...';
+
+            try {
+                const res = await fetch(`/videos/${currentVideoId}/compile`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ parts })
+                });
+
+                if (res.ok) {
+                    const job = await res.json();
+                    alert(`Compilation job #${job.id} queued! Track progress in the status panel above.`);
+                    clearAllClips();
+                    startPollingJobs();
+                } else {
+                    const err = await res.json();
+                    alert('Error: ' + (err.detail || 'Server error'));
+                }
+            } catch (e) {
+                alert('Network error: ' + e);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '🚀 Stitch & Compile';
+            }
+        }
+
+        // Clip engine initializes on first transcript load (no empty row needed)
     </script>
 </body>
-</html>
 
+</html>

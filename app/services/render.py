@@ -7,6 +7,40 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+class KalmanFilter1D:
+    def __init__(self, q=1e-3, r=1.0):
+        self.x = 0.0
+        self.v = 0.0
+        self.p_xx = 1.0
+        self.p_vv = 1.0
+        self.p_xv = 0.0
+        self.q = q
+        self.r = r
+        self.initialized = False
+
+    def update(self, measurement):
+        if not self.initialized:
+            self.x = measurement
+            self.initialized = True
+            return self.x
+        
+        self.x += self.v
+        self.p_xx += self.p_vv + 2 * self.p_xv + self.q
+        self.p_xv += self.p_vv
+        
+        k_x = self.p_xx / (self.p_xx + self.r)
+        k_v = self.p_xv / (self.p_xx + self.r)
+        
+        residual = measurement - self.x
+        self.x += k_x * residual
+        self.v += k_v * residual
+        
+        self.p_xx *= (1 - k_x)
+        self.p_xv *= (1 - k_x)
+        self.p_vv -= k_v * self.p_xv
+        
+        return self.x
+
 def format_seconds_to_srt_timestamp(seconds: float) -> str:
     """Converts a float number of seconds to SRT timestamp format: HH:MM:SS,mmm"""
     hours = int(seconds // 3600)
@@ -20,9 +54,8 @@ def format_seconds_to_srt_timestamp(seconds: float) -> str:
 
 def generate_srt_file(segments: List[Dict[str, Any]], clip_start: float, clip_end: float, srt_path: str):
     """
-    Filters transcript segments that overlap with [clip_start, clip_end],
-    shifts their timestamps relative to the start of the clip (0.0),
-    and writes them to an SRT file.
+    Generates an SRT file for the clip. If word-level timestamps are available,
+    generates word-by-word karaoke-style captions (active word in yellow).
     """
     logger.info(f"Generating SRT subtitle file at: {srt_path} for range {clip_start}s to {clip_end}s")
     srt_lines = []
@@ -32,31 +65,116 @@ def generate_srt_file(segments: List[Dict[str, Any]], clip_start: float, clip_en
         seg_start = seg["start_time"]
         seg_end = seg["end_time"]
         
-        # Check if segment overlaps with the clip window
         if seg_end <= clip_start or seg_start >= clip_end:
             continue
             
-        # Clamp times to the clip window
         relative_start = max(0.0, seg_start - clip_start)
         relative_end = min(clip_end - clip_start, seg_end - clip_start)
         
-        # Skip extremely short segments
         if relative_end - relative_start < 0.1:
             continue
             
-        start_ts = format_seconds_to_srt_timestamp(relative_start)
-        end_ts = format_seconds_to_srt_timestamp(relative_end)
+        words = seg.get("words", [])
+        clip_words = []
         
-        # Clean the segment text to remove metadata like "[45.14 - 50.14] Speaker 1: "
-        raw_text = seg["text"]
-        clean_text = re.sub(r"^\[.*?\]\s*", "", raw_text)
-        clean_text = re.sub(r"^Speaker\s*\d+:\s*", "", clean_text, flags=re.IGNORECASE)
-        
-        srt_lines.append(f"{index}")
-        srt_lines.append(f"{start_ts} --> {end_ts}")
-        srt_lines.append(clean_text)
-        srt_lines.append("")  # empty line separator
-        index += 1
+        if words:
+            # Filter words to only those inside the clip window
+            for w in words:
+                w_start = w.get("start", w.get("start_time", 0.0))
+                w_end = w.get("end", w.get("end_time", 0.0))
+                
+                if w_end <= clip_start or w_start >= clip_end:
+                    continue
+                    
+                w_rel_start = max(0.0, w_start - clip_start)
+                w_rel_end = min(clip_end - clip_start, w_end - clip_start)
+                
+                if w_rel_end <= w_rel_start:
+                    w_rel_end = w_rel_start + 0.1
+                    
+                clip_words.append({
+                    "text": w.get("punctuated_word", w.get("text", "")),
+                    "start": w_rel_start,
+                    "end": w_rel_end
+                })
+        else:
+            # Fallback for older transcripts that lack word-level data
+            # Mathematically estimate the timing of each word by splitting the full segment duration,
+            # and then filter out words that fall outside the clip_start to clip_end window.
+            raw_text = seg["text"]
+            clean_text = re.sub(r"^\[.*?\]\s*", "", raw_text)
+            clean_text = re.sub(r"^Speaker\s*\d+:\s*", "", clean_text, flags=re.IGNORECASE)
+            
+            raw_word_list = clean_text.split()
+            if raw_word_list:
+                seg_dur = seg_end - seg_start
+                word_duration = seg_dur / len(raw_word_list) if seg_dur > 0 else 0.1
+                for k, w_text in enumerate(raw_word_list):
+                    w_start = seg_start + k * word_duration
+                    w_end = seg_start + (k + 1) * word_duration
+                    
+                    # Filter out words that are fully outside the clip window
+                    if w_end <= clip_start or w_start >= clip_end:
+                        continue
+                        
+                    w_rel_start = max(0.0, w_start - clip_start)
+                    w_rel_end = min(clip_end - clip_start, w_end - clip_start)
+                    
+                    if w_rel_end <= w_rel_start:
+                        w_rel_end = w_rel_start + 0.1
+                        
+                    clip_words.append({
+                        "text": w_text,
+                        "start": w_rel_start,
+                        "end": w_rel_end
+                    })
+                    
+        if not clip_words:
+            continue
+            
+        # Chunk words into groups of 3 to prevent massive text walls
+        chunk_size = 3
+        for c_idx in range(0, len(clip_words), chunk_size):
+            chunk = clip_words[c_idx : c_idx + chunk_size]
+            
+            # Generate one cue per word for karaoke effect
+            for i, current_word in enumerate(chunk):
+                cue_start = current_word["start"]
+                
+                if i < len(chunk) - 1:
+                    cue_end = chunk[i+1]["start"]
+                else:
+                    if c_idx + chunk_size < len(clip_words):
+                        cue_end = clip_words[c_idx + chunk_size]["start"]
+                    else:
+                        cue_end = current_word["end"]
+                        
+                if cue_end <= cue_start:
+                    cue_end = cue_start + 0.1
+                    
+                start_ts = format_seconds_to_srt_timestamp(cue_start)
+                end_ts = format_seconds_to_srt_timestamp(cue_end)
+                
+                formatted_words = []
+                for j, w in enumerate(chunk):
+                    text = w["text"]
+                    if j == i:
+                        # Use HTML font tags for SRT compatibility
+                        formatted_words.append(f'<font color="#ffff00">{text}</font>')
+                    else:
+                        formatted_words.append(text)
+                        
+                cue_text = " ".join(formatted_words)
+                
+                # Clean speaker labels if they somehow got into the words (rare)
+                cue_text = re.sub(r"^\[.*?\]\s*", "", cue_text)
+                cue_text = re.sub(r"^Speaker\s*\d+:\s*", "", cue_text, flags=re.IGNORECASE)
+                
+                srt_lines.append(f"{index}")
+                srt_lines.append(f"{start_ts} --> {end_ts}")
+                srt_lines.append(cue_text)
+                srt_lines.append("")
+                index += 1
         
     with open(srt_path, "w", encoding="utf-8") as f:
         f.write("\n".join(srt_lines))
@@ -114,10 +232,185 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
         except subprocess.CalledProcessError as e:
             logger.error(f"FFmpeg landscape render failed: {e.stderr.decode('utf-8', errors='ignore')}")
             raise e
+            
+        # Second: Render Auto-Framed 9:16 Vertical Version
+        vertical_output = os.path.join(settings.OUTPUT_DIR, f"{output_base_name}_vertical.mp4")
+        from app.services.smart_crop import analyze_video_layout
+        import uuid
+        
+        segments = analyze_video_layout(video_path, clip_start, clip_end)
+        fc_nodes = []
+        concat_inputs = ""
+        cmd_files = []
+        
+        try:
+            for i, seg in enumerate(segments):
+                seg_start = clip_start + seg["start_time"]
+                seg_end = clip_start + seg["end_time"]
+                seg_dur = seg["end_time"] - seg["start_time"]
+                
+                # Audio trim
+                fc_nodes.append(f"[0:a]atrim=start={seg_start}:end={seg_end},asetpts=PTS-STARTPTS[outa{i}];")
+                
+                if seg["mode"] == "double":
+                    target_ratio = 9.0 / 8.0
+                    w1 = seg["box_left"][2]
+                    w2 = seg["box_right"][2]
+                    max_w = max(w1, w2) * 1.15
+                    crop_w = int(max_w)
+                    if crop_w > width / 2.0:
+                        crop_w = int(width / 2.0)
+                        
+                    crop_h = int(crop_w / target_ratio)
+                    if crop_h > height:
+                        crop_h = height
+                        crop_w = int(crop_h * target_ratio)
+                    if crop_w > width:
+                        crop_w = width
+                        crop_h = int(crop_w / target_ratio)
+                        
+                    def get_centered_crop(box, c_w, c_h):
+                        x, y, w, h = box
+                        cx, cy = x + w/2.0, y + h * 0.4
+                        cx = max(c_w/2.0, min(width - c_w/2.0, cx))
+                        cy = max(c_h/2.0, min(height - c_h/2.0, cy))
+                        return int(cx - c_w/2.0), int(cy - c_h/2.0)
+                        
+                    x1, y1 = get_centered_crop(seg["box_left"], crop_w, crop_h)
+                    x2, y2 = get_centered_crop(seg["box_right"], crop_w, crop_h)
+                    
+                    fc_nodes.append(f"[0:v]trim=start={seg_start}:end={seg_end},setpts=PTS-STARTPTS[v{i}_base];")
+                    fc_nodes.append(f"[v{i}_base]split=2[v{i}_top][v{i}_bottom];")
+                    fc_nodes.append(f"[v{i}_top]crop={crop_w}:{crop_h}:{x1}:{y1}[top{i}];")
+                    fc_nodes.append(f"[v{i}_bottom]crop={crop_w}:{crop_h}:{x2}:{y2}[bottom{i}];")
+                    fc_nodes.append(f"[top{i}][bottom{i}]vstack=2,drawbox=x=0:y=(ih-10)/2:w=iw:h=10:color=white:t=fill,scale=1080:1920:flags=lanczos,setsar=1:1[outv{i}];")
+                elif seg["mode"] == "blur_pad":
+                    fc_nodes.append(f"[0:v]trim=start={seg_start}:end={seg_end},setpts=PTS-STARTPTS[v{i}_base];")
+                    fc_nodes.append(f"[v{i}_base]split=2[v{i}_orig][v{i}_blur];")
+                    fc_nodes.append(f"[v{i}_blur]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=luma_radius=40:luma_power=2[blurred{i}];")
+                    fc_nodes.append(f"[v{i}_orig]scale=1080:1920:force_original_aspect_ratio=decrease[scaled{i}];")
+                    fc_nodes.append(f"[blurred{i}][scaled{i}]overlay=(W-w)/2:(H-h)/2,setsar=1:1[outv{i}];")
+                    
+                else:
+                    # Single person: Always use max vertical height to get maximum horizontal padding (607 pixels)
+                    crop_h = height
+                    crop_w = int(crop_h * (9.0 / 16.0))
+                    if crop_w > width:
+                        crop_w = width
+                        crop_h = int(crop_w * (16.0 / 9.0))
+                        
+                    # Smooth cinematic tracking
+                    fps = 25
+                    step = 1.0 / fps
+                    t_dense = [j * step for j in range(int(seg_dur * fps) + 1)]
+                    
+                    keyframes = []
+                    kf = KalmanFilter1D(q=1e-3, r=1.0)
+                    for f in seg["frames"]:
+                        t = f["time"] - seg["start_time"]
+                        if f["people"]:
+                            px, py, pw, ph, anchor_x = f["people"][0]
+                            # Run through Kalman Filter to stabilize YOLO jitter
+                            filtered_cx = kf.update(anchor_x)
+                            keyframes.append((t, filtered_cx))
+                            
+                    if not keyframes:
+                        keyframes = [(0.0, width / 2.0), (seg_dur, width / 2.0)]
+                        
+                    def get_target_cx(t):
+                        if t <= keyframes[0][0]: return keyframes[0][1]
+                        if t >= keyframes[-1][0]: return keyframes[-1][1]
+                        for k in range(len(keyframes) - 1):
+                            t1, cx1 = keyframes[k]
+                            t2, cx2 = keyframes[k+1]
+                            if t1 <= t <= t2:
+                                if t2 == t1: return cx1
+                                return cx1 + ((t - t1) / (t2 - t1)) * (cx2 - cx1)
+                        return width / 2.0
+                        
+                    current_cx = get_target_cx(0.0) # Start exactly on the person
+                    raw_desired_cx = current_cx # The camera's intended destination pull
+                    smooth_desired_cx = current_cx # Smoothed destination
+                    
+                    dead_zone = 30.0 # pixels
+                    alpha_desired = 0.05 # smooth desired position
+                    alpha_camera = 0.10 # Smoother tracking for inertia
+                    max_speed = 15.0 # Max pixels the camera can move per frame (simulates camera weight)
+                    
+                    cmd_lines = []
+                    for t in t_dense:
+                        target_cx = get_target_cx(t)
+                        
+                        # 1. Dead Zone Logic: Only pull the camera's raw desired destination if target escapes the dead zone
+                        if target_cx > raw_desired_cx + dead_zone:
+                            raw_desired_cx = target_cx - dead_zone
+                        elif target_cx < raw_desired_cx - dead_zone:
+                            raw_desired_cx = target_cx + dead_zone
+                            
+                        # 2. Smooth Desired Position
+                        smooth_desired_cx += alpha_desired * (raw_desired_cx - smooth_desired_cx)
+                            
+                        # 3. Camera Inertia & Speed Limit
+                        diff = smooth_desired_cx - current_cx
+                        step = alpha_camera * diff
+                        
+                        if step > max_speed: step = max_speed
+                        elif step < -max_speed: step = -max_speed
+                            
+                        current_cx += step
+                        
+                        clamped_cx = max(crop_w/2.0, min(width - crop_w/2.0, current_cx))
+                        crop_x = int(clamped_cx - crop_w/2.0)
+                        cmd_lines.append(f"{t:.3f} crop@c{i} x {crop_x};")
+                        
+                    cmd_file = os.path.join(settings.TEMP_DIR, f"cmd_{i}_{uuid.uuid4().hex[:8]}.txt")
+                    cmd_files.append(cmd_file)
+                    with open(cmd_file, "w") as f:
+                        f.write("\n".join(cmd_lines))
+                        
+                    escaped_cmd = cmd_file.replace("\\", "/").replace(":", "\\:")
+                    fc_nodes.append(f"[0:v]trim=start={seg_start}:end={seg_end},setpts=PTS-STARTPTS,sendcmd=f='{escaped_cmd}',crop@c{i}={crop_w}:{crop_h}:0:0,scale=1080:1920:flags=lanczos,setsar=1:1[outv{i}];")
+                    
+                concat_inputs += f"[outv{i}][outa{i}]"
+                
+            escaped_srt = ""
+            if os.path.exists(srt_path):
+                escaped_srt = srt_path.replace("\\", "/").replace(":", "\\:")
+                fc_nodes.append(f"{concat_inputs}concat=n={len(segments)}:v=1:a=1[outv_concat][outa];")
+                fc_nodes.append(f"[outv_concat]subtitles='{escaped_srt}':force_style='Alignment=2,FontSize=15,PrimaryColour=&HFFFFFF&,Outline=1.5,Shadow=1,MarginV=15'[outv]")
+            else:
+                fc_nodes.append(f"{concat_inputs}concat=n={len(segments)}:v=1:a=1[outv][outa]")
+                
+            filter_complex = "".join(fc_nodes)
+            
+            cmd_ffmpeg = [
+                "ffmpeg", "-y",
+                "-i", video_path,
+                "-filter_complex", filter_complex,
+                "-map", "[outv]",
+                "-map", "[outa]",
+                "-c:v", "libx264",
+                "-profile:v", "high",
+                "-level:v", "4.2",
+                "-preset", "veryfast",
+                "-crf", "18",
+                "-c:a", "aac",
+                "-b:a", "192k",
+                vertical_output
+            ]
+            
+            logger.info(f"Executing single-pass smart crop: {' '.join(cmd_ffmpeg)}")
+            subprocess.run(cmd_ffmpeg, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            results["vertical"] = vertical_output
+            
+        finally:
+            for cf in cmd_files:
+                if os.path.exists(cf):
+                    os.remove(cf)
     else:
         # Input is vertical (9:16) -> Render Vertical only (no crop needed, just scale)
         vertical_output = os.path.join(settings.OUTPUT_DIR, f"{output_base_name}_vertical.mp4")
-        vf_vertical = f"scale=1080:1920,subtitles='{escaped_srt_path}':force_style='Alignment=2,FontSize=16,PrimaryColour=&H00FFFF&'"
+        vf_vertical = f"scale=1080:1920,subtitles='{escaped_srt_path}':force_style='Alignment=2,FontSize=15,PrimaryColour=&HFFFFFF&,Outline=1.5,Shadow=1,MarginV=15'"
         cmd_vertical = [
             "ffmpeg", "-y",
             "-ss", str(clip_start),
@@ -144,3 +437,109 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
             
     return results
 
+def compile_parts(
+    video_path: str,
+    parts: List[Dict[str, float]],
+    segments_dict: List[Dict[str, Any]],
+    output_base_name: str
+) -> str:
+    """
+    Compiles multiple disjoint timestamps of a video into a single continuous vertical clip.
+    Cleans up temporary SRT files and intermediate clips after concatenation.
+    """
+    import uuid
+    part_outputs = []
+    temp_srts = []
+    concat_txt_path = None
+    
+    try:
+        for i, part in enumerate(parts):
+            start_time = part["start_time"]
+            end_time = part["end_time"]
+            
+            logger.info(f"Rendering part {i+1}/{len(parts)} ({start_time}s - {end_time}s)...")
+            
+            # 1. Filter segments for this part
+            part_segments = []
+            for s in segments_dict:
+                if s["end_time"] > start_time and s["start_time"] < end_time:
+                    part_segments.append(s)
+                    
+            # 2. Generate local SRT for this part
+            srt_name = f"{output_base_name}_part_{i}_{uuid.uuid4().hex[:8]}.srt"
+            srt_path = os.path.join(settings.TEMP_DIR, srt_name)
+            temp_srts.append(srt_path)
+            
+            generate_srt_file(part_segments, start_time, end_time, srt_path)
+            
+            # 3. Render the clip (we only care about vertical for compilation)
+            part_base_name = f"{output_base_name}_part_{i}_{uuid.uuid4().hex[:8]}"
+            render_results = render_clip(
+                video_path=video_path,
+                clip_start=start_time,
+                clip_end=end_time,
+                srt_path=srt_path,
+                output_base_name=part_base_name
+            )
+            
+            if "vertical" not in render_results or not os.path.exists(render_results["vertical"]):
+                raise ValueError(f"Failed to render vertical clip for part {i} ({start_time}-{end_time})")
+                
+            part_outputs.append(render_results["vertical"])
+            
+            # Clean up landscape output if any
+            if "landscape" in render_results and os.path.exists(render_results["landscape"]):
+                try:
+                    os.remove(render_results["landscape"])
+                except Exception:
+                    pass
+                    
+        if not part_outputs:
+            raise ValueError("No parts were successfully rendered.")
+            
+        # 4. Create concat.txt
+        concat_txt_path = os.path.abspath(os.path.join(settings.TEMP_DIR, f"{output_base_name}_concat_{uuid.uuid4().hex[:8]}.txt"))
+        with open(concat_txt_path, "w", encoding="utf-8") as f:
+            for p in part_outputs:
+                abs_p = os.path.abspath(p)
+                f.write(f"file '{abs_p}'\n")
+                
+        final_output = os.path.abspath(os.path.join(settings.OUTPUT_DIR, f"{output_base_name}_compiled.mp4"))
+        
+        cmd_concat = [
+            "ffmpeg", "-y",
+            "-f", "concat",
+            "-safe", "0",
+            "-i", concat_txt_path,
+            "-c", "copy",
+            final_output
+        ]
+        
+        logger.info(f"Concatenating parts: {' '.join(cmd_concat)}")
+        res = subprocess.run(cmd_concat, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if res.returncode != 0:
+            logger.error(f"FFmpeg concat failed: {res.stderr.decode('utf-8', errors='ignore')}")
+            raise RuntimeError(f"FFmpeg concat failed: {res.stderr.decode('utf-8', errors='ignore')}")
+            
+        logger.info(f"Compilation complete: {final_output}")
+        return final_output
+        
+    finally:
+        # Clean up temp clips and SRTs
+        for clip in part_outputs:
+            if os.path.exists(clip):
+                try:
+                    os.remove(clip)
+                except Exception as e:
+                    logger.warning(f"Could not clean up temp clip {clip}: {e}")
+        for srt in temp_srts:
+            if os.path.exists(srt):
+                try:
+                    os.remove(srt)
+                except Exception as e:
+                    logger.warning(f"Could not clean up temp srt {srt}: {e}")
+        if concat_txt_path and os.path.exists(concat_txt_path):
+            try:
+                os.remove(concat_txt_path)
+            except Exception as e:
+                logger.warning(f"Could not clean up concat file {concat_txt_path}: {e}")
