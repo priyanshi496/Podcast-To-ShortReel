@@ -70,7 +70,7 @@ def process_job(db: Session, job: models.Job):
         
         # 3. Extract and normalize audio
         logger.info("Extracting and normalizing audio...")
-        audio_filename = f"video_{video.id}_audio.wav"
+        audio_filename = f"video_{video.id}_audio.mp3"
         audio_path = audio.extract_and_normalize_audio(cast(str, video.storage_path), audio_filename)
         crud.update_job(db, cast(int, job.id), status="running", progress=0.5)
         
@@ -141,7 +141,7 @@ def process_job(db: Session, job: models.Job):
         logger.info(f"Scoring {len(candidates)} candidates using Nemotron batch scorer...")
         
         # Prepare audio path (re-extract if it was cleaned up by transcribe step)
-        audio_filename = f"video_{video.id}_audio.wav"
+        audio_filename = f"video_{video.id}_audio.mp3"
         wav_path = os.path.join(settings.TEMP_DIR, audio_filename)
         audio_re_extracted = False
         if not os.path.exists(wav_path):

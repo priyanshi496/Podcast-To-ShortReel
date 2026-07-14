@@ -3,7 +3,64 @@ from typing import List, Optional
 from datetime import datetime
 from app import models, schemas
 
-# Video CRUD
+# ── Project CRUD ──────────────────────────────────────────────────────────────────────
+def get_project(db: Session, project_id: int) -> Optional[models.Project]:
+    return db.query(models.Project).filter(models.Project.id == project_id).first()
+
+def get_projects(db: Session, skip: int = 0, limit: int = 50) -> List[models.Project]:
+    return (
+        db.query(models.Project)
+        .order_by(models.Project.updated_at.desc())
+        .offset(skip).limit(limit).all()
+    )
+
+def create_project(db: Session, project: schemas.ProjectCreate) -> models.Project:
+    db_project = models.Project(name=project.name, description=project.description)
+    db.add(db_project)
+    db.commit()
+    db.refresh(db_project)
+    return db_project
+
+def update_project(db: Session, project_id: int, data: schemas.ProjectUpdate) -> Optional[models.Project]:
+    db_project = get_project(db, project_id)
+    if db_project:
+        if data.name is not None:
+            db_project.name = data.name
+        if data.description is not None:
+            db_project.description = data.description
+        db_project.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(db_project)
+    return db_project
+
+def delete_project(db: Session, project_id: int) -> bool:
+    db_project = get_project(db, project_id)
+    if db_project:
+        db.delete(db_project)
+        db.commit()
+        return True
+    return False
+
+def get_project_summary(db: Session, project: models.Project) -> dict:
+    """Compute lightweight stats for the Home screen."""
+    video_count = len(project.videos)
+    clip_count = sum(
+        db.query(models.ClipCandidate)
+          .filter(models.ClipCandidate.video_id == v.id)
+          .count()
+        for v in project.videos
+    )
+    return {
+        "id": project.id,
+        "name": project.name,
+        "description": project.description,
+        "video_count": video_count,
+        "clip_count": clip_count,
+        "created_at": project.created_at,
+        "updated_at": project.updated_at,
+    }
+
+# ── Video CRUD ───────────────────────────────────────────────────────────────────────
 def get_video(db: Session, video_id: int) -> Optional[models.Video]:
     return db.query(models.Video).filter(models.Video.id == video_id).first()
 
@@ -121,7 +178,32 @@ def create_clip_candidate(db: Session, clip: schemas.ClipCandidateCreate) -> mod
         section_type=clip.section_type,
         narrative_summary=clip.narrative_summary,
         cut_rationale=clip.cut_rationale,
+        source=clip.source,
+        title=clip.title,
         status=clip.status
+    )
+    db.add(db_clip)
+    db.commit()
+    db.refresh(db_clip)
+    return db_clip
+
+
+def create_manual_clip(
+    db: Session,
+    video_id: int,
+    start_time: float,
+    end_time: float,
+    title: Optional[str] = None
+) -> models.ClipCandidate:
+    """Create a user-defined clip with source='manual' and status='approved'."""
+    db_clip = models.ClipCandidate(
+        video_id=video_id,
+        start_time=start_time,
+        end_time=end_time,
+        duration_sec=round(end_time - start_time, 2),
+        source="manual",
+        title=title,
+        status="approved",
     )
     db.add(db_clip)
     db.commit()

@@ -2,7 +2,35 @@ from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional, List
 
-# Video Schemas
+# ── Project Schemas ────────────────────────────────────────────────────────────
+class ProjectCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class ProjectUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+
+class ProjectResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+class ProjectSummary(BaseModel):
+    """Lightweight summary for the Home screen Recent Projects list."""
+    id: int
+    name: str
+    description: Optional[str] = None
+    video_count: int
+    clip_count: int
+    created_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
 class VideoBase(BaseModel):
     original_filename: str
     storage_path: str
@@ -112,6 +140,8 @@ class ClipCandidateBase(BaseModel):
     cut_rationale: Optional[str] = None
 
     status: str = "suggested"
+    source: str = "ai"   # "ai" | "manual"
+    title: Optional[str] = None
 
 
 class ClipCandidateCreate(ClipCandidateBase):

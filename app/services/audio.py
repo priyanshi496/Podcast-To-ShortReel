@@ -46,9 +46,9 @@ def get_video_dimensions(video_path: str) -> tuple[int, int]:
 
 def extract_and_normalize_audio(video_path: str, output_wav_name: str) -> str:
     """
-    Extracts audio from video and resamples it to 16kHz, mono, 16-bit PCM WAV.
-    Loudness normalization (loudnorm) is removed to speed up execution.
-    Returns the absolute path to the generated WAV file.
+    Extracts audio from video and resamples it to 16kHz, mono, 64kbps MP3.
+    This dramatically reduces file size to prevent Deepgram upload timeouts.
+    Returns the absolute path to the generated MP3 file.
     """
     output_path = os.path.join(settings.TEMP_DIR, output_wav_name)
     
@@ -58,7 +58,8 @@ def extract_and_normalize_audio(video_path: str, output_wav_name: str) -> str:
         "-y",
         "-i", video_path,
         "-vn",
-        "-acodec", "pcm_s16le",
+        "-c:a", "libmp3lame",
+        "-b:a", "64k",
         "-ar", "16000",
         "-ac", "1",
         output_path

@@ -12,7 +12,11 @@ import yt_dlp
 router = APIRouter(prefix="/videos", tags=["Videos"])
 
 @router.post("/upload", response_model=schemas.VideoResponse)
-def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_video(
+    project_id: Optional[int] = None,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
     # 1. Create a safe filename and path
     filename = file.filename or "unknown"
     ext = os.path.splitext(filename)[1]
@@ -35,6 +39,11 @@ def upload_video(file: UploadFile = File(...), db: Session = Depends(get_db)):
         status="uploaded"
     )
     db_video = crud.create_video(db, video_in)
+    
+    if project_id:
+        db_video.project_id = project_id
+        db.commit()
+        db.refresh(db_video)
     
     # 4. Create first job in pipeline (transcribe)
     job_in = schemas.JobCreate(
@@ -98,7 +107,11 @@ def get_youtube_info(req: schemas.YouTubeInfoRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/youtube/download", response_model=schemas.VideoResponse)
-def download_youtube_video(req: schemas.YouTubeDownloadRequest, db: Session = Depends(get_db)):
+def download_youtube_video(
+    req: schemas.YouTubeDownloadRequest,
+    project_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+):
     unique_filename = f"{uuid.uuid4()}.mp4"
     file_path = os.path.join(settings.UPLOAD_DIR, unique_filename)
     
@@ -128,6 +141,11 @@ def download_youtube_video(req: schemas.YouTubeDownloadRequest, db: Session = De
                 status="uploaded"
             )
             db_video = crud.create_video(db, video_in)
+            
+            if project_id:
+                db_video.project_id = project_id
+                db.commit()
+                db.refresh(db_video)
             
             # 4. Create first job in pipeline (transcribe)
             job_in = schemas.JobCreate(
@@ -220,6 +238,33 @@ def read_video_clips(video_id: int, db: Session = Depends(get_db)):
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     return crud.get_clips_by_video(db, video_id)
+
+from pydantic import BaseModel
+class ManualClipRequest(BaseModel):
+    start_time: float
+    end_time: float
+    title: Optional[str] = None
+
+@router.post("/{video_id}/clips", response_model=schemas.ClipCandidateResponse)
+def create_manual_clip_endpoint(
+    video_id: int,
+    req: ManualClipRequest,
+    db: Session = Depends(get_db)
+):
+    video = crud.get_video(db, video_id)
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    if req.end_time <= req.start_time:
+        raise HTTPException(status_code=400, detail="end_time must be greater than start_time")
+    
+    return crud.create_manual_clip(
+        db=db,
+        video_id=video_id,
+        start_time=req.start_time,
+        end_time=req.end_time,
+        title=req.title
+    )
+
 
 @router.get("/{video_id}/transcript", response_model=List[schemas.TranscriptSegmentResponse])
 def read_video_transcript(video_id: int, db: Session = Depends(get_db)):

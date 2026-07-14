@@ -4,16 +4,30 @@ from datetime import datetime
 from app.db import Base
 
 
+class Project(Base):
+    __tablename__ = "projects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    videos = relationship("Video", back_populates="project", cascade="all, delete-orphan")
+
+
 class Video(Base):
     __tablename__ = "videos"
 
     id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
     original_filename = Column(String, nullable=False)
     storage_path = Column(String, nullable=False)
     duration_sec = Column(Float, nullable=True)
-    status = Column(String, default="uploaded")  # uploaded, processing, processed, failed
+    status = Column(String, default="uploaded")  # uploaded, processing, transcribed, processed, failed
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    project = relationship("Project", back_populates="videos")
     jobs = relationship("Job", back_populates="video", cascade="all, delete-orphan")
     segments = relationship("TranscriptSegment", back_populates="video", cascade="all, delete-orphan")
     clips = relationship("ClipCandidate", back_populates="video", cascade="all, delete-orphan")
@@ -88,7 +102,10 @@ class ClipCandidate(Base):
     narrative_summary = Column(Text, nullable=True)
     cut_rationale = Column(Text, nullable=True)
 
-    status = Column(String, default="suggested")  # suggested, approved, rejected, trimmed, rendered
+    # Clip identity
+    title = Column(String, nullable=True)            # user-editable display name
+    source = Column(String, default="ai")             # "ai" | "manual"
+    status = Column(String, default="suggested")     # suggested, approved, rejected, trimmed, rendered
 
     video = relationship("Video", back_populates="clips")
     exports = relationship("ClipExport", back_populates="clip_candidate", cascade="all, delete-orphan")

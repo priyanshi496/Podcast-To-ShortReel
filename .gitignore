@@ -23,3 +23,6 @@ __pycache__/
 .DS_Store
 .vscode/
 pyrightconfig.json
+
+node_modules/
+.DS_Store

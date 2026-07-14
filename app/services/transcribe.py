@@ -52,12 +52,14 @@ def _fetch_deepgram_transcript(audio_path: str) -> Dict[str, Any]:
     for attempt in range(max_retries):
         try:
             with open(audio_path, "rb") as f:
-                response = requests.post(
-                    DEEPGRAM_URL,
-                    params=params,
-                    headers=headers,
-                    data=f,
-                    timeout=(60, 3600),  # (connect_timeout, read/write_timeout) - 1hr max for huge podcasts
+                audio_data = f.read()
+                
+            response = requests.post(
+                DEEPGRAM_URL,
+                params=params,
+                headers=headers,
+                data=audio_data,
+                timeout=3600,  # Single timeout for connect/read/write - 1hr max for huge podcasts
                 )
 
             if response.status_code != 200:
