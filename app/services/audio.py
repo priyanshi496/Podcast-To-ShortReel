@@ -1,6 +1,7 @@
 import subprocess
 import os
 import logging
+import time
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -45,19 +46,13 @@ def get_video_dimensions(video_path: str) -> tuple[int, int]:
 
 def extract_and_normalize_audio(video_path: str, output_wav_name: str) -> str:
     """
-    Extracts audio from video and normalizes it to 16kHz, mono, 16-bit PCM WAV.
+    Extracts audio from video and resamples it to 16kHz, mono, 16-bit PCM WAV.
+    Loudness normalization (loudnorm) is removed to speed up execution.
     Returns the absolute path to the generated WAV file.
     """
     output_path = os.path.join(settings.TEMP_DIR, output_wav_name)
     
-    # ffmpeg command:
-    # -y to overwrite existing output
-    # -i video_path input
-    # -vn disable video
-    # -acodec pcm_s16le WAV output format
-    # -ar 16000 resample to 16kHz
-    # -ac 1 single channel (mono)
-    # -filter:a loudnorm (loudness normalization filter)
+    # Primary command: Fast extraction without loudnorm
     cmd = [
         "ffmpeg",
         "-y",
@@ -66,45 +61,35 @@ def extract_and_normalize_audio(video_path: str, output_wav_name: str) -> str:
         "-acodec", "pcm_s16le",
         "-ar", "16000",
         "-ac", "1",
-        "-filter:a", "loudnorm",
         output_path
     ]
     
     try:
-        logger.info(f"Extracting and normalizing audio: {' '.join(cmd)}")
+        logger.info(f"Extracting audio (fast mode): {' '.join(cmd)}")
+        start_time = time.time()
         subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        logger.info(f"FFmpeg extraction took {time.time() - start_time:.2f}s")
         return output_path
     except subprocess.CalledProcessError as e:
-        logger.error(f"FFmpeg error: {e.stderr.decode('utf-8', errors='ignore')}")
-        # If loudnorm fails (e.g. very short audio or silent audio), retry without loudnorm
-        logger.info("Retrying audio extraction without loudnorm...")
-        cmd_fallback = [
+        logger.error(f"FFmpeg primary extraction failed: {e.stderr.decode('utf-8', errors='ignore')}")
+        # If standard downmix fails (e.g., corrupted AAC claiming 44 channels), use robust pan filter
+        logger.info("Retrying audio extraction with robust channel mapping...")
+        cmd_robust = [
             "ffmpeg",
             "-y",
+            "-err_detect", "ignore_err",
             "-i", video_path,
             "-vn",
             "-acodec", "pcm_s16le",
             "-ar", "16000",
-            "-ac", "1",
+            "-filter:a", "pan=mono|c0=c0",
             output_path
         ]
         try:
-            subprocess.run(cmd_fallback, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            start_time = time.time()
+            subprocess.run(cmd_robust, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            logger.info(f"FFmpeg robust extraction took {time.time() - start_time:.2f}s")
             return output_path
         except subprocess.CalledProcessError as e2:
-            logger.error(f"FFmpeg fallback error: {e2.stderr.decode('utf-8', errors='ignore')}")
-            # If standard downmix fails (e.g., corrupted AAC claiming 44 channels), use robust pan filter
-            logger.info("Retrying audio extraction with robust channel mapping...")
-            cmd_robust = [
-                "ffmpeg",
-                "-y",
-                "-err_detect", "ignore_err",
-                "-i", video_path,
-                "-vn",
-                "-acodec", "pcm_s16le",
-                "-ar", "16000",
-                "-filter:a", "pan=mono|c0=c0",
-                output_path
-            ]
-            subprocess.run(cmd_robust, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-            return output_path
+            logger.error(f"FFmpeg robust fallback failed: {e2.stderr.decode('utf-8', errors='ignore')}")
+            raise e2

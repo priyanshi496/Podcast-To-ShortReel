@@ -2,7 +2,9 @@ import logging
 import json
 import re
 import os
-from typing import List, Dict, Any, Optional, Tuple, cast
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import List, Dict, Any, Optional, Tuple, cast, Callable
 from app.config import settings
 from app.services.audio_signal import detect_audio_events
 
@@ -17,12 +19,16 @@ from app.services.prompts import (
     LEAN_SCHEMA_BLOCK_LOCAL,
     build_moment_finder_prompt,
     build_moment_editor_prompt,
-    build_system_prompt
+    build_system_prompt,
+    build_caption_prompt
 )
+
+FREE_MODE = True
+MAX_WORKERS = 2 if FREE_MODE else 3
 
 # ============================================================
 # GENERIC (CATEGORY-AGNOSTIC) PIPELINE TUNABLES
-# ============================================================
+# ============================================================================================
 
 # Stage 1 used to hard-cap at 6 candidates regardless of video length or category.
 # That meant a 44-minute video with 591 windows only ever let 6 of them compete for
@@ -317,6 +323,9 @@ try:
     class EditedClipsResponse(BaseModel):
         video_id: str
         clips: List[EditedClip]
+
+    class CaptionResponse(BaseModel):
+        caption: str = Field(description="An engaging social media caption suggestion for the clip (approx. 1-2 short sentences, with relevant emojis and hashtags, compelling hooks, and high shareability).")
 
     _PYDANTIC_AVAILABLE = True
 except Exception:
@@ -1363,7 +1372,7 @@ def enrich_clip(
         c["text"] for c in candidates
         if c["start_time"] < end and c["end_time"] > start
     )
-    excerpt = full_excerpt[:220]
+    excerpt = full_excerpt
 
     # --- AUDIO SIGNAL LAYER ---
     audio_signals = detect_audio_events(audio_path, start, end) if audio_path else {
@@ -1456,7 +1465,7 @@ def enrich_clip(
         "hook_line": hook,
         "transcript_excerpt": excerpt,
         "suggested_title": clean_title_from_hook(hook),
-        "suggested_caption": excerpt[:100],
+        "suggested_caption": excerpt,
         "needs_manual_review": needs_review,
         "auto_render_blocked": auto_render_blocked,
         "best_aspect_ratio": "9:16",
@@ -1903,7 +1912,7 @@ def call_nvidia_nim_batch_scoring(candidates: List[Dict[str, Any]], video_id: st
                     CATEGORY_CONFIG.get(category)
                     or CATEGORY_CONFIG[DEFAULT_CATEGORY]
                 )["clip_strategy"],
-                "hook_line": cand["text"][:60],
+                "hook_line": cand["text"],
                 "reason": "Heuristic fallback — no LLM provider available or all returned invalid data.",
                 "curiosity_score": cand.get("heuristic_score", 5.0),
                 "hook_score": cand.get("heuristic_score", 5.0),
@@ -2025,6 +2034,36 @@ def log_reasoning(video_id: str, text: str):
         logger.error(f"Failed to write to reasoning log: {e}")
 
 
+def generate_social_media_caption(excerpt: str, title: str) -> Optional[str]:
+    """Generates an engaging social media caption for a clip using the fallback LLM pipeline."""
+    if not _PYDANTIC_AVAILABLE:
+        logger.warning("Pydantic is not available; cannot generate caption using structured output.")
+        return None
+
+    system_prompt = build_caption_prompt()
+    user_content = (
+        f"Clip Title: {title}\n"
+        f"Transcript Excerpt:\n{excerpt}\n\n"
+        "Generate a social media caption for this clip following the guidelines."
+    )
+
+    try:
+        result = _call_llm_with_fallback(
+            system_prompt,
+            user_content,
+            CaptionResponse,
+        )
+        if result:
+            if isinstance(result, dict):
+                return result.get("caption")
+            elif hasattr(result, "caption"):
+                return getattr(result, "caption")
+    except Exception as e:
+        logger.error(f"Failed to generate caption using LLM: {e}")
+
+    return None
+
+
 # ============================================================
 # MAIN ENTRY POINT
 # ============================================================
@@ -2037,6 +2076,7 @@ def rank_candidates(
     category: Optional[str] = None,   # None = auto-classify
     audio_path: Optional[str] = None,  # enables the real audio-signal layer
     transcript_lines: Optional[List[Dict[str, Any]]] = None,  # per-line speaker data, enables exchange validation
+    progress_callback: Optional[Callable[[float], None]] = None,
 ) -> List[Dict[str, Any]]:
     """
     Ranks candidates using the upgraded pipeline:
@@ -2062,6 +2102,8 @@ def rank_candidates(
         pass
 
     log_reasoning(video_id, f"=== RUN LOG FOR VIDEO {video_id} ===\n")
+    if progress_callback:
+        progress_callback(0.01)
 
     # --- INTRO PREVIEW DEDUPLICATION ---
     # Some podcasts stitch a "highlights reel" (30-90s of out-of-order clips) onto
@@ -2118,11 +2160,23 @@ def rank_candidates(
     OVERLAP = 20
     step = CHUNK_SIZE - OVERLAP
     
-    i = 0
-    while i < len(formatted_segments):
-        chunk_start = i
-        chunk_end = min(i + CHUNK_SIZE, len(formatted_segments))
+    # Count total chunks for progress tracking
+    chunks_to_process = []
+    temp_i = 0
+    while temp_i < len(formatted_segments):
+        chunk_start = temp_i
+        chunk_end = min(temp_i + CHUNK_SIZE, len(formatted_segments))
+        chunks_to_process.append((chunk_start, chunk_end))
+        if chunk_end == len(formatted_segments):
+            break
+        temp_i += step
         
+    total_chunks = max(1, len(chunks_to_process))
+    chunk_index = 0
+    progress_lock = threading.Lock()
+    moments_lock = threading.Lock()
+    
+    def chunk_worker(chunk_start, chunk_end):
         logger.info(f"Processing Stage 1 Chunk: segments {chunk_start} to {chunk_end-1}...")
         
         chunk_segs = formatted_segments[chunk_start:chunk_end]
@@ -2148,14 +2202,14 @@ def rank_candidates(
         elif isinstance(finder_result, dict):
             raw_moments = finder_result.get("moments", [])
 
-        chunk_moments_count = 0
+        chunk_moments = []
         for m in raw_moments:
             if not isinstance(m, dict):
                 continue
             try:
                 start_id = int(m.get("start_segment_id", 0))
                 end_id = int(m.get("end_segment_id", 0))
-                moments.append({
+                chunk_moments.append({
                     "start_segment_id": start_id,
                     "end_segment_id": end_id,
                     "opportunity_type": m.get("opportunity_type") or m.get("type") or "standalone_insight",
@@ -2164,15 +2218,30 @@ def rank_candidates(
                     "mandatory_context_lines": m.get("mandatory_context_lines", []),
                     "why_viral": m.get("why_viral") or m.get("reasoning") or "Viral moment",
                 })
-                chunk_moments_count += 1
             except Exception:
                 continue
 
-        logger.info(f"Chunk {chunk_start}-{chunk_end-1} returned {chunk_moments_count} moments.")
+        logger.info(f"Chunk {chunk_start}-{chunk_end-1} returned {len(chunk_moments)} moments.")
         
-        if chunk_end == len(formatted_segments):
-            break
-        i += step
+        with progress_lock:
+            nonlocal chunk_index
+            chunk_index += 1
+            if progress_callback:
+                # Stage 1 moments discovery progresses from 0.05 to 0.55
+                progress_callback(0.05 + 0.50 * (chunk_index / total_chunks))
+                
+        return chunk_moments
+
+    # Process chunks in parallel using ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = [executor.submit(chunk_worker, c_start, c_end) for c_start, c_end in chunks_to_process]
+        for future in as_completed(futures):
+            try:
+                chunk_res = future.result()
+                with moments_lock:
+                    moments.extend(chunk_res)
+            except Exception as e:
+                logger.error(f"Error processing Stage 1 chunk: {e}")
 
     # Deduplicate moments with the exact same segment range
     seen = set()
@@ -2213,13 +2282,18 @@ def rank_candidates(
     raw_clips = []
     MOMENT_BATCH_SIZE = 3
     
-    for i in range(0, len(moments), MOMENT_BATCH_SIZE):
-        batch_moments = moments[i:i + MOMENT_BATCH_SIZE]
-        logger.info(f"Editing moment batch {i // MOMENT_BATCH_SIZE + 1} ({len(batch_moments)} moments)...")
+    batches_to_process = [moments[i:i + MOMENT_BATCH_SIZE] for i in range(0, len(moments), MOMENT_BATCH_SIZE)]
+    total_batches = max(1, len(batches_to_process))
+    batch_index = 0
+    raw_clips_lock = threading.Lock()
+    
+    def batch_worker(batch_idx, batch_moments):
+        logger.info(f"Editing moment batch {batch_idx} ({len(batch_moments)} moments)...")
         
         batch_moments_str = ""
         for idx, m in enumerate(batch_moments):
-            moment_num = i + idx + 1
+            # moment_num based on batch start index
+            moment_num = (batch_idx - 1) * MOMENT_BATCH_SIZE + idx + 1
             batch_moments_str += (
                 f"=== DISCOVERED MOMENT {moment_num} ===\n"
                 f"Opportunity Type: {m.get('opportunity_type')}\n"
@@ -2230,19 +2304,6 @@ def rank_candidates(
                 f"Why Viral: {m.get('why_viral')}\n\n"
             )
 
-        # --- BUG FIX: build the transcript context for THIS batch's moments only,
-        # pulled fresh from formatted_segments — do NOT reuse `segments_str`. That
-        # variable is a Stage 1 while-loop variable that, in Python, leaks into this
-        # outer scope holding only the text of the LAST chunk processed during moment
-        # discovery (whatever chunk happened to be nearest the end of the transcript).
-        # Every Stage 2 batch was silently being handed that same stale final-chunk
-        # text regardless of which moments it was actually trying to edit — so any
-        # moment whose segment range fell outside that last chunk (which is most of
-        # them, for any transcript longer than ~150 segments) got no matching
-        # transcript text at all. This is why the editor sometimes explicitly said
-        # "transcript for segments X-Y not provided in the snippet" and scored those
-        # moments 0 across the board, and why some early moments never appeared in
-        # Stage 2 output at all.
         BUFFER = 5  # segments of padding around each moment, for sentence-boundary context
         needed_ids = set()
         for m in batch_moments:
@@ -2258,7 +2319,7 @@ def rank_candidates(
         user_content_editor = (
             f"Here is the video_id: \"{video_id}\"\n"
             f"Here are the original transcript segments relevant to this batch:\n\n{batch_segments_str}\n"
-            f"Here are the discovered narrative/viral moments to edit (Batch {i // MOMENT_BATCH_SIZE + 1}):\n\n{batch_moments_str}"
+            f"Here are the discovered narrative/viral moments to edit (Batch {batch_idx}):\n\n{batch_moments_str}"
         )
 
         system_prompt_editor = build_moment_editor_prompt(category)
@@ -2267,6 +2328,7 @@ def rank_candidates(
             provider_priority=["nvidia_nim", "openrouter", "ollama"],
         )
         
+        batch_clips = []
         if editor_result and "clips" in editor_result:
             batch_clips = editor_result["clips"]
             # Carry the originating moment's mandatory anchor/context lines forward onto
@@ -2287,7 +2349,26 @@ def rank_candidates(
                     )
                 c["mandatory_anchor_line"] = source_moment.get("mandatory_anchor_line", "")
                 c["mandatory_context_lines"] = source_moment.get("mandatory_context_lines", [])
-            raw_clips.extend(batch_clips)
+                
+        with progress_lock:
+            nonlocal batch_index
+            batch_index += 1
+            if progress_callback:
+                # Stage 2 editing progresses from 0.55 to 0.90
+                progress_callback(0.55 + 0.35 * (batch_index / total_batches))
+                
+        return batch_clips
+
+    # Process batches in parallel using ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = [executor.submit(batch_worker, idx + 1, b) for idx, b in enumerate(batches_to_process)]
+        for future in as_completed(futures):
+            try:
+                batch_res = future.result()
+                with raw_clips_lock:
+                    raw_clips.extend(batch_res)
+            except Exception as e:
+                logger.error(f"Error processing Stage 2 batch: {e}")
 
     logger.info(f"Moment Editor output {len(raw_clips)} edited clips in total:\n{json.dumps(raw_clips, indent=2)}")
 
@@ -2436,7 +2517,7 @@ def rank_candidates(
             enriched["narrative_summary"] = clip.get("reason", "")
             enriched["why_viewers_keep_watching"] = clip.get("reason", "")
             enriched["section_type"] = clip.get("editorial_style", category)
-            enriched["suggested_title"] = clip.get("hook_line", "Untitled")[:40]
+            enriched["suggested_title"] = clip.get("hook_line", "Untitled")
 
             final_clips.append(enriched)
         except Exception as e:
@@ -2458,6 +2539,9 @@ def rank_candidates(
     BOUNDARY_UNCLEAN_PENALTY = 0.65   # moderate penalty — still rankable, clearly flagged
     LOW_SUBSTANCE_HARD_PENALTY = 0.35  # steeper penalty — this signal is stronger evidence the clip is genuinely weak
 
+    if progress_callback:
+        progress_callback(0.92)
+        
     safe_and_valid_clips = []
     log_reasoning(video_id, "=== PIPELINE FILTERS & VALIDATIONS ===")
     for clip in final_clips:
@@ -2530,13 +2614,28 @@ def rank_candidates(
     for idx, c in enumerate(final_ranked_clips):
         c["rank"] = idx + 1
 
+    # Generate actual social media captions for the final ranked clips
+    top_limit_clips = final_ranked_clips[:limit]
+    logger.info(f"Generating social media captions for the top {len(top_limit_clips)} clips...")
+    for c in top_limit_clips:
+        try:
+            caption = generate_social_media_caption(c["transcript_excerpt"], c["suggested_title"])
+            if caption:
+                c["suggested_caption"] = caption
+        except Exception as e:
+            logger.error(f"Error generating caption for clip [{c['start_time']:.2f}s - {c['end_time']:.2f}s]: {e}")
+
     # Log final outputs
     log_reasoning(video_id, "=== FINAL RANKED SUGGESTED CLIPS ===")
-    for idx, c in enumerate(final_ranked_clips[:limit]):
+    for idx, c in enumerate(top_limit_clips):
         log_reasoning(video_id, f"Rank {idx+1}:")
         log_reasoning(video_id, f"  Time: {c['start_time']:.2f}s - {c['end_time']:.2f}s (Duration: {c['duration_sec']:.2f}s)")
         log_reasoning(video_id, f"  Title/Hook: {c['suggested_title']}")
         log_reasoning(video_id, f"  Virality Score: {c['virality_score']}")
-        log_reasoning(video_id, f"  Why it works: {c['why_viewers_keep_watching']}\n")
+        log_reasoning(video_id, f"  Why it works: {c['why_viewers_keep_watching']}")
+        log_reasoning(video_id, f"  Suggested Caption: {c.get('suggested_caption')}\n")
 
-    return final_ranked_clips[:limit]
+    if progress_callback:
+        progress_callback(1.0)
+
+    return top_limit_clips

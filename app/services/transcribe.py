@@ -29,9 +29,6 @@ def _fetch_deepgram_transcript(audio_path: str) -> Dict[str, Any]:
             "https://console.deepgram.com (free tier available)."
         )
 
-    with open(audio_path, "rb") as f:
-        audio_bytes = f.read()
-
     params = {
         "model": settings.DEEPGRAM_MODEL,
         "language": "multi",     # nova-3 multilingual — REPLACES detect_language.
@@ -51,18 +48,30 @@ def _fetch_deepgram_transcript(audio_path: str) -> Dict[str, Any]:
 
     logger.info(f"Sending audio to Deepgram (model='{settings.DEEPGRAM_MODEL}', language=multi, diarize=true): {audio_path}")
 
-    response = requests.post(
-        DEEPGRAM_URL,
-        params=params,
-        headers=headers,
-        data=audio_bytes,
-        timeout=600,  # long-form podcast audio can legitimately take several minutes
-    )
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            with open(audio_path, "rb") as f:
+                response = requests.post(
+                    DEEPGRAM_URL,
+                    params=params,
+                    headers=headers,
+                    data=f,
+                    timeout=(60, 3600),  # (connect_timeout, read/write_timeout) - 1hr max for huge podcasts
+                )
 
-    if response.status_code != 200:
-        raise RuntimeError(f"Deepgram request failed ({response.status_code}): {response.text[:500]}")
+            if response.status_code != 200:
+                raise RuntimeError(f"Deepgram request failed ({response.status_code}): {response.text[:500]}")
 
-    return response.json()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries - 1:
+                raise RuntimeError(f"Deepgram request failed after {max_retries} attempts: {e}")
+            logger.warning(f"Deepgram request failed (attempt {attempt + 1}/{max_retries}): {e}. Retrying in 10s...")
+            import time
+            time.sleep(10)
+
+    raise RuntimeError("Deepgram transcription failed: unexpected exit from retry loop.")
 
 
 def _extract_words(deepgram_json: Dict[str, Any]) -> List[Dict[str, Any]]:

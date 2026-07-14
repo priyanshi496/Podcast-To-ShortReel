@@ -158,18 +158,21 @@ def process_job(db: Session, job: models.Job):
                 logger.info("No source video file found (uploaded transcript only). Skipping audio signal features.")
                 wav_path = None
             
-        sim = ProgressSimulator(cast(int, job.id), 0.5, 0.95, 60)
-        sim.start()
+        def rank_progress_callback(sub_progress: float):
+            # Map [0.0, 1.0] of ranking phase to [0.50, 0.90] of the overall job progress
+            overall_prog = 0.50 + (0.40 * sub_progress)
+            crud.update_job(db, cast(int, job.id), status="running", progress=round(overall_prog, 2))
+
         try:
             ranked_candidates = rank.rank_candidates(
                 candidates,
                 video_id=str(video.id),
                 limit=5,
                 audio_path=wav_path,
-                transcript_lines=segments_dict
+                transcript_lines=segments_dict,
+                progress_callback=rank_progress_callback
             )
         finally:
-            sim.stop()
             if audio_re_extracted:
                 try:
                     if wav_path and os.path.exists(wav_path):
@@ -178,7 +181,7 @@ def process_job(db: Session, job: models.Job):
                 except Exception as e:
                     logger.warning(f"Failed to remove temp audio file {wav_path}: {e}")
                     
-        crud.update_job(db, cast(int, job.id), status="running", progress=0.8)
+        crud.update_job(db, cast(int, job.id), status="running", progress=0.92)
         
         # 4. Save ranked candidates
         logger.info("Saving clip candidates to database...")
