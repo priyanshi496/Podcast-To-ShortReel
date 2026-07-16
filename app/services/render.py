@@ -271,10 +271,17 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                         
                     def get_centered_crop(box, c_w, c_h):
                         x, y, w, h = box
-                        cx, cy = x + w/2.0, y + h * 0.4
-                        cx = max(c_w/2.0, min(width - c_w/2.0, cx))
-                        cy = max(c_h/2.0, min(height - c_h/2.0, cy))
-                        return int(cx - c_w/2.0), int(cy - c_h/2.0)
+                        # Horizontal centering: center on the bounding box width
+                        cx = x + w / 2.0
+                        cx = max(c_w / 2.0, min(width - c_w / 2.0, cx))
+                        
+                        # Vertical alignment: position the top of the crop slightly above the top of the bounding box (headroom)
+                        # We use 15% of crop height as headroom to ensure the head is fully in frame.
+                        crop_y = y - 0.15 * c_h
+                        crop_y = max(0.0, min(height - c_h, crop_y))
+                        
+                        return int(cx - c_w / 2.0), int(crop_y)
+
                         
                     x1, y1 = get_centered_crop(seg["box_left"], crop_w, crop_h)
                     x2, y2 = get_centered_crop(seg["box_right"], crop_w, crop_h)
