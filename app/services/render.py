@@ -315,27 +315,29 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                     kf = KalmanFilter1D(q=1e-3, r=1.0)
                     for f in seg["frames"]:
                         t = f["time"] - seg["start_time"]
+                        shake = f.get("shake_x", 0.0)
                         if f["people"]:
                             px, py, pw, ph, anchor_x = f["people"][0]
                             # Run through Kalman Filter to stabilize YOLO jitter
                             filtered_cx = kf.update(anchor_x)
-                            keyframes.append((t, filtered_cx))
+                            keyframes.append((t, filtered_cx, shake))
                             
                     if not keyframes:
-                        keyframes = [(0.0, width / 2.0), (seg_dur, width / 2.0)]
+                        keyframes = [(0.0, width / 2.0, 0.0), (seg_dur, width / 2.0, 0.0)]
                         
-                    def get_target_cx(t):
-                        if t <= keyframes[0][0]: return keyframes[0][1]
-                        if t >= keyframes[-1][0]: return keyframes[-1][1]
+                    def get_target_cx_and_shake(t):
+                        if t <= keyframes[0][0]: return keyframes[0][1], keyframes[0][2]
+                        if t >= keyframes[-1][0]: return keyframes[-1][1], keyframes[-1][2]
                         for k in range(len(keyframes) - 1):
-                            t1, cx1 = keyframes[k]
-                            t2, cx2 = keyframes[k+1]
+                            t1, cx1, s1 = keyframes[k]
+                            t2, cx2, s2 = keyframes[k+1]
                             if t1 <= t <= t2:
-                                if t2 == t1: return cx1
-                                return cx1 + ((t - t1) / (t2 - t1)) * (cx2 - cx1)
-                        return width / 2.0
+                                if t2 == t1: return cx1, s1
+                                ratio = (t - t1) / (t2 - t1)
+                                return cx1 + ratio * (cx2 - cx1), s1 + ratio * (s2 - s1)
+                        return width / 2.0, 0.0
                         
-                    current_cx = get_target_cx(0.0) # Start exactly on the person
+                    current_cx, _ = get_target_cx_and_shake(0.0) # Start exactly on the person
                     raw_desired_cx = current_cx # The camera's intended destination pull
                     smooth_desired_cx = current_cx # Smoothed destination
                     
@@ -346,7 +348,7 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                     
                     cmd_lines = []
                     for t in t_dense:
-                        target_cx = get_target_cx(t)
+                        target_cx, shake = get_target_cx_and_shake(t)
                         
                         # 1. Dead Zone Logic: Only pull the camera's raw desired destination if target escapes the dead zone
                         if target_cx > raw_desired_cx + dead_zone:
@@ -366,7 +368,7 @@ def render_clip(video_path: str, clip_start: float, clip_end: float, srt_path: s
                             
                         current_cx += step
                         
-                        clamped_cx = max(crop_w/2.0, min(width - crop_w/2.0, current_cx))
+                        clamped_cx = max(crop_w/2.0, min(width - crop_w/2.0, current_cx + shake))
                         crop_x = int(clamped_cx - crop_w/2.0)
                         cmd_lines.append(f"{t:.3f} crop@c{i} x {crop_x};")
                         

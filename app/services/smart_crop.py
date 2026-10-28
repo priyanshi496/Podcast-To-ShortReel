@@ -4,6 +4,7 @@ import statistics
 import subprocess
 import re
 from typing import List, Dict, Any
+from app.services.stabilize import CameraMotionEstimator
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,9 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
     
     raw_frames_data = []
     
+    motion_estimator = None
+    current_scene_idx = -1
+    
     while current_time <= clip_end:
         cap.set(cv2.CAP_PROP_POS_MSEC, current_time * 1000)
         ret, frame = cap.read()
@@ -70,11 +74,36 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
             break
             
         relative_time = current_time - clip_start
+        
+        # Reset camera motion estimator if we cross a scene boundary
+        scene_idx = 0
+        for idx in range(len(scene_boundaries) - 1):
+            if scene_boundaries[idx] <= relative_time < scene_boundaries[idx+1]:
+                scene_idx = idx
+                break
+        else:
+            scene_idx = len(scene_boundaries) - 2
+            
+        if scene_idx != current_scene_idx:
+            motion_estimator = CameraMotionEstimator()
+            current_scene_idx = scene_idx
+            
         # Base conf 0.50, we use keypoints to filter out false positives robustly
         results = model.predict(source=frame, classes=[0], conf=0.50, verbose=False)
         boxes = results[0].boxes
         keypoints = results[0].keypoints if hasattr(results[0], 'keypoints') else None
         
+        # Collect all raw bounding boxes of detected people to mask out of ORB background tracking
+        detected_bboxes = []
+        if boxes is not None:
+            for box in boxes:
+                bx1, by1, bx2, by2 = box.xyxy[0].tolist()
+                detected_bboxes.append((bx1, by1, bx2 - bx1, by2 - by1))
+                
+        # Update camera motion estimator state
+        if motion_estimator is not None:
+            motion_estimator.update(frame, detected_bboxes)
+            
         people = []
         if boxes is not None:
             for i, box in enumerate(boxes):  # type: ignore
@@ -111,6 +140,10 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                                 # Fallback if shoulders are obscured
                                 anchor_x = x1 + w / 2.0
                             
+                            # Compensate for camera shake/motion
+                            if motion_estimator is not None:
+                                anchor_x = motion_estimator.compensate(anchor_x, width)
+                                
                             people.append((x1, y1, w, h, conf, anchor_x))
                 
         people.sort(key=lambda p: p[0])
@@ -147,6 +180,7 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
         raw_frames_data.append({
             "time": relative_time,
             "mode": mode,
+            "shake_x": motion_estimator.shake_x if motion_estimator is not None else 0.0,
             "people": [(p[0], p[1], p[2], p[3], p[5]) for p in final_people]  # extract x, y, w, h, anchor_x
         })
         
@@ -243,7 +277,7 @@ def analyze_video_layout(video_path: str, clip_start: float, clip_end: float) ->
                 "end_time": scene_end,
                 "mode": mode,
                 "box": box,
-                "frames": scene_frames if scene_frames else [{"time": scene_start, "people": []}]
+                "frames": scene_frames if scene_frames else [{"time": scene_start, "people": [], "shake_x": 0.0}]
             })
         elif mode == "blur_pad":
             final_layout.append({
